@@ -6,18 +6,20 @@
     <title>GRUMPYCATOR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
     <!-- Link to CSS -->
     <link rel="stylesheet" href="css/styles.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Baloo+2&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Baloo+2&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
     <header>
         <h1>GRUMPYCATOR</h1>
         <h2>Welcome to Grumpycator's World</h2>
-        <p>Create your character and join the cult!</p>
+        <p>Create your character and join the cult !</p>
     </header>
     <main class="main-container">
         <!-- Canvas and Selection Buttons Container -->
@@ -38,7 +40,8 @@
                 <button class="part-button" data-part="body" title="Body" aria-label="Select Body" tabindex="0">
                     <img src="assets/avatar/body/body-icon.png" alt="Body">
                 </button>
-                <button class="part-button" data-part="accessories" title="Accessories" aria-label="Select Accessories" tabindex="0">
+                <button class="part-button" data-part="accessories" title="Accessories" aria-label="Select Accessories"
+                    tabindex="0">
                     <img src="assets/avatar/accessories/accessories-icon.png" alt="Accessories">
                 </button>
                 <button class="part-button" data-part="hat" title="Hat" aria-label="Select Hat" tabindex="0">
@@ -49,12 +52,36 @@
         <!-- Options Panel -->
         <aside class="options-panel" aria-label="Options Panel">
             <!-- Color Selection -->
+            <!-- Color Selection -->
             <div class="color-selection" id="colorSelection">
                 <h3>Choose a Color</h3>
                 <div class="color-buttons">
-                    <button class="color-button" data-color="#e31828" style="background-color: #e31828;" title="Red" aria-label="Select Red Color"></button>
-                    <button class="color-button" data-color="#000000" style="background-color: #000000;" title="Black" aria-label="Select Black Color"></button>
-                    <button class="color-button" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ccc;" title="White" aria-label="Select White Color"></button>
+                    <!-- Rouge -->
+                    <button class="color-button" data-color="rgb(255, 0, 0)" style="background-color: rgb(255, 0, 0);"
+                        title="Red" aria-label="Select Red Color"></button>
+
+                    <!-- Vert -->
+                    <button class="color-button" data-color="rgb(0, 255, 0)" style="background-color: rgb(0, 255, 0);"
+                        title="Green" aria-label="Select Green Color"></button>
+
+                    <!-- Bleu -->
+                    <button class="color-button" data-color="rgb(0, 0, 255)" style="background-color: rgb(0, 0, 255);"
+                        title="Blue" aria-label="Select Blue Color"></button>
+
+                    <!-- Cyan (Bleu + Vert) -->
+                    <button class="color-button" data-color="rgb(0, 255, 255)"
+                        style="background-color: rgb(0, 255, 255);" title="Cyan"
+                        aria-label="Select Cyan Color"></button>
+
+                    <!-- Magenta (Rouge + Bleu) -->
+                    <button class="color-button" data-color="rgb(255, 0, 255)"
+                        style="background-color: rgb(255, 0, 255);" title="Magenta"
+                        aria-label="Select Magenta Color"></button>
+
+                    <!-- Jaune (Rouge + Vert) -->
+                    <button class="color-button" data-color="rgb(255, 255, 0)"
+                        style="background-color: rgb(255, 255, 0);" title="Yellow"
+                        aria-label="Select Yellow Color"></button>
                 </div>
             </div>
             <!-- Part Options -->
@@ -147,19 +174,24 @@
                 <div class="options-group" id="options-accessories">
                     <h3>Select an Accessory</h3>
                     <div class="options-grid">
-                        <button class="option-button" data-part="accessories" data-option="accessory1" aria-label="Accessory 1">
+                        <button class="option-button" data-part="accessories" data-option="accessory1"
+                            aria-label="Accessory 1">
                             <img src="assets/avatar/accessories/accessories1.png" alt="Accessory 1">
                         </button>
-                        <button class="option-button" data-part="accessories" data-option="accessory2" aria-label="Accessory 2">
+                        <button class="option-button" data-part="accessories" data-option="accessory2"
+                            aria-label="Accessory 2">
                             <img src="assets/avatar/accessories/accessories2.png" alt="Accessory 2">
                         </button>
-                        <button class="option-button" data-part="accessories" data-option="accessory3" aria-label="Accessory 3">
+                        <button class="option-button" data-part="accessories" data-option="accessory3"
+                            aria-label="Accessory 3">
                             <img src="assets/avatar/accessories/accessories3.png" alt="Accessory 3">
                         </button>
-                        <button class="option-button" data-part="accessories" data-option="accessory4" aria-label="Accessory 4">
+                        <button class="option-button" data-part="accessories" data-option="accessory4"
+                            aria-label="Accessory 4">
                             <img src="assets/avatar/accessories/accessories4.png" alt="Accessory 4">
                         </button>
-                        <button class="option-button" data-part="accessories" data-option="accessory5" aria-label="Accessory 5">
+                        <button class="option-button" data-part="accessories" data-option="accessory5"
+                            aria-label="Accessory 5">
                             <img src="assets/avatar/accessories/accessories5.png" alt="Accessory 5">
                         </button>
                     </div>
@@ -191,8 +223,10 @@
         <section class="control-buttons" aria-label="Control Buttons">
             <button id="saveButton" class="save-button" aria-label="Save Your Creation">🎨 Save</button>
             <button id="deleteButton" class="action-button" aria-label="Delete Selection">🗑️ Delete</button>
-            <button id="flipHorizontalButton" class="action-button" aria-label="Flip Horizontally">↔️ Flip Horizontally</button>
-            <button id="flipVerticalButton" class="action-button" aria-label="Flip Vertically">↕️ Flip Vertically</button>
+            <button id="flipHorizontalButton" class="action-button" aria-label="Flip Horizontally">↔️ Flip
+                Horizontally</button>
+            <button id="flipVerticalButton" class="action-button" aria-label="Flip Vertically">↕️ Flip
+                Vertically</button>
             <button id="bringForwardButton" class="action-button" aria-label="Bring Forward">🔼 Bring Forward</button>
             <button id="sendBackwardButton" class="action-button" aria-label="Send Backward">🔽 Send Backward</button>
         </section>
@@ -200,23 +234,28 @@
         <section class="socials" aria-label="Social Links">
             <div class="social__container">
                 <h2 class="socials__title">SOCIALS</h2>
-                <p class="socials__description">JOIN THE GRUMP CULT</p>
+                <p class="socials__description">JOIN THE GRUMP CULT !</p>
                 <div class="socials__links">
-                    <a href="https://twitter.com/GRUMCOINTRX" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Twitter">
+                    <a href="https://twitter.com/grumcoin" target="_blank" rel="noopener noreferrer"
+                        class="socials__link" aria-label="Twitter">
                         <img src="assets/img/x.svg" alt="Twitter" class="socials__icon" />
                     </a>
-                    <a href="https://t.me/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Telegram">
+                    <a href="https://t.me/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link"
+                        aria-label="Telegram">
                         <img src="assets/img/telegram.svg" alt="Telegram" class="socials__icon" />
                     </a>
-                    <a href="https://www.instagram.com/grumcoin/" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Instagram">
+                    <a href="https://www.instagram.com/grumcoin" target="_blank" rel="noopener noreferrer"
+                        class="socials__link" aria-label="Instagram">
                         <img src="assets/img/instagram.svg" alt="Instagram" class="socials__icon" />
                     </a>
-                    <a href="https://linktr.ee/grumcointrx" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Linktree">
+                    <a href="https://linktr.ee/grumcoin" target="_blank" rel="noopener noreferrer"
+                        class="socials__link" aria-label="Linktree">
                         <img src="assets/img/linktree.svg" alt="Linktree" class="socials__icon" />
                     </a>
                 </div>
-                <a href="https://sunpump.meme/token/TCksyJEgZSyFPiAC1NK6bDK29pc9VQxwpQ" target="_blank" rel="noopener noreferrer" class="socials__action-link" aria-label="Action Link"></a>
-                <p>$GRUM IS A SHITCOIN WITH NO GUARANTEED FINANCIAL RETURNS. INVEST AT YOUR OWN RISK!</p>
+
+                <img src="img/draw.png" alt="draw" class="draw">
+                <p>GRUM IS A CULT-URE WITH GUARANTEED FUN !</p>
             </div>
         </section>
     </main>
