@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>GRUMPYCATOR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
+    <!-- Link to CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Baloo+2&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <h1>GRUMPYCATOR</h1>
+        <h2>Welcome to Grumpycator's World</h2>
+        <p>Create your character and join the cult!</p>
+    </header>
+    <main class="main-container">
+        <!-- Canvas and Selection Buttons Container -->
+        <section class="canvas-section" aria-label="Canvas Section">
+            <div id="characterContainer" class="character-container" aria-label="Character Creation Container">
+                <!-- Les éléments ajoutés seront insérés ici -->
+            </div>
+            <div class="selection-buttons" aria-label="Select Part">
+                <button class="part-button" data-part="hair" title="Hair" aria-label="Select Hair" tabindex="0">
+                    <img src="assets/avatar/hair/hair-icon.png" alt="Hair">
+                </button>
+                <button class="part-button" data-part="eyes" title="Eyes" aria-label="Select Eyes" tabindex="0">
+                    <img src="assets/avatar/eyes/eyes-icon.png" alt="Eyes">
+                </button>
+                <button class="part-button" data-part="mouth" title="Mouth" aria-label="Select Mouth" tabindex="0">
+                    <img src="assets/avatar/mouth/mouth-icon.png" alt="Mouth">
+                </button>
+                <button class="part-button" data-part="body" title="Body" aria-label="Select Body" tabindex="0">
+                    <img src="assets/avatar/body/body-icon.png" alt="Body">
+                </button>
+                <button class="part-button" data-part="accessories" title="Accessories" aria-label="Select Accessories" tabindex="0">
+                    <img src="assets/avatar/accessories/accessories-icon.png" alt="Accessories">
+                </button>
+                <button class="part-button" data-part="hat" title="Hat" aria-label="Select Hat" tabindex="0">
+                    <img src="assets/avatar/hat/hat-icon.png" alt="Hat">
+                </button>
+            </div>
+        </section>
+        <!-- Options Panel -->
+        <aside class="options-panel" aria-label="Options Panel">
+            <!-- Color Selection -->
+            <div class="color-selection" id="colorSelection">
+                <h3>Choose a Color</h3>
+                <div class="color-buttons">
+                    <button class="color-button" data-color="#e31828" style="background-color: #e31828;" title="Red" aria-label="Select Red Color"></button>
+                    <button class="color-button" data-color="#000000" style="background-color: #000000;" title="Black" aria-label="Select Black Color"></button>
+                    <button class="color-button" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ccc;" title="White" aria-label="Select White Color"></button>
+                </div>
+            </div>
+            <!-- Part Options -->
+            <div class="options-display" id="optionsDisplay" aria-live="polite">
+                <!-- Hair Options -->
+                <div class="options-group" id="options-hair">
+                    <h3>Select a Hair Style</h3>
+                    <div class="options-grid">
+                        <button class="option-button" data-part="hair" data-option="hair1" aria-label="Hair Style 1">
+                            <img src="assets/avatar/hair/hair1.png" alt="Hair Style 1">
+                        </button>
+                        <button class="option-button" data-part="hair" data-option="hair2" aria-label="Hair Style 2">
+                            <img src="assets/avatar/hair/hair2.png" alt="Hair Style 2">
+                        </button>
+                        <button class="option-button" data-part="hair" data-option="hair3" aria-label="Hair Style 3">
+                            <img src="assets/avatar/hair/hair3.png" alt="Hair Style 3">
+                        </button>
+                        <button class="option-button" data-part="hair" data-option="hair4" aria-label="Hair Style 4">
+                            <img src="assets/avatar/hair/hair4.png" alt="Hair Style 4">
+                        </button>
+                        <button class="option-button" data-part="hair" data-option="hair5" aria-label="Hair Style 5">
+                            <img src="assets/avatar/hair/hair5.png" alt="Hair Style 5">
+                        </button>
+                    </div>
+                </div>
+                <!-- Eyes Options -->
+                <div class="options-group" id="options-eyes">
+                    <h3>Select an Eye Style</h3>
+                    <div class="options-grid">
+                        <button class="option-button" data-part="eyes" data-option="eyes1" aria-label="Eye Style 1">
+                            <img src="assets/avatar/eyes/eyes1.png" alt="Eye Style 1">
+                        </button>
+                        <button class="option-button" data-part="eyes" data-option="eyes2" aria-label="Eye Style 2">
+                            <img src="assets/avatar/eyes/eyes2.png" alt="Eye Style 2">
+                        </button>
+                        <button class="option-button" data-part="eyes" data-option="eyes3" aria-label="Eye Style 3">
+                            <img src="assets/avatar/eyes/eyes3.png" alt="Eye Style 3">
+                        </button>
+                        <button class="option-button" data-part="eyes" data-option="eyes4" aria-label="Eye Style 4">
+                            <img src="assets/avatar/eyes/eyes4.png" alt="Eye Style 4">
+                        </button>
+                        <button class="option-button" data-part="eyes" data-option="eyes5" aria-label="Eye Style 5">
+                            <img src="assets/avatar/eyes/eyes5.png" alt="Eye Style 5">
+                        </button>
+                    </div>
+                </div>
+                <!-- Mouth Options -->
+                <div class="options-group" id="options-mouth">
+                    <h3>Select a Mouth Style</h3>
+                    <div class="options-grid">
+                        <button class="option-button" data-part="mouth" data-option="mouth1" aria-label="Mouth Style 1">
+                            <img src="assets/avatar/mouth/mouth1.png" alt="Mouth Style 1">
+                        </button>
+                        <button class="option-button" data-part="mouth" data-option="mouth2" aria-label="Mouth Style 2">
+                            <img src="assets/avatar/mouth/mouth2.png" alt="Mouth Style 2">
+                        </button>
+                        <button class="option-button" data-part="mouth" data-option="mouth3" aria-label="Mouth Style 3">
+                            <img src="assets/avatar/mouth/mouth3.png" alt="Mouth Style 3">
+                        </button>
+                        <button class="option-button" data-part="mouth" data-option="mouth4" aria-label="Mouth Style 4">
+                            <img src="assets/avatar/mouth/mouth4.png" alt="Mouth Style 4">
+                        </button>
+                        <button class="option-button" data-part="mouth" data-option="mouth5" aria-label="Mouth Style 5">
+                            <img src="assets/avatar/mouth/mouth5.png" alt="Mouth Style 5">
+                        </button>
+                    </div>
+                </div>
+                <!-- Body Options -->
+                <div class="options-group" id="options-body">
+                    <h3>Select a Body Style</h3>
+                    <div class="options-grid">
+                        <button class="option-button" data-part="body" data-option="body1" aria-label="Body Style 1">
+                            <img src="assets/avatar/body/body1.png" alt="Body Style 1">
+                        </button>
+                        <button class="option-button" data-part="body" data-option="body2" aria-label="Body Style 2">
+                            <img src="assets/avatar/body/body2.png" alt="Body Style 2">
+                        </button>
+                        <button class="option-button" data-part="body" data-option="body3" aria-label="Body Style 3">
+                            <img src="assets/avatar/body/body3.png" alt="Body Style 3">
+                        </button>
+                        <button class="option-button" data-part="body" data-option="body4" aria-label="Body Style 4">
+                            <img src="assets/avatar/body/body4.png" alt="Body Style 4">
+                        </button>
+                        <button class="option-button" data-part="body" data-option="body5" aria-label="Body Style 5">
+                            <img src="assets/avatar/body/body5.png" alt="Body Style 5">
+                        </button>
+                    </div>
+                </div>
+                <!-- Accessories Options -->
+                <div class="options-group" id="options-accessories">
+                    <h3>Select an Accessory</h3>
+                    <div class="options-grid">
+                        <button class="option-button" data-part="accessories" data-option="accessory1" aria-label="Accessory 1">
+                            <img src="assets/avatar/accessories/accessories1.png" alt="Accessory 1">
+                        </button>
+                        <button class="option-button" data-part="accessories" data-option="accessory2" aria-label="Accessory 2">
+                            <img src="assets/avatar/accessories/accessories2.png" alt="Accessory 2">
+                        </button>
+                        <button class="option-button" data-part="accessories" data-option="accessory3" aria-label="Accessory 3">
+                            <img src="assets/avatar/accessories/accessories3.png" alt="Accessory 3">
+                        </button>
+                        <button class="option-button" data-part="accessories" data-option="accessory4" aria-label="Accessory 4">
+                            <img src="assets/avatar/accessories/accessories4.png" alt="Accessory 4">
+                        </button>
+                        <button class="option-button" data-part="accessories" data-option="accessory5" aria-label="Accessory 5">
+                            <img src="assets/avatar/accessories/accessories5.png" alt="Accessory 5">
+                        </button>
+                    </div>
+                </div>
+                <!-- Hat Options -->
+                <div class="options-group" id="options-hat">
+                    <h3>Select a Hat Style</h3>
+                    <div class="options-grid">
+                        <button class="option-button" data-part="hat" data-option="hat1" aria-label="Hat Style 1">
+                            <img src="assets/avatar/hat/hat1.png" alt="Hat Style 1">
+                        </button>
+                        <button class="option-button" data-part="hat" data-option="hat2" aria-label="Hat Style 2">
+                            <img src="assets/avatar/hat/hat2.png" alt="Hat Style 2">
+                        </button>
+                        <button class="option-button" data-part="hat" data-option="hat3" aria-label="Hat Style 3">
+                            <img src="assets/avatar/hat/hat3.png" alt="Hat Style 3">
+                        </button>
+                        <button class="option-button" data-part="hat" data-option="hat4" aria-label="Hat Style 4">
+                            <img src="assets/avatar/hat/hat4.png" alt="Hat Style 4">
+                        </button>
+                        <button class="option-button" data-part="hat" data-option="hat5" aria-label="Hat Style 5">
+                            <img src="assets/avatar/hat/hat5.png" alt="Hat Style 5">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- Control Buttons -->
+        <section class="control-buttons" aria-label="Control Buttons">
+            <button id="saveButton" class="save-button" aria-label="Save Your Creation">🎨 Save</button>
+            <button id="deleteButton" class="action-button" aria-label="Delete Selection">🗑️ Delete</button>
+            <button id="flipHorizontalButton" class="action-button" aria-label="Flip Horizontally">↔️ Flip Horizontally</button>
+            <button id="flipVerticalButton" class="action-button" aria-label="Flip Vertically">↕️ Flip Vertically</button>
+            <button id="bringForwardButton" class="action-button" aria-label="Bring Forward">🔼 Bring Forward</button>
+            <button id="sendBackwardButton" class="action-button" aria-label="Send Backward">🔽 Send Backward</button>
+        </section>
+        <!-- Social Links Section -->
+        <section class="socials" aria-label="Social Links">
+            <div class="social__container">
+                <h2 class="socials__title">SOCIALS</h2>
+                <p class="socials__description">JOIN THE GRUMP CULT</p>
+                <div class="socials__links">
+                    <a href="https://twitter.com/GRUMCOINTRX" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Twitter">
+                        <img src="assets/img/x.svg" alt="Twitter" class="socials__icon" />
+                    </a>
+                    <a href="https://t.me/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Telegram">
+                        <img src="assets/img/telegram.svg" alt="Telegram" class="socials__icon" />
+                    </a>
+                    <a href="https://www.instagram.com/grumcoin/" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Instagram">
+                        <img src="assets/img/instagram.svg" alt="Instagram" class="socials__icon" />
+                    </a>
+                    <a href="https://linktr.ee/grumcointrx" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Linktree">
+                        <img src="assets/img/linktree.svg" alt="Linktree" class="socials__icon" />
+                    </a>
+                </div>
+                <a href="https://sunpump.meme/token/TCksyJEgZSyFPiAC1NK6bDK29pc9VQxwpQ" target="_blank" rel="noopener noreferrer" class="socials__action-link" aria-label="Action Link"></a>
+                <p>$GRUM IS A SHITCOIN WITH NO GUARANTEED FINANCIAL RETURNS. INVEST AT YOUR OWN RISK!</p>
+            </div>
+        </section>
+    </main>
+    <!-- JavaScript File -->
+    <script src="js/script.js" defer></script>
+</body>
+
+</html>
