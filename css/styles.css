@@ -237,6 +237,19 @@ header p {
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
+/* Styles spécifiques pour le bouton de réinitialisation de couleur */
+.color-button[data-color="reset"] {
+    background-color: #ffffff;
+    border: 2px solid #000000;
+}
+
+.color-button[data-color="reset"]:hover,
+.color-button[data-color="reset"]:focus {
+    background-color: #dddddd;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
 /* Options Display */
 .options-display {
     display: none;
