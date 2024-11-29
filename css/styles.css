@@ -112,15 +112,15 @@ header p {
     padding: 20px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 600px;
+    max-width: 800px; /* Augmenté pour une meilleure résolution */
     margin: 0 auto;
 }
 
 /* Character Container Styles */
 .character-container {
     position: relative;
-    width: 100%;
-    height: 750px;
+    width: 800px; /* Dimension Fixe */
+    height: 1000px; /* Dimension Fixe */
     background-color: #ffe4e1;
     border: 2px solid var(--secondary-color);
     border-radius: 10px;
@@ -149,8 +149,8 @@ header p {
 
 /* Part Buttons */
 .part-button {
-    width: 50px;
-    height: 50px;
+    width: 60px; /* Augmenté pour une meilleure visibilité */
+    height: 60px;
     border: none;
     border-radius: 50%;
     background-color: #ffffff;
@@ -164,8 +164,8 @@ header p {
 }
 
 .part-button img {
-    width: 30px;
-    height: 30px;
+    width: 36px; /* Augmenté pour correspondre à la taille du bouton */
+    height: 36px;
     transition: transform var(--transition-speed);
 }
 
@@ -286,8 +286,8 @@ header p {
 }
 
 .option-button {
-    width: 60px;
-    height: 60px;
+    width: 80px; /* Augmenté pour une meilleure visibilité */
+    height: 80px;
     background-color: #ffffff;
     border: none;
     border-radius: 10px;
@@ -300,8 +300,8 @@ header p {
 }
 
 .option-button img {
-    width: 40px;
-    height: 40px;
+    width: 100%;
+    height: 100%;
     border-radius: 5px;
     transition: transform var(--transition-speed);
     margin-bottom: 5px;
@@ -329,7 +329,7 @@ header p {
 }
 
 .action-button, .save-button {
-    padding: 10px 20px;
+    padding: 15px 30px; /* Augmenté pour une meilleure visibilité */
     background-color: var(--primary-color);
     color: var(--button-text);
     border: none;
@@ -439,8 +439,8 @@ header p {
 /* Styles pour les poignées de redimensionnement */
 .resize-handle {
     position: absolute;
-    width: 16px; /* Augmenté pour une meilleure visibilité */
-    height: 16px;
+    width: 24px; /* Augmenté pour une meilleure visibilité */
+    height: 24px;
     background-color: var(--primary-color);
     border: 2px solid #fff;
     border-radius: 50%;
@@ -451,37 +451,37 @@ header p {
 
 /* Positions spécifiques des poignées */
 .resize-handle.br {
-    right: -8px;
-    bottom: -8px;
+    right: -12px;
+    bottom: -12px;
     cursor: nwse-resize;
 }
 
 .resize-handle.bl {
-    left: -8px;
-    bottom: -8px;
+    left: -12px;
+    bottom: -12px;
     cursor: nesw-resize;
 }
 
 .resize-handle.tr {
-    right: -8px;
-    top: -8px;
+    right: -12px;
+    top: -12px;
     cursor: nesw-resize;
 }
 
 .resize-handle.tl {
-    left: -8px;
-    top: -8px;
+    left: -12px;
+    top: -12px;
     cursor: nwse-resize;
 }
 
 /* Styles pour la poignée de rotation */
 .rotate-handle {
     position: absolute;
-    top: -25px; /* Ajusté pour éviter le chevauchement */
+    top: -30px; /* Ajusté pour éviter le chevauchement */
     left: 50%;
     transform: translateX(-50%);
-    width: 16px; /* Augmenté pour une meilleure visibilité */
-    height: 16px;
+    width: 24px; /* Augmenté pour une meilleure visibilité */
+    height: 24px;
     background-color: var(--secondary-color);
     border: 2px solid #fff;
     border-radius: 50%;
@@ -517,8 +517,8 @@ header p {
         width: 90%;
     }
     .character-container {
-        height: 60vh;
-        max-width: 100%;
+        width: 600px; /* Maintenu la taille fixe */
+        height: 750px; /* Ajusté pour correspondre */
     }
     .selection-buttons {
         flex-wrap: wrap;
@@ -527,16 +527,16 @@ header p {
         max-width: none;
     }
     .part-button {
-        width: 40px;
-        height: 40px;
-    }
-    .part-button img {
-        width: 24px;
-        height: 24px;
-    }
-    .option-button {
         width: 50px;
         height: 50px;
+    }
+    .part-button img {
+        width: 30px;
+        height: 30px;
+    }
+    .option-button {
+        width: 70px;
+        height: 70px;
     }
     .option-button img {
         width: 100%;
@@ -555,6 +555,7 @@ header p {
     }
 }
 
+/* Responsive Design for Larger Screens */
 @media (min-width: 800px) {
     .draw {
         position: absolute;
@@ -566,16 +567,15 @@ header p {
     .canvas-section {
         width: 800px;
     }
-
-.draw {
-    position: absolute;
-    left: -1em;
-    top: 35em;
-    width: auto;
-    height: 25vh;
-    object-fit: cover;
-    z-index: -1;
-}
+    .draw {
+        position: absolute;
+        left: -1em;
+        top: 35em;
+        width: auto;
+        height: 25vh;
+        object-fit: cover;
+        z-index: -1;
+    }
 }
 
 @media (min-width: 1300px) {
@@ -592,8 +592,8 @@ header p {
         width: 800px;
     }
     .character-container {
-        width: 600px;
-        height: 900px;
+        width: 800px; /* Maintenu la taille fixe */
+        height: 1000px; /* Maintenu la taille fixe */
     }
     .part-button {
         width: 60px;

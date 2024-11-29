@@ -24,6 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let dragOffsetY = 0;
     let animationFrameId;
 
+    // Définir un facteur d'échelle pour augmenter la résolution du canvas
+    const scalingFactor = 2;
+
     // Fonction de debounce pour limiter la fréquence des appels
     function debounce(func, delay) {
         let timeout;
@@ -261,6 +264,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 let dx = clientX - startX;
                 let dy = clientY - startY;
 
+                // Récupérer les échelles actuelles
+                const scaleX = parseFloat(selectedElement.dataset.scaleX) || 1;
+                const scaleY = parseFloat(selectedElement.dataset.scaleY) || 1;
+
+                // Appliquer les échelles pour ajuster le delta
+                dx *= scaleX;
+                dy *= scaleY;
+
                 let newWidth = startWidth;
                 let newHeight = startHeight;
                 let newLeft = startLeft;
@@ -290,6 +301,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     default:
                         break;
                 }
+
+                // Assurer que la largeur et la hauteur restent positives
+                newWidth = Math.abs(newWidth);
+                newHeight = Math.abs(newHeight);
 
                 // Limiter la taille minimale et maximale
                 newWidth = Math.max(30, newWidth);
@@ -503,22 +518,22 @@ document.addEventListener("DOMContentLoaded", () => {
             // Applique un filtre CSS pour colorer l'image
             switch (color) {
                 case "rgb(255, 0, 0)": // Rouge
-                    element.style.filter = "sepia(1) saturate(6) hue-rotate(0deg)";
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(0deg)";
                     break;
                 case "rgb(0, 255, 0)": // Vert
-                    element.style.filter = "sepia(1) saturate(6) hue-rotate(120deg)";
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(120deg)";
                     break;
                 case "rgb(0, 0, 255)": // Bleu
-                    element.style.filter = "sepia(1) saturate(6) hue-rotate(240deg)";
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(240deg)";
                     break;
                 case "rgb(0, 255, 255)": // Cyan
-                    element.style.filter = "sepia(1) saturate(6) hue-rotate(180deg)";
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(180deg)";
                     break;
                 case "rgb(255, 0, 255)": // Magenta
-                    element.style.filter = "sepia(1) saturate(6) hue-rotate(300deg)";
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(300deg)";
                     break;
                 case "rgb(255, 255, 0)": // Jaune
-                    element.style.filter = "sepia(1) saturate(6) hue-rotate(60deg)";
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(60deg)";
                     break;
                 case "reset": // Réinitialiser la couleur
                     element.style.filter = "none"; // Réinitialiser le filtre
@@ -605,8 +620,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (
                 selectedElement &&
                 selectedElement.dataset.part !== "body" &&
-                selectedElement.dataset.part !== "eyes" &&
-                selectedElement.dataset.part !== "mouth"
+                selectedElement.dataset.part !== "eyes"
             ) {
                 applyColor(selectedElement, selectedColor);
             }
@@ -676,11 +690,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fonction pour sauvegarder le canvas en image
     saveButton.addEventListener("click", () => {
-        // Créer un canvas temporaire
+        // Créer un canvas temporaire avec une résolution élevée
         const tempCanvas = document.createElement("canvas");
         const containerRect = characterContainer.getBoundingClientRect();
-        tempCanvas.width = containerRect.width;
-        tempCanvas.height = containerRect.height;
+        tempCanvas.width = containerRect.width * scalingFactor;
+        tempCanvas.height = containerRect.height * scalingFactor;
         const ctx = tempCanvas.getContext("2d");
 
         // Dessiner l'image de fond (body si présent)
@@ -693,28 +707,42 @@ document.addEventListener("DOMContentLoaded", () => {
             body.crossOrigin = "anonymous"; // Assurez-vous que les images sont CORS-enabled
             body.src = bodyImg.src;
             body.onload = () => {
+                // Appliquer les transformations du corps
+                const rect = bodyElement.getBoundingClientRect();
+                const scaleX = parseFloat(bodyElement.dataset.scaleX) || 1;
+                const scaleY = parseFloat(bodyElement.dataset.scaleY) || 1;
+                const rotation = parseFloat(bodyElement.dataset.rotation) || 0;
+
+                ctx.save();
+                ctx.translate(
+                    (bodyElement.offsetLeft + bodyElement.offsetWidth / 2) * scalingFactor,
+                    (bodyElement.offsetTop + bodyElement.offsetHeight / 2) * scalingFactor
+                );
+                ctx.rotate((rotation * Math.PI) / 180);
+                ctx.scale(scaleX, scaleY);
                 ctx.drawImage(
                     body,
-                    bodyElement.offsetLeft,
-                    bodyElement.offsetTop,
-                    bodyElement.offsetWidth,
-                    bodyElement.offsetHeight
+                    -bodyElement.offsetWidth / 2 * scalingFactor,
+                    -bodyElement.offsetHeight / 2 * scalingFactor,
+                    bodyElement.offsetWidth * scalingFactor,
+                    bodyElement.offsetHeight * scalingFactor
                 );
+                ctx.restore();
 
                 // Dessiner les autres éléments
-                drawElements(ctx, tempCanvas);
+                drawElements(ctx, tempCanvas, scalingFactor);
             };
             body.onerror = () => {
                 console.error(`Failed to load image: ${body.src}`);
-                drawElements(ctx, tempCanvas);
+                drawElements(ctx, tempCanvas, scalingFactor);
             };
         } else {
             // Si pas de body, simplement dessiner les éléments
-            drawElements(ctx, tempCanvas);
+            drawElements(ctx, tempCanvas, scalingFactor);
         }
     });
 
-    function drawElements(ctx, canvas) {
+    function drawElements(ctx, canvas, scale) {
         const elements = characterContainer.querySelectorAll(
             '.draggable:not([data-part="body"])'
         );
@@ -731,11 +759,11 @@ document.addEventListener("DOMContentLoaded", () => {
             img.crossOrigin = "anonymous"; // Assurez-vous que les images sont CORS-enabled
             img.src = el.querySelector("img").src;
             img.onload = () => {
-                // Calculer la position et la taille
-                const left = el.offsetLeft;
-                const top = el.offsetTop;
-                const width = el.offsetWidth;
-                const height = el.offsetHeight;
+                // Calculer la position et la taille avec échelle
+                const left = el.offsetLeft * scale;
+                const top = el.offsetTop * scale;
+                const width = el.offsetWidth * scale;
+                const height = el.offsetHeight * scale;
 
                 // Extraire les transformations
                 const rotation = parseFloat(el.dataset.rotation) || 0;
