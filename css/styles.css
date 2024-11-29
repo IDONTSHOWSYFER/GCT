@@ -112,15 +112,17 @@ header p {
     padding: 20px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 800px; /* Augmenté pour une meilleure résolution */
+    max-width: 800px; /* Limite la largeur maximale */
     margin: 0 auto;
+    overflow: hidden; /* Empêche le débordement */
 }
 
 /* Character Container Styles */
 .character-container {
     position: relative;
-    width: 800px; /* Dimension Fixe */
-    height: 1000px; /* Dimension Fixe */
+    width: 100%;
+    max-width: 800px; /* Assure qu'il ne dépasse pas le parent */
+    aspect-ratio: 4 / 5; /* Maintient les proportions */
     background-color: #ffe4e1;
     border: 2px solid var(--secondary-color);
     border-radius: 10px;
@@ -426,13 +428,15 @@ header p {
 
 /* Resize Handles - Cachés par défaut */
 .draggable .resize-handle,
-.draggable .rotate-handle {
+.draggable .rotate-handle,
+.draggable .lock-button {
     display: none;
 }
 
 /* Afficher les poignées uniquement lorsque l'élément est sélectionné */
 .draggable.selected .resize-handle,
-.draggable.selected .rotate-handle {
+.draggable.selected .rotate-handle,
+.draggable.selected .lock-button {
     display: block;
 }
 
@@ -490,16 +494,38 @@ header p {
     z-index: 1001; /* Assure qu'elles sont au-dessus de l'élément */
 }
 
-/* Afficher les poignées uniquement lorsque l'élément est sélectionné */
-.draggable.selected .resize-handle,
-.draggable.selected .rotate-handle {
-    display: block;
+/* Styles pour le bouton de verrouillage */
+.lock-button {
+    position: absolute;
+    top: -30px; /* Positionné à côté de la poignée de rotation */
+    right: -30px;
+    width: 24px;
+    height: 24px;
+    background-color: var(--secondary-color);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-sizing: border-box;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
 }
 
-/* Styles additionnels pour une meilleure expérience utilisateur */
-.draggable.selected {
-    outline: 2px dashed var(--primary-color);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+.lock-button.locked {
+    background-color: #555555;
+}
+
+/* Locked State Styles */
+.draggable.locked {
+    opacity: 0.6;
+    /* pointer-events: none; */ /* Supprimé pour permettre l'interaction avec le bouton de verrouillage */
+}
+
+.draggable.locked .lock-button {
+    background-color: #555555;
 }
 
 /* Responsive Design for Small Screens */
@@ -517,8 +543,9 @@ header p {
         width: 90%;
     }
     .character-container {
-        width: 600px; /* Maintenu la taille fixe */
-        height: 750px; /* Ajusté pour correspondre */
+        width: 100%;
+        max-width: 600px; /* Réduit la taille maximale pour les petits écrans */
+        aspect-ratio: 4 / 5; /* Maintient les proportions */
     }
     .selection-buttons {
         flex-wrap: wrap;
@@ -592,8 +619,9 @@ header p {
         width: 800px;
     }
     .character-container {
-        width: 800px; /* Maintenu la taille fixe */
-        height: 1000px; /* Maintenu la taille fixe */
+        width: 100%;
+        max-width: 800px; /* Maintenu la taille maximale */
+        aspect-ratio: 4 / 5; /* Maintient les proportions */
     }
     .part-button {
         width: 60px;

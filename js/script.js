@@ -1,3 +1,5 @@
+// script.js
+
 document.addEventListener("DOMContentLoaded", () => {
     // Sélecteurs des éléments du DOM
     const characterContainer = document.getElementById("characterContainer");
@@ -80,8 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
         draggable.style.left = "30%";
         draggable.style.top = "30%";
         draggable.style.transform = "translate(0%, 0%) rotate(0deg) scale(1)";
-        draggable.style.width = "50%";
-        draggable.style.height = "50%";
+        draggable.style.width = "100px"; // Taille par défaut en pixels
+        draggable.style.height = "100px"; // Taille par défaut en pixels
         draggable.style.zIndex = getMaxZIndex() + 1;
 
         // Créer l'image et l'ajouter au conteneur
@@ -106,6 +108,12 @@ document.addEventListener("DOMContentLoaded", () => {
         rotateHandle.classList.add("rotate-handle");
         draggable.appendChild(rotateHandle);
 
+        // Ajouter un bouton de verrouillage
+        const lockButton = document.createElement("button");
+        lockButton.classList.add("lock-button");
+        lockButton.innerHTML = "🔒"; // Icône de cadenas fermé
+        draggable.appendChild(lockButton);
+
         // Initialiser les propriétés de transformation
         draggable.dataset.rotation = "0";
         draggable.dataset.scaleX = "1";
@@ -119,6 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
         makeDraggable(draggable);
         makeResizable(draggable);
         makeRotatable(draggable);
+        makeLockable(draggable, lockButton);
 
         // Appliquer la couleur si sélectionnée et applicable
         if (selectedColor && part !== "body" && part !== "eyes") {
@@ -129,12 +138,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fonction pour rendre un élément draggable avec gestion tactile
     function makeDraggable(element) {
         const startDrag = (e) => {
-            // Ignorer si l'utilisateur interagit avec une poignée
+            // Ignorer si l'utilisateur interagit avec une poignée ou le bouton de verrouillage
             if (
                 e.target.classList.contains("resize-handle") ||
-                e.target.classList.contains("rotate-handle")
+                e.target.classList.contains("rotate-handle") ||
+                e.target.classList.contains("lock-button")
             )
                 return;
+
+            // Vérifier si l'élément est verrouillé
+            if (element.classList.contains("locked")) {
+                return;
+            }
 
             isDragging = true;
             selectedElement = element;
@@ -155,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const duringDrag = (e) => {
-            if (isDragging && selectedElement) {
+            if (isDragging && selectedElement && !selectedElement.classList.contains("locked")) {
                 const containerRect = characterContainer.getBoundingClientRect();
                 let clientX, clientY;
 
@@ -221,6 +236,11 @@ document.addEventListener("DOMContentLoaded", () => {
         let startX, startY, startWidth, startHeight, startLeft, startTop;
 
         const startResize = (e) => {
+            // Vérifier si l'élément est verrouillé
+            if (element.classList.contains("locked")) {
+                return;
+            }
+
             isResizing = true;
             currentHandle = e.target.classList.contains("br")
                 ? "br"
@@ -250,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const duringResize = (e) => {
-            if (isResizing && selectedElement) {
+            if (isResizing && selectedElement && !selectedElement.classList.contains("locked")) {
                 let clientX, clientY;
 
                 if (e.type === "touchmove") {
@@ -382,6 +402,11 @@ document.addEventListener("DOMContentLoaded", () => {
         let lastAngle = 0;
 
         const startRotate = (e) => {
+            // Vérifier si l'élément est verrouillé
+            if (element.classList.contains("locked")) {
+                return;
+            }
+
             isRotating = true;
             selectedElement = element;
             selectElement(element);
@@ -417,7 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const duringRotate = (e) => {
-            if (!isRotating || !selectedElement) return;
+            if (!isRotating || !selectedElement || selectedElement.classList.contains("locked")) return;
 
             let clientX, clientY;
             if (e.type === "touchmove") {
@@ -473,6 +498,33 @@ document.addEventListener("DOMContentLoaded", () => {
             passive: false,
         });
         document.addEventListener("touchend", endRotate, { passive: false });
+    }
+
+    // Fonction pour rendre un élément verrouillable avec gestion tactile
+    function makeLockable(element, lockButton) {
+        // Initialiser l'état de verrouillage
+        let isLocked = false;
+
+        const toggleLock = (e) => {
+            e.stopPropagation(); // Empêche la sélection de l'élément lors du clic sur le bouton de verrouillage
+
+            isLocked = !isLocked;
+            element.classList.toggle("locked", isLocked);
+            lockButton.classList.toggle("locked", isLocked);
+
+            // Changer l'icône du bouton en fonction de l'état
+            lockButton.innerHTML = isLocked ? "🔓" : "🔒";
+
+            console.log(`Element ${isLocked ? "locked" : "unlocked"}`);
+        };
+
+        lockButton.addEventListener("click", toggleLock);
+        lockButton.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                toggleLock(e);
+            }
+        });
     }
 
     // Fonction pour obtenir l'échelle actuelle d'un élément
@@ -697,60 +749,18 @@ document.addEventListener("DOMContentLoaded", () => {
         tempCanvas.height = containerRect.height * scalingFactor;
         const ctx = tempCanvas.getContext("2d");
 
-        // Dessiner l'image de fond (body si présent)
-        const bodyElement = characterContainer.querySelector(
-            '.draggable[data-part="body"]'
-        );
-        if (bodyElement) {
-            const bodyImg = bodyElement.querySelector("img");
-            const body = new Image();
-            body.crossOrigin = "anonymous"; // Assurez-vous que les images sont CORS-enabled
-            body.src = bodyImg.src;
-            body.onload = () => {
-                // Appliquer les transformations du corps
-                const rect = bodyElement.getBoundingClientRect();
-                const scaleX = parseFloat(bodyElement.dataset.scaleX) || 1;
-                const scaleY = parseFloat(bodyElement.dataset.scaleY) || 1;
-                const rotation = parseFloat(bodyElement.dataset.rotation) || 0;
+        // Trier les éléments par z-index croissant pour dessiner du bas vers le haut
+        const elements = Array.from(characterContainer.querySelectorAll(".draggable"));
+        elements.sort((a, b) => {
+            return (parseInt(a.style.zIndex) || 0) - (parseInt(b.style.zIndex) || 0);
+        });
 
-                ctx.save();
-                ctx.translate(
-                    (bodyElement.offsetLeft + bodyElement.offsetWidth / 2) * scalingFactor,
-                    (bodyElement.offsetTop + bodyElement.offsetHeight / 2) * scalingFactor
-                );
-                ctx.rotate((rotation * Math.PI) / 180);
-                ctx.scale(scaleX, scaleY);
-                ctx.drawImage(
-                    body,
-                    -bodyElement.offsetWidth / 2 * scalingFactor,
-                    -bodyElement.offsetHeight / 2 * scalingFactor,
-                    bodyElement.offsetWidth * scalingFactor,
-                    bodyElement.offsetHeight * scalingFactor
-                );
-                ctx.restore();
-
-                // Dessiner les autres éléments
-                drawElements(ctx, tempCanvas, scalingFactor);
-            };
-            body.onerror = () => {
-                console.error(`Failed to load image: ${body.src}`);
-                drawElements(ctx, tempCanvas, scalingFactor);
-            };
-        } else {
-            // Si pas de body, simplement dessiner les éléments
-            drawElements(ctx, tempCanvas, scalingFactor);
-        }
-    });
-
-    function drawElements(ctx, canvas, scale) {
-        const elements = characterContainer.querySelectorAll(
-            '.draggable:not([data-part="body"])'
-        );
+        // Dessiner chaque élément dans l'ordre trié
         let loadedImages = 0;
         const totalImages = elements.length;
 
         if (totalImages === 0) {
-            downloadCanvas(canvas);
+            downloadCanvas(tempCanvas);
             return;
         }
 
@@ -760,10 +770,10 @@ document.addEventListener("DOMContentLoaded", () => {
             img.src = el.querySelector("img").src;
             img.onload = () => {
                 // Calculer la position et la taille avec échelle
-                const left = el.offsetLeft * scale;
-                const top = el.offsetTop * scale;
-                const width = el.offsetWidth * scale;
-                const height = el.offsetHeight * scale;
+                const left = el.offsetLeft * scalingFactor;
+                const top = el.offsetTop * scalingFactor;
+                const width = el.offsetWidth * scalingFactor;
+                const height = el.offsetHeight * scalingFactor;
 
                 // Extraire les transformations
                 const rotation = parseFloat(el.dataset.rotation) || 0;
@@ -779,25 +789,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 loadedImages++;
                 if (loadedImages === totalImages) {
-                    downloadCanvas(canvas);
+                    downloadCanvas(tempCanvas);
                 }
             };
             img.onerror = () => {
                 console.error(`Failed to load image: ${img.src}`);
                 loadedImages++;
                 if (loadedImages === totalImages) {
-                    downloadCanvas(canvas);
+                    downloadCanvas(tempCanvas);
                 }
             };
         });
-    }
+    });
 
     // Fonction pour télécharger le canvas comme image
     function downloadCanvas(canvas) {
         const dataURL = canvas.toDataURL("image/png");
         const link = document.createElement("a");
         link.href = dataURL;
-        link.download = "grumpycator.png";
+        link.download = "avatar.png";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -811,16 +821,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
         switch (e.key) {
             case "ArrowUp":
-                selectedElement.style.top = `${selectedElement.offsetTop - step}px`;
+                if (!selectedElement.classList.contains("locked")) {
+                    selectedElement.style.top = `${selectedElement.offsetTop - step}px`;
+                }
                 break;
             case "ArrowDown":
-                selectedElement.style.top = `${selectedElement.offsetTop + step}px`;
+                if (!selectedElement.classList.contains("locked")) {
+                    selectedElement.style.top = `${selectedElement.offsetTop + step}px`;
+                }
                 break;
             case "ArrowLeft":
-                selectedElement.style.left = `${selectedElement.offsetLeft - step}px`;
+                if (!selectedElement.classList.contains("locked")) {
+                    selectedElement.style.left = `${selectedElement.offsetLeft - step}px`;
+                }
                 break;
             case "ArrowRight":
-                selectedElement.style.left = `${selectedElement.offsetLeft + step}px`;
+                if (!selectedElement.classList.contains("locked")) {
+                    selectedElement.style.left = `${selectedElement.offsetLeft + step}px`;
+                }
                 break;
             case "Delete":
             case "Backspace":
