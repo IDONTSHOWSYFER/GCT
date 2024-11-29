@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Afficher ou masquer la sélection de couleur en fonction de la partie
-    if (part === "body" || part === "eyes") {
+    if (part === "body" || part === "eyes" || part === "mouth") {
       colorSelection.style.display = "none";
       console.log("Color selection hidden");
     } else {
@@ -74,11 +74,11 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable.classList.add("draggable");
     draggable.dataset.part = part;
     draggable.dataset.option = option;
-    draggable.style.left = "50%";
-    draggable.style.top = "50%";
+    draggable.style.left = "30%";
+    draggable.style.top = "30%";
     draggable.style.transform = "translate(0%, 0%) rotate(0deg) scale(1)";
-    draggable.style.width = "100px"; // Taille par défaut, ajustable
-    draggable.style.height = "100px"; // Assurez-vous de définir une hauteur
+    draggable.style.width = "25%%";
+    draggable.style.height = "25%";
     draggable.style.zIndex = getMaxZIndex() + 1;
 
     // Créer l'image et l'ajouter au conteneur
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
     img.alt = `${part} ${option}`;
     img.style.width = "100%";
     img.style.height = "100%";
-    img.style.pointerEvents = "none"; // Pour permettre la sélection du conteneur
+    img.style.pointerEvents = "none";
     draggable.appendChild(img);
 
     // Ajouter des poignées de redimensionnement
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable.appendChild(rotateHandle);
 
     // Initialiser les propriétés de transformation
-    draggable.dataset.rotation = "0"; // Cumulatif
+    draggable.dataset.rotation = "0";
     draggable.dataset.scaleX = "1";
     draggable.dataset.scaleY = "1";
 
@@ -135,7 +135,7 @@ function makeDraggable(element) {
   
       isDragging = true;
       selectedElement = element;
-      selectElement(element); // Sélectionner l'élément sans l'amener au premier plan
+      selectElement(element);
   
       const rect = element.getBoundingClientRect();
       const containerRect = characterContainer.getBoundingClientRect();
@@ -602,7 +602,8 @@ function makeDraggable(element) {
       if (
         selectedElement &&
         selectedElement.dataset.part !== "body" &&
-        selectedElement.dataset.part !== "eyes"
+        selectedElement.dataset.part !== "eyes" &&
+        selectedElement.dataset.part !== "mouth"
       ) {
         applyColor(selectedElement, selectedColor);
       }
