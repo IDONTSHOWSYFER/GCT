@@ -121,6 +121,14 @@ document.addEventListener("DOMContentLoaded", () => {
         draggable.dataset.scaleX = "1";
         draggable.dataset.scaleY = "1";
 
+        // Initialiser le filtre
+        if (part === "body" || part === "eyes" || part === "mouth") {
+            draggable.dataset.filter = "none";
+            draggable.style.filter = "none";
+        } else {
+            draggable.dataset.filter = "none"; // Par défaut sans filtre
+        }
+
         // Ajouter l'élément au container
         characterContainer.appendChild(draggable);
         console.log(`Added element: ${option} to part: ${part}`);
@@ -565,42 +573,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fonction pour appliquer une couleur à un élément
     function applyColor(element, color) {
-        // Appliquer le filtre CSS pour la visualisation en temps réel
-        if (color === "reset") {
-            element.style.filter = 'none';
-        } else {
-            let filterValue = "none";
-            switch (color) {
-                case "rgb(255, 0, 0)": // Rouge
-                    filterValue = "sepia(1) saturate(10) hue-rotate(0deg)";
-                    break;
-                case "rgb(0, 255, 0)": // Vert
-                    filterValue = "sepia(1) saturate(10) hue-rotate(120deg)";
-                    break;
-                case "rgb(0, 0, 255)": // Bleu
-                    filterValue = "sepia(1) saturate(10) hue-rotate(240deg)";
-                    break;
-                case "rgb(0, 255, 255)": // Cyan
-                    filterValue = "sepia(1) saturate(10) hue-rotate(180deg)";
-                    break;
-                case "rgb(255, 0, 255)": // Magenta
-                    filterValue = "sepia(1) saturate(10) hue-rotate(300deg)";
-                    break;
-                case "rgb(255, 255, 0)": // Jaune
-                    filterValue = "sepia(1) saturate(10) hue-rotate(60deg)";
-                    break;
-                default:
-                    filterValue = "none";
-                    break;
-            }
-            element.style.filter = filterValue;
+        const part = element.dataset.part;
+        
+        // Empêcher l'application de couleur aux parties non désirées
+        if (part === "body" || part === "eyes" || part === "mouth") {
+            console.warn(`Impossible d'appliquer une couleur à la partie "${part}".`);
+            return;
         }
 
-        // Stocker la couleur sélectionnée dans l'attribut de données pour la sauvegarde
+        // Déterminer la chaîne de filtres CSS basée sur la couleur sélectionnée
+        let filterValue = "none";
+        switch (color) {
+            case "rgb(255, 0, 0)": // Rouge
+                filterValue = "sepia(1) saturate(10) hue-rotate(0deg)";
+                break;
+            case "rgb(0, 255, 0)": // Vert
+                filterValue = "sepia(1) saturate(10) hue-rotate(120deg)";
+                break;
+            case "rgb(0, 0, 255)": // Bleu
+                filterValue = "sepia(1) saturate(10) hue-rotate(240deg)";
+                break;
+            case "rgb(0, 255, 255)": // Cyan
+                filterValue = "sepia(1) saturate(10) hue-rotate(180deg)";
+                break;
+            case "rgb(255, 0, 255)": // Magenta
+                filterValue = "sepia(1) saturate(10) hue-rotate(300deg)";
+                break;
+            case "rgb(255, 255, 0)": // Jaune
+                filterValue = "sepia(1) saturate(10) hue-rotate(60deg)";
+                break;
+            case "reset": // Réinitialiser la couleur
+                filterValue = "none";
+                break;
+            default:
+                filterValue = "none";
+                break;
+        }
+
+        // Appliquer le filtre CSS pour la visualisation en temps réel
+        element.style.filter = filterValue;
+
+        // Stocker le filtre dans l'attribut de données pour la sauvegarde
         if (color === "reset") {
-            element.dataset.color = null;
+            element.dataset.filter = "none";
         } else {
-            element.dataset.color = color;
+            element.dataset.filter = filterValue;
         }
     }
 
@@ -797,10 +814,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 const scaleX = parseFloat(el.dataset.scaleX) || 1;
                 const scaleY = parseFloat(el.dataset.scaleY) || 1;
 
-                // Extraire la couleur de l'attribut de données
-                const color = el.dataset.color || null;
+                // Extraire le filtre CSS stocké dans l'attribut de données
+                const filter = el.dataset.filter || 'none';
+                const part = el.dataset.part;
 
-                console.log(`Élément: ${el.dataset.part} - Couleur appliquée: ${color}`);
+                // Ne pas appliquer de filtre aux parties non colorables
+                if (part === "body" || part === "eyes" || part === "mouth") {
+                    console.log(`Élément: ${part} - Pas de filtre appliqué.`);
+                } else {
+                    console.log(`Élément: ${part} - Filtre appliqué: ${filter}`);
+                }
 
                 ctx.save();
 
@@ -809,16 +832,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 ctx.rotate((rotation * Math.PI) / 180);
                 ctx.scale(scaleX, scaleY);
 
+                // Appliquer le filtre si applicable
+                if (filter !== 'none' && part !== "body" && part !== "eyes" && part !== "mouth") {
+                    ctx.filter = filter;
+                } else {
+                    ctx.filter = 'none';
+                }
+
                 // Dessiner l'image
                 ctx.drawImage(img, -width / 2, -height / 2, width, height);
 
-                // Appliquer la superposition de couleur si une couleur est définie
-                if (color) {
-                    ctx.globalCompositeOperation = "source-atop"; // Dessiner uniquement sur les pixels existants
-                    ctx.fillStyle = color;
-                    ctx.fillRect(-width / 2, -height / 2, width, height);
-                    ctx.globalCompositeOperation = "source-over"; // Réinitialiser le mode de composition
-                }
+                // Réinitialiser le filtre
+                ctx.filter = 'none';
 
                 ctx.restore();
 
