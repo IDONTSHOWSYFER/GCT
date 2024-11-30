@@ -1,4 +1,4 @@
-// script.js
+// js/script.js
 
 document.addEventListener("DOMContentLoaded", () => {
     // Sélecteurs des éléments du DOM
@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const flipVerticalButton = document.getElementById("flipVerticalButton");
     const bringForwardButton = document.getElementById("bringForwardButton");
     const sendBackwardButton = document.getElementById("sendBackwardButton");
+    const versionButton = document.getElementById("versionButton"); // Bouton V2
 
     let selectedPart = null;
     let selectedColor = null;
@@ -561,47 +562,39 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Fonction pour appliquer une couleur à un élément
     function applyColor(element, color) {
         // Réinitialiser tous les styles de filtre au cas où il y en aurait déjà
         element.style.filter = '';
 
         // Si l'élément contient une image
         if (element.querySelector("img")) {
-            if (color === "reset") {
-                element.style.filter = "none";
-                return;
-            }
-
-            // Utiliser une expression régulière pour extraire les valeurs RGB
-            const rgbMatch = color.match(/^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/);
-            if (rgbMatch) {
-                const r = parseInt(rgbMatch[1], 10);
-                const g = parseInt(rgbMatch[2], 10);
-                const b = parseInt(rgbMatch[3], 10);
-
-                // Déterminer l'angle de rotation en fonction de la couleur
-                let hueRotate = 0;
-                if (r === 255 && g === 0 && b === 0) { // Rouge
-                    hueRotate = 0;
-                } else if (r === 0 && g === 255 && b === 0) { // Vert
-                    hueRotate = 120;
-                } else if (r === 0 && g === 0 && b === 255) { // Bleu
-                    hueRotate = 240;
-                } else if (r === 0 && g === 255 && b === 255) { // Cyan
-                    hueRotate = 180;
-                } else if (r === 255 && g === 0 && b === 255) { // Magenta
-                    hueRotate = 300;
-                } else if (r === 255 && g === 255 && b === 0) { // Jaune
-                    hueRotate = 60;
-                } else {
-                    hueRotate = 0; // Valeur par défaut si couleur non reconnue
-                }
-
-                // Appliquer le filtre CSS
-                element.style.filter = `sepia(1) saturate(10) hue-rotate(${hueRotate}deg)`;
-            } else {
-                // Si le format de la couleur n'est pas reconnu, réinitialiser le filtre
-                element.style.filter = "none";
+            // Applique un filtre CSS pour colorer l'image
+            switch (color) {
+                case "rgb(255, 0, 0)": // Rouge
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(0deg)";
+                    break;
+                case "rgb(0, 255, 0)": // Vert
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(120deg)";
+                    break;
+                case "rgb(0, 0, 255)": // Bleu
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(240deg)";
+                    break;
+                case "rgb(0, 255, 255)": // Cyan
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(180deg)";
+                    break;
+                case "rgb(255, 0, 255)": // Magenta
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(300deg)";
+                    break;
+                case "rgb(255, 255, 0)": // Jaune
+                    element.style.filter = "sepia(1) saturate(10) hue-rotate(60deg)";
+                    break;
+                case "reset": // Réinitialiser la couleur
+                    element.style.filter = "none"; // Réinitialiser le filtre
+                    break;
+                default:
+                    element.style.filter = "none"; // Réinitialiser le filtre par défaut
+                    break;
             }
         }
     }
@@ -762,7 +755,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Trier les éléments par z-index croissant pour dessiner du bas vers le haut
         const elements = Array.from(characterContainer.querySelectorAll(".draggable"));
         elements.sort((a, b) => {
-            return (parseInt(a.style.zIndex) || 0) - (parseInt(b.style.zIndex) || 0);
+            return (parseInt(window.getComputedStyle(a).zIndex) || 0) - (parseInt(window.getComputedStyle(b).zIndex) || 0);
         });
 
         // Dessiner chaque élément dans l'ordre trié
@@ -790,7 +783,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const scaleX = parseFloat(el.dataset.scaleX) || 1;
                 const scaleY = parseFloat(el.dataset.scaleY) || 1;
 
-                // Extraire le filtre CSS via getComputedStyle
+                // Extraire le filtre CSS en utilisant getComputedStyle
                 const computedStyle = window.getComputedStyle(el);
                 const filter = computedStyle.filter || 'none';
 
@@ -910,11 +903,17 @@ document.addEventListener("DOMContentLoaded", () => {
         { passive: false }
     );
 
+    // Initialiser le corps comme élément draggable (optionnel)
+    function initializeBody() {
+        addElement("body", "body1"); // Ajoutez le corps initial
+    }
+
+    initializeBody();
+
     // Gestion du bouton V2
-    const versionButton = document.getElementById("versionButton");
     versionButton.addEventListener("click", () => {
         alert("Bienvenue dans la version 2 de GRUMPYCATOR !");
-        // Vous pouvez ajouter d'autres fonctionnalités ici
+        // Vous pouvez ajouter d'autres fonctionnalités ici, comme rediriger vers une nouvelle page
     });
 
     // Accessibilité via clavier pour le bouton V2
@@ -924,11 +923,4 @@ document.addEventListener("DOMContentLoaded", () => {
             versionButton.click();
         }
     });
-
-    // Initialiser le corps comme élément draggable (optionnel)
-    function initializeBody() {
-        addElement("body", "body1"); // Ajoutez le corps initial
-    }
-
-    initializeBody();
 });

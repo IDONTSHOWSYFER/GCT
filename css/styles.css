@@ -8,6 +8,8 @@
     font-style: normal;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Baloo+2&display=swap');
+
 /* Reset and CSS Variables */
 * {
     margin: 0;
@@ -353,7 +355,6 @@ header p {
 }
 
 .save-button {
-    /* Remplacer le fond blanc par noir pour visibilité */
     background-color: var(--button-bg); /* Noir */
     color: var(--button-text); /* Blanc */
 }
@@ -647,34 +648,6 @@ header p {
     }
 }
 
-/* Bouton Spécial V2 */
-.version-button {
-    background-color: #e31828; /* Rouge vif */
-    color: #000000; /* Noir pour le texte */
-    border: 2px solid #000000; /* Bordure noire */
-    border-radius: 50%; /* Forme circulaire */
-    width: 50px;
-    height: 50px;
-    font-size: 1.2em;
-    font-weight: bold;
-    cursor: pointer;
-    position: absolute; /* Positionnement absolu */
-    top: 20px; /* Ajustez selon vos préférences */
-    right: 20px; /* Ajustez selon vos préférences */
-    z-index: 1001; /* Assure qu'il est au-dessus des autres éléments */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: transform var(--transition-speed), background-color var(--transition-speed);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.version-button:hover,
-.version-button:focus {
-    transform: scale(1.1);
-    background-color: #a1161d; /* Rouge foncé au survol */
-}
-
 /* Additional Playful Styles */
 body {
     background-color: #f0f0f0; /* Fond gris clair pour contraste */
@@ -705,4 +678,32 @@ header h1, header h2, header p, .socials__title, .socials__description, .control
 .control-buttons button:focus {
     outline: none;
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+/* Bouton Spécial V2 */
+.version-button {
+    background-color: #e31828; /* Rouge vif */
+    color: #000000; /* Noir pour le texte */
+    border: 2px solid #000000; /* Bordure noire */
+    border-radius: 50%; /* Forme circulaire */
+    width: 50px;
+    height: 50px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute; /* Positionnement absolu */
+    top: 20px; /* Ajustez selon vos préférences */
+    right: 20px; /* Ajustez selon vos préférences */
+    z-index: 1001; /* Assure qu'il est au-dessus des autres éléments */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-speed), background-color var(--transition-speed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.version-button:hover,
+.version-button:focus {
+    transform: scale(1.1);
+    background-color: #a1161d; /* Rouge foncé au survol */
 }
