@@ -565,46 +565,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fonction pour appliquer une couleur à un élément
     function applyColor(element, color) {
-        // Réinitialiser tous les styles de filtre au cas où il y en aurait déjà
-        element.style.filter = '';
-
-        // Si l'élément contient une image
-        if (element.querySelector("img")) {
-            let filterValue = "none"; // Valeur par défaut
-
-            // Applique un filtre CSS pour colorer l'image
-            switch (color) {
-                case "rgb(255, 0, 0)": // Rouge
-                    filterValue = "sepia(1) saturate(10) hue-rotate(0deg)";
-                    break;
-                case "rgb(0, 255, 0)": // Vert
-                    filterValue = "sepia(1) saturate(10) hue-rotate(120deg)";
-                    break;
-                case "rgb(0, 0, 255)": // Bleu
-                    filterValue = "sepia(1) saturate(10) hue-rotate(240deg)";
-                    break;
-                case "rgb(0, 255, 255)": // Cyan
-                    filterValue = "sepia(1) saturate(10) hue-rotate(180deg)";
-                    break;
-                case "rgb(255, 0, 255)": // Magenta
-                    filterValue = "sepia(1) saturate(10) hue-rotate(300deg)";
-                    break;
-                case "rgb(255, 255, 0)": // Jaune
-                    filterValue = "sepia(1) saturate(10) hue-rotate(60deg)";
-                    break;
-                case "reset": // Réinitialiser la couleur
-                    filterValue = "none"; // Réinitialiser le filtre
-                    break;
-                default:
-                    filterValue = "none"; // Réinitialiser le filtre par défaut
-                    break;
-            }
-
-            // Appliquer le filtre CSS
-            element.style.filter = filterValue;
-
-            // Stocker le filtre dans un attribut de données
-            element.dataset.filter = filterValue;
+        if (color === "reset") {
+            element.dataset.color = null;
+        } else {
+            element.dataset.color = color;
         }
     }
 
@@ -801,16 +765,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 const scaleX = parseFloat(el.dataset.scaleX) || 1;
                 const scaleY = parseFloat(el.dataset.scaleY) || 1;
 
-                // Extraire le filtre CSS stocké dans l'attribut de données
-                const filter = el.dataset.filter || 'none';
+                // Extraire la couleur de l'attribut de données
+                const color = el.dataset.color || null;
 
-                // Log du filtre pour le débogage
-                console.log(`Element: ${el.dataset.part} - Filter: ${filter}`);
+                console.log(`Élément: ${el.dataset.part} - Couleur appliquée: ${color}`);
 
                 ctx.save();
-
-                // Appliquer le filtre
-                ctx.filter = filter;
 
                 // Appliquer les transformations
                 ctx.translate(left + width / 2, top + height / 2);
@@ -820,6 +780,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Dessiner l'image
                 ctx.drawImage(img, -width / 2, -height / 2, width, height);
 
+                // Appliquer la superposition de couleur si une couleur est définie
+                if (color) {
+                    ctx.globalCompositeOperation = "source-atop"; // Dessiner uniquement sur les pixels existants
+                    ctx.fillStyle = color;
+                    ctx.fillRect(-width / 2, -height / 2, width, height);
+                    ctx.globalCompositeOperation = "source-over"; // Réinitialiser le mode de composition
+                }
+
                 ctx.restore();
 
                 loadedImages++;
@@ -828,7 +796,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             };
             img.onerror = () => {
-                console.error(`Failed to load image: ${img.src}`);
+                console.error(`Échec du chargement de l'image : ${img.src}`);
                 loadedImages++;
                 if (loadedImages === totalImages) {
                     downloadCanvas(tempCanvas);
