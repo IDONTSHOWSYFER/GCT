@@ -565,6 +565,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fonction pour appliquer une couleur à un élément
     function applyColor(element, color) {
+        // Appliquer le filtre CSS pour la visualisation en temps réel
+        if (color === "reset") {
+            element.style.filter = 'none';
+        } else {
+            let filterValue = "none";
+            switch (color) {
+                case "rgb(255, 0, 0)": // Rouge
+                    filterValue = "sepia(1) saturate(10) hue-rotate(0deg)";
+                    break;
+                case "rgb(0, 255, 0)": // Vert
+                    filterValue = "sepia(1) saturate(10) hue-rotate(120deg)";
+                    break;
+                case "rgb(0, 0, 255)": // Bleu
+                    filterValue = "sepia(1) saturate(10) hue-rotate(240deg)";
+                    break;
+                case "rgb(0, 255, 255)": // Cyan
+                    filterValue = "sepia(1) saturate(10) hue-rotate(180deg)";
+                    break;
+                case "rgb(255, 0, 255)": // Magenta
+                    filterValue = "sepia(1) saturate(10) hue-rotate(300deg)";
+                    break;
+                case "rgb(255, 255, 0)": // Jaune
+                    filterValue = "sepia(1) saturate(10) hue-rotate(60deg)";
+                    break;
+                default:
+                    filterValue = "none";
+                    break;
+            }
+            element.style.filter = filterValue;
+        }
+
+        // Stocker la couleur sélectionnée dans l'attribut de données pour la sauvegarde
         if (color === "reset") {
             element.dataset.color = null;
         } else {
