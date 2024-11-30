@@ -60,6 +60,7 @@ header {
     margin-bottom: 20px;
     width: 100%;
     text-align: center;
+    position: relative; /* Pour positionner le bouton V2 */
 }
 
 header h1 {
@@ -81,34 +82,6 @@ header p {
     font-size: var(--font-size-description);
     color: var(--text-color); /* Modifié de var(--secondary-color) à var(--text-color) */
     margin-top: 10px;
-}
-
-/* Bouton Spécial V2 */
-.version-button {
-    background-color: #e31828;
-    color: #000000;
-    border: 2px solid #000000;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    font-size: 0.6em;
-    font-weight: bold;
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 1001;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: transform var(--transition-speed), background-color var(--transition-speed);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.version-button:hover,
-.version-button:focus {
-    transform: scale(1.1);
-    background-color: #a1161d;
 }
 
 /* Main Container */
@@ -672,6 +645,34 @@ header p {
         width: 80px;
         height: 80px;
     }
+}
+
+/* Bouton Spécial V2 */
+.version-button {
+    background-color: #e31828; /* Rouge vif */
+    color: #000000; /* Noir pour le texte */
+    border: 2px solid #000000; /* Bordure noire */
+    border-radius: 50%; /* Forme circulaire */
+    width: 50px;
+    height: 50px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute; /* Positionnement absolu */
+    top: 20px; /* Ajustez selon vos préférences */
+    right: 20px; /* Ajustez selon vos préférences */
+    z-index: 1001; /* Assure qu'il est au-dessus des autres éléments */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-speed), background-color var(--transition-speed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.version-button:hover,
+.version-button:focus {
+    transform: scale(1.1);
+    background-color: #a1161d; /* Rouge foncé au survol */
 }
 
 /* Additional Playful Styles */

@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
         makeLockable(draggable, lockButton);
 
         // Appliquer la couleur si sélectionnée et applicable
-        if (selectedColor && part !== "body" && part !== "eyes") {
+        if (selectedColor && part !== "body" && part !== "eyes" && part !== "mouth") {
             applyColor(draggable, selectedColor);
         }
     }
@@ -567,32 +567,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Si l'élément contient une image
         if (element.querySelector("img")) {
-            // Applique un filtre CSS pour colorer l'image
-            switch (color) {
-                case "rgb(255, 0, 0)": // Rouge
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(0deg)";
-                    break;
-                case "rgb(0, 255, 0)": // Vert
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(120deg)";
-                    break;
-                case "rgb(0, 0, 255)": // Bleu
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(240deg)";
-                    break;
-                case "rgb(0, 255, 255)": // Cyan
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(180deg)";
-                    break;
-                case "rgb(255, 0, 255)": // Magenta
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(300deg)";
-                    break;
-                case "rgb(255, 255, 0)": // Jaune
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(60deg)";
-                    break;
-                case "reset": // Réinitialiser la couleur
-                    element.style.filter = "none"; // Réinitialiser le filtre
-                    break;
-                default:
-                    element.style.filter = "none"; // Réinitialiser le filtre par défaut
-                    break;
+            if (color === "reset") {
+                element.style.filter = "none";
+                return;
+            }
+
+            // Utiliser une expression régulière pour extraire les valeurs RGB
+            const rgbMatch = color.match(/^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/);
+            if (rgbMatch) {
+                const r = parseInt(rgbMatch[1], 10);
+                const g = parseInt(rgbMatch[2], 10);
+                const b = parseInt(rgbMatch[3], 10);
+
+                // Déterminer l'angle de rotation en fonction de la couleur
+                let hueRotate = 0;
+                if (r === 255 && g === 0 && b === 0) { // Rouge
+                    hueRotate = 0;
+                } else if (r === 0 && g === 255 && b === 0) { // Vert
+                    hueRotate = 120;
+                } else if (r === 0 && g === 0 && b === 255) { // Bleu
+                    hueRotate = 240;
+                } else if (r === 0 && g === 255 && b === 255) { // Cyan
+                    hueRotate = 180;
+                } else if (r === 255 && g === 0 && b === 255) { // Magenta
+                    hueRotate = 300;
+                } else if (r === 255 && g === 255 && b === 0) { // Jaune
+                    hueRotate = 60;
+                } else {
+                    hueRotate = 0; // Valeur par défaut si couleur non reconnue
+                }
+
+                // Appliquer le filtre CSS
+                element.style.filter = `sepia(1) saturate(10) hue-rotate(${hueRotate}deg)`;
+            } else {
+                // Si le format de la couleur n'est pas reconnu, réinitialiser le filtre
+                element.style.filter = "none";
             }
         }
     }
@@ -672,7 +681,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (
                 selectedElement &&
                 selectedElement.dataset.part !== "body" &&
-                selectedElement.dataset.part !== "eyes"
+                selectedElement.dataset.part !== "eyes" &&
+                selectedElement.dataset.part !== "mouth"
             ) {
                 applyColor(selectedElement, selectedColor);
             }
@@ -780,8 +790,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 const scaleX = parseFloat(el.dataset.scaleX) || 1;
                 const scaleY = parseFloat(el.dataset.scaleY) || 1;
 
-                // Extraire le filtre CSS
-                const filter = el.style.filter || 'none';
+                // Extraire le filtre CSS via getComputedStyle
+                const computedStyle = window.getComputedStyle(el);
+                const filter = computedStyle.filter || 'none';
 
                 ctx.save();
 
@@ -898,6 +909,21 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         { passive: false }
     );
+
+    // Gestion du bouton V2
+    const versionButton = document.getElementById("versionButton");
+    versionButton.addEventListener("click", () => {
+        alert("Bienvenue dans la version 2 de GRUMPYCATOR !");
+        // Vous pouvez ajouter d'autres fonctionnalités ici
+    });
+
+    // Accessibilité via clavier pour le bouton V2
+    versionButton.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            versionButton.click();
+        }
+    });
 
     // Initialiser le corps comme élément draggable (optionnel)
     function initializeBody() {
