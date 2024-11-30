@@ -780,11 +780,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 const scaleX = parseFloat(el.dataset.scaleX) || 1;
                 const scaleY = parseFloat(el.dataset.scaleY) || 1;
 
+                // Extraire le filtre CSS
+                const filter = el.style.filter || 'none';
+
                 ctx.save();
+
+                // Appliquer le filtre
+                ctx.filter = filter;
+
+                // Appliquer les transformations
                 ctx.translate(left + width / 2, top + height / 2);
                 ctx.rotate((rotation * Math.PI) / 180);
                 ctx.scale(scaleX, scaleY);
+
+                // Dessiner l'image
                 ctx.drawImage(img, -width / 2, -height / 2, width, height);
+
                 ctx.restore();
 
                 loadedImages++;

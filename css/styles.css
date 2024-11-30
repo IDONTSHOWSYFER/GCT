@@ -16,29 +16,29 @@
 }
 
 :root {
-    --primary-color: #e31828;
-    --secondary-color: #000000;
-    --background: #f0f0f0;
-    --card-background: rgba(255, 255, 255, 0.95);
-    --text-color: #000000;
-    --button-bg: #e31828;
-    --button-text: #ffffff;
-    --button-hover-bg: #b3121c;
-    --button-border-radius: 10px;
+    --primary-color: #000000; /* Noir pour une base neutre */
+    --secondary-color: #ffffff; /* Blanc pour contraste */
+    --background: #ffffff; /* Fond blanc */
+    --card-background: rgba(0, 0, 0, 0.05); /* Légère ombre pour les cartes */
+    --text-color: #000000; /* Noir pour le texte principal */
+    --button-bg: #000000; /* Noir pour les boutons principaux */
+    --button-text: #ffffff; /* Blanc pour le texte des boutons */
+    --button-hover-bg: #333333; /* Noir foncé au survol */
+    --button-border-radius: 20px; /* Plus arrondi */
     --button-padding: 10px 20px;
     --button-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     --font-primary: 'Schoolbell', cursive;
     --font-secondary: 'Comic Neue', cursive;
     --font-size-base: 1em;
-    --font-size-h1: 3em;
-    --font-size-h2: 1.8em;
-    --font-size-h3: 1.5em;
-    --font-size-description: 1.2em;
+    --font-size-h1: 2.5em; /* Ajusté pour une meilleure lisibilité */
+    --font-size-h2: 1.5em;
+    --font-size-h3: 1.3em;
+    --font-size-description: 1em;
     --font-size-button: 1em;
     --padding-section: 40px 20px;
     --gap-socials: 20px;
-    --social-icon-size: 50px;
-    --social-card-size: 100px;
+    --social-icon-size: 40px; /* Ajusté pour une meilleure intégration */
+    --social-card-size: 80px;
     --animation-fade-in-duration: 2s;
     --transition-speed: 0.3s;
 }
@@ -73,14 +73,42 @@ header h1 {
 header h2 {
     font-family: var(--font-secondary), cursive;
     font-size: var(--font-size-h2);
-    color: var(--secondary-color);
+    color: var(--text-color); /* Modifié de var(--secondary-color) à var(--text-color) */
     margin-top: 10px;
 }
 
 header p {
     font-size: var(--font-size-description);
-    color: var(--secondary-color);
+    color: var(--text-color); /* Modifié de var(--secondary-color) à var(--text-color) */
     margin-top: 10px;
+}
+
+/* Bouton Spécial V2 */
+.version-button {
+    background-color: #e31828;
+    color: #000000;
+    border: 2px solid #000000;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 0.6em;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1001;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-speed), background-color var(--transition-speed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.version-button:hover,
+.version-button:focus {
+    transform: scale(1.1);
+    background-color: #a1161d;
 }
 
 /* Main Container */
@@ -106,9 +134,9 @@ header p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #ffffff;
+    background-color: var(--card-background);
     border: 2px solid #ccc;
-    border-radius: 10px;
+    border-radius: 20px; /* Plus arrondi pour une apparence enfantine */
     padding: 20px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     width: 100%;
@@ -123,8 +151,8 @@ header p {
     width: 100%;
     max-width: 800px; /* Assure qu'il ne dépasse pas le parent */
     aspect-ratio: 4 / 5; /* Maintient les proportions */
-    background-color: #ffe4e1;
-    border: 2px solid var(--secondary-color);
+    background-color: #ffffff;
+    border: 2px solid var(--primary-color);
     border-radius: 10px;
     overflow: hidden;
     box-sizing: border-box;
@@ -140,8 +168,8 @@ header p {
     gap: 10px;
     background-color: var(--primary-color);
     padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 20px; /* Plus arrondi */
+    box-shadow: var(--button-shadow);
     transition: all var(--transition-speed);
     width: 100%;
     max-width: 300px;
@@ -155,7 +183,7 @@ header p {
     height: 60px;
     border: none;
     border-radius: 50%;
-    background-color: #ffffff;
+    background-color: var(--secondary-color);
     cursor: pointer;
     transition: transform var(--transition-speed), background-color var(--transition-speed);
     display: flex;
@@ -172,13 +200,13 @@ header p {
 }
 
 .part-button.active {
-    border: 2px solid var(--secondary-color);
+    border: 2px solid var(--primary-color);
     transform: scale(1.1);
 }
 
 .part-button:hover,
 .part-button:focus {
-    background-color: var(--button-hover-bg);
+    background-color: #ffffff; /* Change de couleur au survol */
     transform: scale(1.1);
 }
 
@@ -193,9 +221,9 @@ header p {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    background-color: var(--card-background);
+    background-color: #ffffff;
     border: 2px solid #ccc;
-    border-radius: 10px;
+    border-radius: 20px; /* Plus arrondi */
     padding: 15px;
     box-shadow: var(--button-shadow);
     width: 100%;
@@ -205,7 +233,7 @@ header p {
 
 /* Color Selection */
 .color-selection {
-    background-color: var(--card-background);
+    background-color: #ffffff;
     padding: 15px;
     border-radius: 10px;
     box-shadow: var(--button-shadow);
@@ -214,7 +242,7 @@ header p {
 .color-selection h3 {
     text-align: center;
     font-family: var(--font-secondary), cursive;
-    color: var(--secondary-color);
+    color: var(--primary-color);
     margin-bottom: 10px;
 }
 
@@ -255,7 +283,7 @@ header p {
 /* Options Display */
 .options-display {
     display: none;
-    background-color: var(--card-background);
+    background-color: #ffffff;
     padding: 15px;
     border-radius: 10px;
     box-shadow: var(--button-shadow);
@@ -276,7 +304,7 @@ header p {
 .options-group h3 {
     text-align: center;
     font-family: var(--font-secondary), cursive;
-    color: var(--secondary-color);
+    color: var(--primary-color);
     margin-bottom: 10px;
 }
 
@@ -332,8 +360,8 @@ header p {
 
 .action-button, .save-button {
     padding: 15px 30px; /* Augmenté pour une meilleure visibilité */
-    background-color: var(--primary-color);
-    color: var(--button-text);
+    background-color: var(--button-bg); /* Changement pour var(--button-bg) qui est noir */
+    color: var(--button-text); /* Blanc */
     border: none;
     border-radius: var(--button-border-radius);
     font-size: var(--font-size-button);
@@ -352,12 +380,14 @@ header p {
 }
 
 .save-button {
-    background-color: var(--secondary-color);
+    /* Remplacer le fond blanc par noir pour visibilité */
+    background-color: var(--button-bg); /* Noir */
+    color: var(--button-text); /* Blanc */
 }
 
 .save-button:hover,
 .save-button:focus {
-    background-color: #333333;
+    background-color: var(--button-hover-bg); /* Noir foncé */
 }
 
 /* Social Links Section */
@@ -370,14 +400,14 @@ header p {
     font-size: 2em;
     margin-bottom: 10px;
     font-family: var(--font-secondary), cursive;
-    color: var(--secondary-color);
+    color: var(--primary-color);
 }
 
 .socials__description {
     font-size: 1.2em;
     margin-bottom: 20px;
     font-family: var(--font-secondary), cursive;
-    color: var(--secondary-color);
+    color: var(--primary-color);
 }
 
 .socials__links {
@@ -404,7 +434,7 @@ header p {
 
 .social__container p {
     font-size: 1em;
-    color: var(--secondary-color);
+    color: var(--primary-color);
     font-family: var(--font-secondary), cursive;
 }
 
@@ -446,7 +476,7 @@ header p {
     width: 24px; /* Augmenté pour une meilleure visibilité */
     height: 24px;
     background-color: var(--primary-color);
-    border: 2px solid #fff;
+    border: 2px solid #ffffff;
     border-radius: 50%;
     cursor: nwse-resize;
     box-sizing: border-box;
@@ -487,7 +517,7 @@ header p {
     width: 24px; /* Augmenté pour une meilleure visibilité */
     height: 24px;
     background-color: var(--secondary-color);
-    border: 2px solid #fff;
+    border: 2px solid #ffffff;
     border-radius: 50%;
     cursor: grab;
     box-sizing: border-box;
@@ -502,7 +532,7 @@ header p {
     width: 24px;
     height: 24px;
     background-color: var(--secondary-color);
-    border: 2px solid #fff;
+    border: 2px solid #ffffff;
     border-radius: 50%;
     cursor: pointer;
     box-sizing: border-box;
@@ -510,7 +540,7 @@ header p {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: #ffffff;
     font-size: 14px;
 }
 
@@ -642,4 +672,36 @@ header p {
         width: 80px;
         height: 80px;
     }
+}
+
+/* Additional Playful Styles */
+body {
+    background-color: #f0f0f0; /* Fond gris clair pour contraste */
+}
+
+header h1, header h2, header p, .socials__title, .socials__description, .control-buttons button {
+    text-align: center;
+}
+
+.character-container {
+    background-color: #ffffff; /* Fond blanc pour les éléments colorés */
+}
+
+.options-panel {
+    background-color: #ffffff;
+}
+
+.options-group h3 {
+    font-size: 1.3em;
+}
+
+.control-buttons button {
+    border-radius: 20px;
+    font-size: 1em;
+    padding: 10px 20px;
+}
+
+.control-buttons button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
