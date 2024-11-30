@@ -570,33 +570,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Si l'élément contient une image
         if (element.querySelector("img")) {
+            let filterValue = "none"; // Valeur par défaut
+
             // Applique un filtre CSS pour colorer l'image
             switch (color) {
                 case "rgb(255, 0, 0)": // Rouge
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(0deg)";
+                    filterValue = "sepia(1) saturate(10) hue-rotate(0deg)";
                     break;
                 case "rgb(0, 255, 0)": // Vert
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(120deg)";
+                    filterValue = "sepia(1) saturate(10) hue-rotate(120deg)";
                     break;
                 case "rgb(0, 0, 255)": // Bleu
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(240deg)";
+                    filterValue = "sepia(1) saturate(10) hue-rotate(240deg)";
                     break;
                 case "rgb(0, 255, 255)": // Cyan
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(180deg)";
+                    filterValue = "sepia(1) saturate(10) hue-rotate(180deg)";
                     break;
                 case "rgb(255, 0, 255)": // Magenta
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(300deg)";
+                    filterValue = "sepia(1) saturate(10) hue-rotate(300deg)";
                     break;
                 case "rgb(255, 255, 0)": // Jaune
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(60deg)";
+                    filterValue = "sepia(1) saturate(10) hue-rotate(60deg)";
                     break;
                 case "reset": // Réinitialiser la couleur
-                    element.style.filter = "none"; // Réinitialiser le filtre
+                    filterValue = "none"; // Réinitialiser le filtre
                     break;
                 default:
-                    element.style.filter = "none"; // Réinitialiser le filtre par défaut
+                    filterValue = "none"; // Réinitialiser le filtre par défaut
                     break;
             }
+
+            // Appliquer le filtre CSS
+            element.style.filter = filterValue;
+
+            // Stocker le filtre dans un attribut de données
+            element.dataset.filter = filterValue;
         }
     }
 
@@ -793,9 +801,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 const scaleX = parseFloat(el.dataset.scaleX) || 1;
                 const scaleY = parseFloat(el.dataset.scaleY) || 1;
 
-                // Extraire le filtre CSS en utilisant getComputedStyle
-                const computedStyle = window.getComputedStyle(el);
-                const filter = computedStyle.filter || 'none';
+                // Extraire le filtre CSS stocké dans l'attribut de données
+                const filter = el.dataset.filter || 'none';
+
+                // Log du filtre pour le débogage
+                console.log(`Element: ${el.dataset.part} - Filter: ${filter}`);
 
                 ctx.save();
 
