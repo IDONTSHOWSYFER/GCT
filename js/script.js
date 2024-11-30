@@ -121,12 +121,12 @@ document.addEventListener("DOMContentLoaded", () => {
         draggable.dataset.scaleX = "1";
         draggable.dataset.scaleY = "1";
 
-        // Initialiser le filtre
+        // Initialiser la couleur
         if (part === "body" || part === "eyes" || part === "mouth") {
-            draggable.dataset.filter = "none";
+            draggable.dataset.color = null;
             draggable.style.filter = "none";
         } else {
-            draggable.dataset.filter = "none"; // Par défaut sans filtre
+            draggable.dataset.color = null; // Par défaut sans couleur
         }
 
         // Ajouter l'élément au container
@@ -581,7 +581,14 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Déterminer la chaîne de filtres CSS basée sur la couleur sélectionnée
+        // Stocker la couleur dans l'attribut de données pour la sauvegarde
+        if (color === "reset") {
+            element.dataset.color = null;
+        } else {
+            element.dataset.color = color;
+        }
+
+        // Déterminer la chaîne de filtres CSS basée sur la couleur sélectionnée pour la visualisation en temps réel
         let filterValue = "none";
         switch (color) {
             case "rgb(255, 0, 0)": // Rouge
@@ -612,13 +619,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Appliquer le filtre CSS pour la visualisation en temps réel
         element.style.filter = filterValue;
-
-        // Stocker le filtre dans l'attribut de données pour la sauvegarde
-        if (color === "reset") {
-            element.dataset.filter = "none";
-        } else {
-            element.dataset.filter = filterValue;
-        }
     }
 
     // Fonction pour obtenir le z-index maximal dans le container
@@ -814,15 +814,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 const scaleX = parseFloat(el.dataset.scaleX) || 1;
                 const scaleY = parseFloat(el.dataset.scaleY) || 1;
 
-                // Extraire le filtre CSS stocké dans l'attribut de données
-                const filter = el.dataset.filter || 'none';
+                // Extraire la couleur stockée dans l'attribut de données
+                const color = el.dataset.color || null;
                 const part = el.dataset.part;
 
-                // Ne pas appliquer de filtre aux parties non colorables
+                // Ne pas appliquer de couleur aux parties non colorables
                 if (part === "body" || part === "eyes" || part === "mouth") {
-                    console.log(`Élément: ${part} - Pas de filtre appliqué.`);
-                } else {
-                    console.log(`Élément: ${part} - Filtre appliqué: ${filter}`);
+                    console.log(`Élément: ${part} - Pas de couleur appliquée.`);
+                } else if (color) {
+                    console.log(`Élément: ${part} - Couleur appliquée: ${color}`);
                 }
 
                 ctx.save();
@@ -832,18 +832,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 ctx.rotate((rotation * Math.PI) / 180);
                 ctx.scale(scaleX, scaleY);
 
-                // Appliquer le filtre si applicable
-                if (filter !== 'none' && part !== "body" && part !== "eyes" && part !== "mouth") {
-                    ctx.filter = filter;
-                } else {
-                    ctx.filter = 'none';
-                }
-
                 // Dessiner l'image
                 ctx.drawImage(img, -width / 2, -height / 2, width, height);
 
-                // Réinitialiser le filtre
-                ctx.filter = 'none';
+                // Appliquer une superposition de couleur si applicable
+                if (color && part !== "body" && part !== "eyes" && part !== "mouth") {
+                    // Définir le mode de composition
+                    ctx.globalCompositeOperation = 'source-atop'; // Utiliser 'source-atop' pour superposer la couleur
+
+                    // Définir la couleur de remplissage
+                    ctx.fillStyle = color;
+
+                    // Remplir la zone de l'image avec la couleur
+                    ctx.fillRect(-width / 2, -height / 2, width, height);
+
+                    // Réinitialiser le mode de composition
+                    ctx.globalCompositeOperation = 'source-over';
+                }
 
                 ctx.restore();
 
