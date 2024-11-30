@@ -94,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
         img.style.width = "100%";
         img.style.height = "100%";
         img.style.pointerEvents = "none";
+        img.crossOrigin = "anonymous"; // Important pour CORS
         draggable.appendChild(img);
 
         // Ajouter des poignées de redimensionnement
@@ -768,9 +769,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         elements.forEach((el) => {
+            const imgElement = el.querySelector("img");
+            if (!imgElement) {
+                loadedImages++;
+                if (loadedImages === totalImages) {
+                    downloadCanvas(tempCanvas);
+                }
+                return;
+            }
+
             const img = new Image();
             img.crossOrigin = "anonymous"; // Assurez-vous que les images sont CORS-enabled
-            img.src = el.querySelector("img").src;
+            img.src = imgElement.src;
             img.onload = () => {
                 // Calculer la position et la taille avec échelle
                 const left = el.offsetLeft * scalingFactor;
