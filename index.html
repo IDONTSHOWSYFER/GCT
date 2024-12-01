@@ -16,7 +16,7 @@
     <header>
         <h1>GRUMPYCATOR</h1>
         <h2>Welcome to Grumpycator's World</h2>
-        <p>Create your Grum and join the cult !</p>
+        <p>Create your Grum and join the cult!</p>
         <button id="versionButton" class="version-button" aria-label="Switch to Version 2">V2</button>
     </header>
     <main class="main-container">
@@ -52,16 +52,17 @@
             <div class="color-selection" id="colorSelection">
                 <h3>Choose a Color</h3>
                 <div class="color-buttons">
-                    <button class="color-button" data-color="rgb(255, 0, 0)" style="background-color: rgb(255, 0, 0);" title="Red" aria-label="Select Red Color"></button>
-                    <button class="color-button" data-color="rgb(0, 255, 0)" style="background-color: rgb(0, 255, 0);" title="Green" aria-label="Select Green Color"></button>
-                    <button class="color-button" data-color="rgb(0, 0, 255)" style="background-color: rgb(0, 0, 255);" title="Blue" aria-label="Select Blue Color"></button>
-                    <button class="color-button" data-color="rgb(0, 255, 255)" style="background-color: rgb(0, 255, 255);" title="Cyan" aria-label="Select Cyan Color"></button>
-                    <button class="color-button" data-color="rgb(255, 0, 255)" style="background-color: rgb(255, 0, 255);" title="Magenta" aria-label="Select Magenta Color"></button>
-                    <button class="color-button" data-color="rgb(255, 255, 0)" style="background-color: rgb(255, 255, 0);" title="Yellow" aria-label="Select Yellow Color"></button>
-                    <button class="color-button" data-color="reset" style="background-color: #ffffff; border: 2px solid #000000;" title="Reset Color" aria-label="Reset Color">🔄</button>
+                    <button class="color-button" data-color="#FF0000" style="background-color: #FF0000;" title="Red" aria-label="Select Red Color"></button>
+                    <button class="color-button" data-color="#00FF00" style="background-color: #00FF00;" title="Green" aria-label="Select Green Color"></button>
+                    <button class="color-button" data-color="#0000FF" style="background-color: #0000FF;" title="Blue" aria-label="Select Blue Color"></button>
+                    <button class="color-button" data-color="#00FFFF" style="background-color: #00FFFF;" title="Cyan" aria-label="Select Cyan Color"></button>
+                    <button class="color-button" data-color="#FF00FF" style="background-color: #FF00FF;" title="Magenta" aria-label="Select Magenta Color"></button>
+                    <button class="color-button" data-color="#FFFF00" style="background-color: #FFFF00;" title="Yellow" aria-label="Select Yellow Color"></button>
+                    <button class="color-button" data-color="reset" style="background-color: #FFFFFF; border: 2px solid #000000;" title="Reset Color" aria-label="Reset Color">🔄</button>
                 </div>
             </div>
             <div class="options-display" id="optionsDisplay" aria-live="polite">
+                <!-- Hair Options Group -->
                 <div class="options-group" id="options-hair">
                     <h3>Select a Hair Style</h3>
                     <div class="options-grid">
@@ -85,6 +86,7 @@
                         </button>
                     </div>
                 </div>
+                <!-- Eyes Options Group -->
                 <div class="options-group" id="options-eyes">
                     <h3>Select an Eye Style</h3>
                     <div class="options-grid">
@@ -105,6 +107,7 @@
                         </button>
                     </div>
                 </div>
+                <!-- Mouth Options Group -->
                 <div class="options-group" id="options-mouth">
                     <h3>Select a Mouth Style</h3>
                     <div class="options-grid">
@@ -128,6 +131,7 @@
                         </button>
                     </div>
                 </div>
+                <!-- Body Options Group -->
                 <div class="options-group" id="options-body">
                     <h3>Select a Body Style</h3>
                     <div class="options-grid">
@@ -148,6 +152,7 @@
                         </button>
                     </div>
                 </div>
+                <!-- Accessories Options Group -->
                 <div class="options-group" id="options-accessories">
                     <h3>Select an Accessory</h3>
                     <div class="options-grid">
@@ -174,38 +179,81 @@
                         </button>
                     </div>
                 </div>
-            </aside>
-            <section class="control-buttons" aria-label="Control Buttons">
-                <button id="saveButton" class="save-button" aria-label="Save Your Creation">🎨 Save</button>
-                <button id="deleteButton" class="action-button" aria-label="Delete Selection">🗑️ Delete</button>
-                <button id="flipHorizontalButton" class="action-button" aria-label="Flip Horizontally">↔️ Flip Horizontally</button>
-                <button id="flipVerticalButton" class="action-button" aria-label="Flip Vertically">↕️ Flip Vertically</button>
-                <button id="bringForwardButton" class="action-button" aria-label="Bring Forward">🔼 Bring Forward</button>
-                <button id="sendBackwardButton" class="action-button" aria-label="Send Backward">🔽 Send Backward</button>
-            </section>
-            <section class="socials" aria-label="Social Links">
-                <div class="social__container">
-                    <h2 class="socials__title">SOCIALS</h2>
-                    <p class="socials__description">JOIN THE GRUMPY CULT !</p>
-                    <div class="socials__links">
-                        <a href="https://twitter.com/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Twitter">
-                            <img src="assets/img/x.svg" alt="Twitter" class="socials__icon" />
-                        </a>
-                        <a href="https://t.me/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Telegram">
-                            <img src="assets/img/telegram.svg" alt="Telegram" class="socials__icon" />
-                        </a>
-                        <a href="https://www.instagram.com/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Instagram">
-                            <img src="assets/img/instagram.svg" alt="Instagram" class="socials__icon" />
-                        </a>
-                        <a href="https://linktr.ee/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Linktree">
-                            <img src="assets/img/linktree.svg" alt="Linktree" class="socials__icon" />
-                        </a>
+                <!-- Hat Options Group -->
+                <div class="options-group" id="options-hat">
+                    <h3>Select an Hat</h3>
+                    <div class="options-grid">
+                        <button class="option-button" data-part="hat" data-option="hat1" aria-label="Hat 1">
+                            <img src="assets/avatar/hat/hat1.png" alt="Hat 1">
+                        </button>
+                        <button class="option-button" data-part="hat" data-option="hat2" aria-label="Hat 2">
+                            <img src="assets/avatar/hat/hat2.png" alt="Hat 2">
+                        </button>
+                        <button class="option-button" data-part="hat" data-option="hat3" aria-label="Hat 3">
+                            <img src="assets/avatar/hat/hat3.png" alt="Hat 3">
+                        </button>
+                        <button class="option-button" data-part="hat" data-option="hat4" aria-label="Hat 4">
+                            <img src="assets/avatar/hat/hat4.png" alt="Hat 4">
+                        </button>
+                        <button class="option-button" data-part="hat" data-option="hat5" aria-label="Hat 5">
+                            <img src="assets/avatar/hat/hat5.png" alt="Hat 5">
+                        </button>
                     </div>
-                    <p>GRUM IS A CULT-URE WITH GUARANTEED FUN !</p>
                 </div>
-            </section>
-        </main>
-        <script src="js/script.js" defer></script>
-    </body>
+                <!-- Clothes Options Group -->
+                <div class="options-group" id="options-clothes">
+                    <h3>Select Clothes</h3>
+                    <div class="options-grid">
+                        <button class="option-button" data-part="clothes" data-option="clothes1" aria-label="Clothes 1">
+                            <img src="assets/avatar/clothes/clothes1.png" alt="Clothes 1">
+                        </button>
+                        <button class="option-button" data-part="clothes" data-option="clothes2" aria-label="Clothes 2">
+                            <img src="assets/avatar/clothes/clothes2.png" alt="Clothes 2">
+                        </button>
+                        <button class="option-button" data-part="clothes" data-option="clothes3" aria-label="Clothes 3">
+                            <img src="assets/avatar/clothes/clothes3.png" alt="Clothes 3">
+                        </button>
+                        <button class="option-button" data-part="clothes" data-option="clothes4" aria-label="Clothes 4">
+                            <img src="assets/avatar/clothes/clothes4.png" alt="Clothes 4">
+                        </button>
+                        <button class="option-button" data-part="clothes" data-option="clothes5" aria-label="Clothes 5">
+                            <img src="assets/avatar/clothes/clothes5.png" alt="Clothes 5">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <section class="control-buttons" aria-label="Control Buttons">
+            <button id="saveButton" class="save-button" aria-label="Save Your Creation">🎨 Save</button>
+            <button id="deleteButton" class="action-button" aria-label="Delete Selection">🗑️ Delete</button>
+            <button id="flipHorizontalButton" class="action-button" aria-label="Flip Horizontally">↔️ Flip Horizontally</button>
+            <button id="flipVerticalButton" class="action-button" aria-label="Flip Vertically">↕️ Flip Vertically</button>
+            <button id="bringForwardButton" class="action-button" aria-label="Bring Forward">🔼 Bring Forward</button>
+            <button id="sendBackwardButton" class="action-button" aria-label="Send Backward">🔽 Send Backward</button>
+        </section>
+        <section class="socials" aria-label="Social Links">
+            <div class="social__container">
+                <h2 class="socials__title">SOCIALS</h2>
+                <p class="socials__description">JOIN THE GRUMPY CULT!</p>
+                <div class="socials__links">
+                    <a href="https://twitter.com/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Twitter">
+                        <img src="assets/img/x.svg" alt="Twitter" class="socials__icon" />
+                    </a>
+                    <a href="https://t.me/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Telegram">
+                        <img src="assets/img/telegram.svg" alt="Telegram" class="socials__icon" />
+                    </a>
+                    <a href="https://www.instagram.com/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Instagram">
+                        <img src="assets/img/instagram.svg" alt="Instagram" class="socials__icon" />
+                    </a>
+                    <a href="https://linktr.ee/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Linktree">
+                        <img src="assets/img/linktree.svg" alt="Linktree" class="socials__icon" />
+                    </a>
+                </div>
+                <p>GRUM IS A CULTURE WITH GUARANTEED FUN!</p>
+            </div>
+        </section>
+    </main>
+    <script src="js/script.js" defer></script>
+</body>
 
 </html>

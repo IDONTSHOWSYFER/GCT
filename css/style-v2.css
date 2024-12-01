@@ -1,10 +1,6 @@
-/* style-v2.css - Design Époustouflant Rouge, Blanc et Noir pour V2 */
-
-/* Importation des polices */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
-/* Variables CSS pour la thématique Rouge, Blanc et Noir */
 :root {
     --primary-color: #ff0000; 
     --secondary-color: #ffffff;
@@ -33,35 +29,54 @@
     --social-card-size: 90px;
     --transition-speed: 0.4s;
     --animation-duration: 1.2s;
+    --filter-color: rgba(255, 0, 0, 0.1);
 }
 
-/* Styles de réinitialisation */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Style du corps de la page */
 body {
     background-color: var(--background-color);
     color: var(--text-color);
     font-family: var(--font-primary), sans-serif;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
     align-items: center;
     padding: 20px;
     overflow-x: hidden;
     position: relative;
 }
 
-/* Styles de l'en-tête */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--filter-color);
+    pointer-events: none;
+    z-index: -2;
+}
+
+@keyframes moveFilter {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 header {
     margin-bottom: 40px;
     width: 100%;
     text-align: center;
     position: relative;
+    z-index: 1;
 }
 
 header h1 {
@@ -96,7 +111,6 @@ header p {
     animation-delay: 0.6s;
 }
 
-/* Positionnement du bouton de version */
 .version-button {
     background-color: var(--accent-color);
     color: var(--secondary-color);
@@ -110,7 +124,7 @@ header p {
     position: fixed;
     top: 25px;
     right: 25px;
-    z-index: 1001;
+    z-index: 10000;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     transition: transform var(--transition-speed), background-color var(--transition-speed);
     display: flex;
@@ -125,15 +139,14 @@ header p {
     color: var(--secondary-color);
 }
 
-/* Section principale */
 .main-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    z-index: 1;
 }
 
-/* Section canvas */
 .canvas-section {
     display: flex;
     flex-direction: column;
@@ -153,7 +166,6 @@ header p {
     animation-delay: 0.9s;
 }
 
-/* Conteneur du personnage */
 .character-container {
     position: relative;
     width: 100%;
@@ -171,7 +183,6 @@ header p {
     box-shadow: 0 4px 12px rgba(255, 0, 0, 0.5);
 }
 
-/* Boutons de sélection */
 .selection-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -191,7 +202,6 @@ header p {
     animation-delay: 1.2s;
 }
 
-/* Bouton de partie */
 .part-button {
     width: 70px;
     height: 70px;
@@ -241,7 +251,6 @@ header p {
     filter: invert(1);
 }
 
-/* Panneau d'options */
 .options-panel {
     display: flex;
     flex-direction: column;
@@ -260,7 +269,6 @@ header p {
     animation-delay: 1.5s;
 }
 
-/* Sélection de couleur */
 .color-selection {
     background-color: var(--secondary-color);
     padding: 20px;
@@ -314,7 +322,6 @@ header p {
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
 }
 
-/* Affichage des options */
 .options-display {
     display: none;
     background-color: var(--secondary-color);
@@ -334,7 +341,6 @@ header p {
     display: block;
 }
 
-/* Groupe d'options */
 .options-group {
     margin-bottom: 25px;
 }
@@ -399,7 +405,6 @@ header p {
     filter: invert(1);
 }
 
-/* Boutons de contrôle */
 .control-buttons {
     display: flex;
     gap: 20px;
@@ -435,10 +440,10 @@ header p {
     transform: translateY(-3px);
 }
 
-/* Conteneur des réseaux sociaux */
 .social__container {
     text-align: center;
-    padding: 30px;
+    margin-top: 3em;
+    margin-bottom: -5em;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeIn var(--animation-duration) forwards;
@@ -461,6 +466,7 @@ header p {
 
 .socials__links {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 25px;
     margin-bottom: 100px;
@@ -485,7 +491,6 @@ header p {
     display: none;
 }
 
-/* Éléments draggable */
 .draggable {
     position: absolute;
     cursor: move;
@@ -599,7 +604,6 @@ header p {
     color: var(--secondary-color);
 }
 
-/* Animations */
 @keyframes fadeInDown {
     to {
         opacity: 1;
@@ -650,52 +654,181 @@ header p {
     }
 }
 
-/* Image Artwork en bas de la page */
 .artwork {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
     height: auto;
-    max-height: 30vh; /* Ajustez la hauteur maximale selon vos besoins */
+    max-height: 35vh;
     object-fit: cover;
-    z-index: -2;
+    z-index: -1;
     box-shadow: 0 -4px 12px rgba(255, 0, 0, 0.5);
+    margin-top: auto;
 }
 
-/* Responsivité améliorée */
-@media (max-width: 600px) {
-    .version-button {
-        width: 25px;
-        height: 25px;
-        font-size: 0.7em;
-        top: 15px;
-        right: 15px;
+.socials__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--gap-socials);
+    margin-bottom: 100px;
+}
+
+@media (max-width: 250px) {
+    header h1 {
+        font-size: 1.2em;
     }
 
+    header h2 {
+        font-size: 1em;
+    }
+
+    header p {
+        font-size: 0.9em;
+    }
+
+    .version-button {
+        width: 20px;
+        height: 20px;
+        font-size: 0.8em;
+        top: 10px;
+        right: 10px;
+    }
+
+    .selection-buttons {
+        max-width: 100%;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .part-button {
+        width: 50px;
+        height: 50px;
+    }
+
+    .part-button img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .option-button {
+        width: 60px;
+        height: 60px;
+    }
+
+    .option-button img {
+        width: 80%;
+        height: 80%;
+    }
+
+    .color-button {
+        width: 35px;
+        height: 35px;
+    }
+
+    .control-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .socials__links {
+        gap: 15px;
+    }
+
+    .artwork {
+        max-height: 20vh;
+    }
+}
+
+@media (min-width: 251px) and (max-width: 480px) {
     header h1 {
         font-size: 1.5em;
     }
 
     header h2 {
-        font-size: 1.3em;
+        font-size: 1.2em;
     }
 
     header p {
         font-size: 1em;
     }
 
-    .canvas-section {
-        padding: 20px;
-        max-width: 100%;
-    }
-
-    .character-container {
-        max-width: 100%;
+    .version-button {
+        width: 35px;
+        height: 35px;
+        font-size: 1em;
+        top: 15px;
+        right: 15px;
     }
 
     .selection-buttons {
         max-width: 100%;
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .part-button {
+        width: 55px;
+        height: 55px;
+    }
+
+    .part-button img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .option-button {
+        width: 65px;
+        height: 65px;
+    }
+
+    .option-button img {
+        width: 85%;
+        height: 85%;
+    }
+
+    .color-button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .control-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .socials__links {
+        gap: 20px;
+    }
+
+    .artwork {
+        max-height: 25vh;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    header h1 {
+        font-size: 2em;
+    }
+
+    header h2 {
+        font-size: 1.5em;
+    }
+
+    header p {
+        font-size: 1.1em;
+    }
+
+    .version-button {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1em;
+        top: 20px;
+        right: 20px;
+    }
+
+    .selection-buttons {
+        max-width: 100%;
+        padding: 15px;
+        gap: 15px;
     }
 
     .part-button {
@@ -714,31 +847,312 @@ header p {
     }
 
     .option-button img {
+        width: 90%;
+        height: 90%;
+    }
+
+    .color-button {
+        width: 45px;
+        height: 45px;
+    }
+
+    .control-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .socials__links {
+        gap: 25px;
+    }
+
+    .artwork {
+        max-height: 30vh;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    header h1 {
+        font-size: 2.5em;
+    }
+
+    header h2 {
+        font-size: 1.8em;
+    }
+
+    header p {
+        font-size: 1.3em;
+    }
+
+    .version-button {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2em;
+        top: 22px;
+        right: 22px;
+    }
+
+    .selection-buttons {
+        max-width: 400px;
+        padding: 18px;
+        gap: 18px;
+    }
+
+    .part-button {
+        width: 65px;
+        height: 65px;
+    }
+
+    .part-button img {
+        width: 38px;
+        height: 38px;
+    }
+
+    .option-button {
+        width: 75px;
+        height: 75px;
+    }
+
+    .option-button img {
+        width: 95%;
+        height: 95%;
+    }
+
+    .color-button {
+        width: 50px;
+        height: 50px;
+    }
+
+    .control-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 25px;
+    }
+
+    .socials__links {
+        gap: 30px;
+    }
+
+    .artwork {
+        max-height: 30vh;
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+    header h1 {
+        font-size: 3em;
+    }
+
+    header h2 {
+        font-size: 2em;
+    }
+
+    header p {
+        font-size: 1.5em;
+    }
+
+    .version-button {
+        width: 50px;
+        height: 50px;
+        font-size: 1.3em;
+        top: 25px;
+        right: 25px;
+    }
+
+    .selection-buttons {
+        max-width: 450px;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .part-button {
+        width: 70px;
+        height: 70px;
+    }
+
+    .part-button img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .option-button {
+        width: 80px;
+        height: 80px;
+    }
+
+    .option-button img {
         width: 100%;
         height: 100%;
     }
 
     .color-button {
-        width: 35px;
-        height: 35px;
+        width: 50px;
+        height: 50px;
     }
 
     .control-buttons {
-        flex-direction: column;
-        gap: 15px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 30px;
     }
 
     .socials__links {
-        flex-wrap: wrap;
+        gap: 35px;
     }
 
     .artwork {
-        max-height: 20vh; /* Hauteur réduite pour les petits écrans */
+        max-height: 35vh;
     }
 }
 
-@media (min-width: 1200px) {
-    .artwork {
-        max-height: 35vh; /* Hauteur plus grande pour les grands écrans */
+@media (min-width: 1441px) and (max-width: 2000px) {
+    header h1 {
+        font-size: 3.5em;
     }
+
+    header h2 {
+        font-size: 2.3em;
+    }
+
+    header p {
+        font-size: 1.7em;
+    }
+
+    .version-button {
+        width: 55px;
+        height: 55px;
+        font-size: 1.4em;
+        top: 28px;
+        right: 28px;
+    }
+
+    .selection-buttons {
+        max-width: 500px;
+        padding: 22px;
+        gap: 22px;
+    }
+
+    .part-button {
+        width: 75px;
+        height: 75px;
+    }
+
+    .part-button img {
+        width: 42px;
+        height: 42px;
+    }
+
+    .option-button {
+        width: 85px;
+        height: 85px;
+    }
+
+    .option-button img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .color-button {
+        width: 55px;
+        height: 55px;
+    }
+
+    .control-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 35px;
+    }
+
+    .socials__links {
+        gap: 40px;
+    }
+
+    .artwork {
+        max-height: 35vh;
+        margin-top: 5em;
+    }
+}
+
+@media (min-width: 2001px) {
+    header h1 {
+        font-size: 4em;
+    }
+
+    header h2 {
+        font-size: 2.5em;
+    }
+
+    header p {
+        font-size: 1.9em;
+    }
+
+    .version-button {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5em;
+        top: 30px;
+        right: 30px;
+    }
+
+    .selection-buttons {
+        max-width: 550px;
+        padding: 25px;
+        gap: 25px;
+    }
+
+    .part-button {
+        width: 80px;
+        height: 80px;
+    }
+
+    .part-button img {
+        width: 45px;
+        height: 45px;
+    }
+
+    .option-button {
+        width: 90px;
+        height: 90px;
+    }
+
+    .option-button img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .color-button {
+        width: 60px;
+        height: 60px;
+    }
+
+    .control-buttons {
+        gap: 40px;
+    }
+
+    .socials__links {
+        gap: 50px;
+    }
+
+    .artwork {
+        max-height: 35vh;
+        margin-top: 5em;
+    }
+}
+
+.artwork {
+    width: 100%;
+    height: auto;
+    max-height: 35vh;
+    object-fit: cover;
+    z-index: -1;
+    box-shadow: 0 -4px 12px rgba(255, 0, 0, 0.5);
+    margin-top: auto;
+}
+
+.socials__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--gap-socials);
+    margin-bottom: 100px;
 }
