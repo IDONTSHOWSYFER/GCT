@@ -66,8 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         draggable.style.transform = "translate(0%, 0%) rotate(0deg) scale(1)";
         draggable.style.width = "100px";
         draggable.style.height = "100px";
-        // Assigner z-index = 0 pour le corps, sinon augmenter
-        draggable.style.zIndex = (part === "body") ? 0 : getMaxZIndex() + 1;
+        draggable.style.zIndex = getMaxZIndex() + 1;
 
         const img = document.createElement("img");
         img.src = imgSrc;
@@ -75,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         img.style.width = "100%";
         img.style.height = "100%";
         img.style.pointerEvents = "none";
-        img.crossOrigin = "anonymous"; // Assurez-vous que les images sont servies avec les en-têtes CORS appropriés
+        img.crossOrigin = "anonymous";
         draggable.appendChild(img);
 
         const handles = ["br", "bl", "tr", "tl"];
@@ -490,34 +489,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (color === "reset") {
             element.dataset.color = null;
-            element.style.filter = "none";
         } else {
             element.dataset.color = color;
-            // Définir le filtre correspondant à la couleur
-            switch (color) {
-                case "rgb(255, 0, 0)": // Rouge
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(0deg)";
-                    break;
-                case "rgb(0, 255, 0)": // Vert
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(120deg)";
-                    break;
-                case "rgb(0, 0, 255)": // Bleu
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(240deg)";
-                    break;
-                case "rgb(0, 255, 255)": // Cyan
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(180deg)";
-                    break;
-                case "rgb(255, 0, 255)": // Magenta
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(300deg)";
-                    break;
-                case "rgb(255, 255, 0)": // Jaune
-                    element.style.filter = "sepia(1) saturate(10) hue-rotate(60deg)";
-                    break;
-                default:
-                    element.style.filter = "none";
-                    break;
-            }
         }
+
+        let filterValue = "none";
+        switch (color) {
+            case "rgb(255, 0, 0)":
+                filterValue = "sepia(1) saturate(10) hue-rotate(0deg)";
+                break;
+            case "rgb(0, 255, 0)":
+                filterValue = "sepia(1) saturate(10) hue-rotate(120deg)";
+                break;
+            case "rgb(0, 0, 255)":
+                filterValue = "sepia(1) saturate(10) hue-rotate(240deg)";
+                break;
+            case "rgb(0, 255, 255)":
+                filterValue = "sepia(1) saturate(10) hue-rotate(180deg)";
+                break;
+            case "rgb(255, 0, 255)":
+                filterValue = "sepia(1) saturate(10) hue-rotate(300deg)";
+                break;
+            case "rgb(255, 255, 0)":
+                filterValue = "sepia(1) saturate(10) hue-rotate(60deg)";
+                break;
+            case "reset":
+                filterValue = "none";
+                break;
+            default:
+                filterValue = "none";
+                break;
+        }
+
+        element.style.filter = filterValue;
     }
 
     function getMaxZIndex() {
@@ -641,13 +645,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tempCanvas.height = containerRect.height * scalingFactor;
         const ctx = tempCanvas.getContext("2d");
 
-        // Remplir le canvas avec un fond blanc
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-
         const elements = Array.from(characterContainer.querySelectorAll(".draggable"));
-
-        // Trier par z-index croissant pour dessiner en ordre correct
         elements.sort((a, b) => {
             return (parseInt(window.getComputedStyle(a).zIndex) || 0) - (parseInt(window.getComputedStyle(b).zIndex) || 0);
         });
@@ -671,7 +669,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const img = new Image();
-            img.crossOrigin = "anonymous"; // Assurez-vous que les images sont servies avec les en-têtes CORS appropriés
+            img.crossOrigin = "anonymous";
             img.src = imgElement.src;
             img.onload = () => {
                 const left = el.offsetLeft * scalingFactor;
@@ -688,48 +686,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 ctx.save();
 
-                // Appliquer les transformations
                 ctx.translate(left + width / 2, top + height / 2);
                 ctx.rotate((rotation * Math.PI) / 180);
                 ctx.scale(scaleX, scaleY);
 
-                // Appliquer les filtres de couleur si nécessaire
-                if (color && part !== "body" && part !== "eyes" && part !== "mouth") {
-                    // Définir le filtre correspondant à la couleur
-                    let filterValue = "none";
-                    switch (color) {
-                        case "rgb(255, 0, 0)": // Rouge
-                            filterValue = "sepia(1) saturate(10) hue-rotate(0deg)";
-                            break;
-                        case "rgb(0, 255, 0)": // Vert
-                            filterValue = "sepia(1) saturate(10) hue-rotate(120deg)";
-                            break;
-                        case "rgb(0, 0, 255)": // Bleu
-                            filterValue = "sepia(1) saturate(10) hue-rotate(240deg)";
-                            break;
-                        case "rgb(0, 255, 255)": // Cyan
-                            filterValue = "sepia(1) saturate(10) hue-rotate(180deg)";
-                            break;
-                        case "rgb(255, 0, 255)": // Magenta
-                            filterValue = "sepia(1) saturate(10) hue-rotate(300deg)";
-                            break;
-                        case "rgb(255, 255, 0)": // Jaune
-                            filterValue = "sepia(1) saturate(10) hue-rotate(60deg)";
-                            break;
-                        case "reset":
-                            filterValue = "none";
-                            break;
-                        default:
-                            filterValue = "none";
-                            break;
-                    }
-                    ctx.filter = filterValue;
-                } else {
-                    ctx.filter = 'none';
-                }
-
-                // Dessiner l'image avec les filtres appliqués
                 ctx.drawImage(img, -width / 2, -height / 2, width, height);
+
+                if (color && part !== "body" && part !== "eyes" && part !== "mouth") {
+                    ctx.globalCompositeOperation = 'source-atop';
+                    ctx.fillStyle = color;
+                    ctx.fillRect(-width / 2, -height / 2, width, height);
+                    ctx.globalCompositeOperation = 'source-over';
+                }
 
                 ctx.restore();
 
@@ -739,7 +707,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             };
             img.onerror = () => {
-                console.error(`Erreur de chargement de l'image: ${img.src}`);
                 loadedImages++;
                 if (loadedImages === totalImages) {
                     downloadCanvas(tempCanvas);
@@ -823,15 +790,9 @@ document.addEventListener("DOMContentLoaded", () => {
         { passive: false }
     );
 
-    function initializeBody() {
-        addElement("body", "body1");
-    }
-
-    initializeBody();
-
     // Version Button Functionality
     versionButton.addEventListener("click", () => {
-        window.location.href = "index-v2.html";
+        window.location.href = "index.html";
     });
 
     versionButton.addEventListener("keydown", (e) => {
@@ -840,4 +801,6 @@ document.addEventListener("DOMContentLoaded", () => {
             versionButton.click();
         }
     });
+
+    // Additional functionalities specific to V2 can be added here
 });

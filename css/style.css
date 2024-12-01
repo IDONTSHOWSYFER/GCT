@@ -1,6 +1,4 @@
-/* css/styles.css */
-
-/* Import Custom Fonts */
+/* Import Schoolbell Font */
 @font-face {
     font-family: 'Schoolbell';
     src: url('../assets/fonts/Schoolbell/Schoolbell-Regular.ttf') format('truetype');
@@ -8,9 +6,7 @@
     font-style: normal;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Baloo+2&display=swap');
-
-/* Reset and CSS Variables */
+/* Reset Styles */
 * {
     margin: 0;
     padding: 0;
@@ -18,34 +14,34 @@
 }
 
 :root {
-    --primary-color: #000000; /* Noir pour une base neutre */
-    --secondary-color: #ffffff; /* Blanc pour contraste */
-    --background: #ffffff; /* Fond blanc */
-    --card-background: rgba(0, 0, 0, 0.05); /* Légère ombre pour les cartes */
-    --text-color: #000000; /* Noir pour le texte principal */
-    --button-bg: #000000; /* Noir pour les boutons principaux */
-    --button-text: #ffffff; /* Blanc pour le texte des boutons */
-    --button-hover-bg: #333333; /* Noir foncé au survol */
-    --button-border-radius: 20px; /* Plus arrondi */
+    --primary-color: #000000;
+    --secondary-color: #ffffff;
+    --background: #ffffff;
+    --card-background: rgba(0, 0, 0, 0.05);
+    --text-color: #000000;
+    --button-bg: #000000;
+    --button-text: #ffffff;
+    --button-hover-bg: #333333;
+    --button-border-radius: 20px;
     --button-padding: 10px 20px;
     --button-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     --font-primary: 'Schoolbell', cursive;
     --font-secondary: 'Comic Neue', cursive;
     --font-size-base: 1em;
-    --font-size-h1: 2.5em; /* Ajusté pour une meilleure lisibilité */
+    --font-size-h1: 2.5em;
     --font-size-h2: 1.5em;
     --font-size-h3: 1.3em;
     --font-size-description: 1em;
     --font-size-button: 1em;
     --padding-section: 40px 20px;
     --gap-socials: 20px;
-    --social-icon-size: 40px; /* Ajusté pour une meilleure intégration */
+    --social-icon-size: 40px;
     --social-card-size: 80px;
     --animation-fade-in-duration: 2s;
     --transition-speed: 0.3s;
 }
 
-/* Base Body Styles */
+/* Body Style */
 body {
     background: var(--background);
     color: var(--text-color);
@@ -55,6 +51,7 @@ body {
     min-height: 100vh;
     align-items: center;
     padding: 20px;
+    overflow-x: hidden;
 }
 
 /* Header Styles */
@@ -62,7 +59,7 @@ header {
     margin-bottom: 20px;
     width: 100%;
     text-align: center;
-    position: relative; /* Pour positionner le bouton V2 */
+    position: relative;
 }
 
 header h1 {
@@ -76,33 +73,50 @@ header h1 {
 header h2 {
     font-family: var(--font-secondary), cursive;
     font-size: var(--font-size-h2);
-    color: var(--text-color); /* Modifié de var(--secondary-color) à var(--text-color) */
+    color: var(--text-color);
     margin-top: 10px;
 }
 
 header p {
     font-size: var(--font-size-description);
-    color: var(--text-color); /* Modifié de var(--secondary-color) à var(--text-color) */
+    color: var(--text-color);
     margin-top: 10px;
 }
 
-/* Main Container */
+/* Version Button Position */
+.version-button {
+    background-color: #e31828;
+    color: #000000;
+    border: 2px solid #000000;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 0.7em;
+    font-weight: bold;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-speed), background-color var(--transition-speed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.version-button:hover,
+.version-button:focus {
+    transform: scale(1.1);
+    background-color: #a1161d;
+}
+
+/* Canvas Section */
 .main-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-}
-
-/* Positionner l'image de décor à gauche de l'écran */
-.draw {
-    position: absolute;
-    left: -2em;
-    top: 70em;
-    width: auto;
-    height: 25vh;
-    object-fit: cover;
-    z-index: -1;
 }
 
 .canvas-section {
@@ -111,29 +125,30 @@ header p {
     align-items: center;
     background-color: var(--card-background);
     border: 2px solid #ccc;
-    border-radius: 20px; /* Plus arrondi pour une apparence enfantine */
+    border-radius: 20px;
     padding: 20px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 800px; /* Limite la largeur maximale */
+    max-width: 800px;
     margin: 0 auto;
-    overflow: hidden; /* Empêche le débordement */
+    overflow: hidden;
 }
 
-/* Character Container Styles */
+/* Character Container */
 .character-container {
     position: relative;
     width: 100%;
-    max-width: 800px; /* Assure qu'il ne dépasse pas le parent */
-    aspect-ratio: 4 / 5; /* Maintient les proportions */
+    max-width: 800px;
+    aspect-ratio: 4 / 5;
     background-color: #ffffff;
     border: 2px solid var(--primary-color);
     border-radius: 10px;
     overflow: hidden;
     box-sizing: border-box;
-    background-image: url('assets/avatar/body/body1.png'); /* Image de base du corps */
-    background-size: cover;
-    background-position: center;
+    /* Suppression de l'image de fond */
+    /* background-image: url('assets/avatar/body/body1.png'); */
+    /* background-size: cover; */
+    /* background-position: center; */
 }
 
 /* Selection Buttons */
@@ -143,7 +158,7 @@ header p {
     gap: 10px;
     background-color: var(--primary-color);
     padding: 10px;
-    border-radius: 20px; /* Plus arrondi */
+    border-radius: 20px;
     box-shadow: var(--button-shadow);
     transition: all var(--transition-speed);
     width: 100%;
@@ -152,9 +167,9 @@ header p {
     margin-top: 10px;
 }
 
-/* Part Buttons */
+/* Part Button */
 .part-button {
-    width: 60px; /* Augmenté pour une meilleure visibilité */
+    width: 60px;
     height: 60px;
     border: none;
     border-radius: 50%;
@@ -169,7 +184,7 @@ header p {
 }
 
 .part-button img {
-    width: 36px; /* Augmenté pour correspondre à la taille du bouton */
+    width: 36px;
     height: 36px;
     transition: transform var(--transition-speed);
 }
@@ -181,7 +196,7 @@ header p {
 
 .part-button:hover,
 .part-button:focus {
-    background-color: #ffffff; /* Change de couleur au survol */
+    background-color: #ffffff;
     transform: scale(1.1);
 }
 
@@ -198,7 +213,7 @@ header p {
     gap: 20px;
     background-color: #ffffff;
     border: 2px solid #ccc;
-    border-radius: 20px; /* Plus arrondi */
+    border-radius: 20px;
     padding: 15px;
     box-shadow: var(--button-shadow);
     width: 100%;
@@ -242,7 +257,6 @@ header p {
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
-/* Styles spécifiques pour le bouton de réinitialisation de couleur */
 .color-button[data-color="reset"] {
     background-color: #ffffff;
     border: 2px solid #000000;
@@ -291,7 +305,7 @@ header p {
 }
 
 .option-button {
-    width: 80px; /* Augmenté pour une meilleure visibilité */
+    width: 80px;
     height: 80px;
     background-color: #ffffff;
     border: none;
@@ -334,9 +348,9 @@ header p {
 }
 
 .action-button, .save-button {
-    padding: 15px 30px; /* Augmenté pour une meilleure visibilité */
-    background-color: var(--button-bg); /* Changement pour var(--button-bg) qui est noir */
-    color: var(--button-text); /* Blanc */
+    padding: 15px 30px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
     border: none;
     border-radius: var(--button-border-radius);
     font-size: var(--font-size-button);
@@ -355,16 +369,16 @@ header p {
 }
 
 .save-button {
-    background-color: var(--button-bg); /* Noir */
-    color: var(--button-text); /* Blanc */
+    background-color: var(--button-bg);
+    color: var(--button-text);
 }
 
 .save-button:hover,
 .save-button:focus {
-    background-color: var(--button-hover-bg); /* Noir foncé */
+    background-color: var(--button-hover-bg);
 }
 
-/* Social Links Section */
+/* Socials */
 .social__container {
     text-align: center;
     padding: 20px;
@@ -412,7 +426,7 @@ header p {
     font-family: var(--font-secondary), cursive;
 }
 
-/* Draggable Element Styles */
+/* Draggable Elements */
 .draggable {
     position: absolute;
     cursor: move;
@@ -427,37 +441,33 @@ header p {
 .draggable.selected {
     outline: 2px dashed var(--primary-color);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000; /* Assure que l'élément sélectionné est au-dessus */
+    z-index: 1000;
 }
 
-/* Resize Handles - Cachés par défaut */
 .draggable .resize-handle,
 .draggable .rotate-handle,
 .draggable .lock-button {
     display: none;
 }
 
-/* Afficher les poignées uniquement lorsque l'élément est sélectionné */
 .draggable.selected .resize-handle,
 .draggable.selected .rotate-handle,
 .draggable.selected .lock-button {
     display: block;
 }
 
-/* Styles pour les poignées de redimensionnement */
 .resize-handle {
     position: absolute;
-    width: 24px; /* Augmenté pour une meilleure visibilité */
+    width: 24px;
     height: 24px;
     background-color: var(--primary-color);
     border: 2px solid #ffffff;
     border-radius: 50%;
     cursor: nwse-resize;
     box-sizing: border-box;
-    z-index: 1001; /* Assure qu'elles sont au-dessus de l'élément */
+    z-index: 1001;
 }
 
-/* Positions spécifiques des poignées */
 .resize-handle.br {
     right: -12px;
     bottom: -12px;
@@ -482,26 +492,24 @@ header p {
     cursor: nwse-resize;
 }
 
-/* Styles pour la poignée de rotation */
 .rotate-handle {
     position: absolute;
-    top: -30px; /* Ajusté pour éviter le chevauchement */
+    top: -30px;
     left: 50%;
     transform: translateX(-50%);
-    width: 24px; /* Augmenté pour une meilleure visibilité */
+    width: 24px;
     height: 24px;
     background-color: var(--secondary-color);
     border: 2px solid #ffffff;
     border-radius: 50%;
     cursor: grab;
     box-sizing: border-box;
-    z-index: 1001; /* Assure qu'elles sont au-dessus de l'élément */
+    z-index: 1001;
 }
 
-/* Styles pour le bouton de verrouillage */
 .lock-button {
     position: absolute;
-    top: -30px; /* Positionné à côté de la poignée de rotation */
+    top: -30px;
     right: -30px;
     width: 24px;
     height: 24px;
@@ -522,24 +530,22 @@ header p {
     background-color: #555555;
 }
 
-/* Locked State Styles */
 .draggable.locked {
     opacity: 0.6;
-    /* pointer-events: none; */ /* Supprimé pour permettre l'interaction avec le bouton de verrouillage */
 }
 
 .draggable.locked .lock-button {
     background-color: #555555;
 }
 
-/* Responsive Design for Small Screens */
+/* Responsive Design */
 @media (max-width: 500px) {
     header h1 {
-        font-size: 2em;
+        font-size: 1.5em;
     }
-    .draw {
+    /* .draw {
         display: none;
-    }
+    } */
 }
 
 @media (max-width: 768px) {
@@ -548,8 +554,8 @@ header p {
     }
     .character-container {
         width: 100%;
-        max-width: 600px; /* Réduit la taille maximale pour les petits écrans */
-        aspect-ratio: 4 / 5; /* Maintient les proportions */
+        max-width: 600px;
+        aspect-ratio: 4 / 5;
     }
     .selection-buttons {
         flex-wrap: wrap;
@@ -586,19 +592,18 @@ header p {
     }
 }
 
-/* Responsive Design for Larger Screens */
 @media (min-width: 800px) {
-    .draw {
+    /* .draw {
         position: absolute;
         top: 25em;
-    }
+    } */
 }
 
 @media (min-width: 1000px) {
     .canvas-section {
         width: 800px;
     }
-    .draw {
+    /* .draw {
         position: absolute;
         left: -1em;
         top: 35em;
@@ -606,26 +611,25 @@ header p {
         height: 25vh;
         object-fit: cover;
         z-index: -1;
-    }
+    } */
 }
 
 @media (min-width: 1300px) {
-    .draw {
+    /* .draw {
         position: absolute;
         height: 40vh;
         left: -2em;
-    }
+    } */
 }
 
-/* Responsive Design for Very Large Screens */
 @media (min-width: 1601px) {
     .canvas-section {
         width: 800px;
     }
     .character-container {
         width: 100%;
-        max-width: 800px; /* Maintenu la taille maximale */
-        aspect-ratio: 4 / 5; /* Maintient les proportions */
+        max-width: 800px;
+        aspect-ratio: 4 / 5;
     }
     .part-button {
         width: 60px;
@@ -648,9 +652,9 @@ header p {
     }
 }
 
-/* Additional Playful Styles */
+/* Additional Styles */
 body {
-    background-color: #f0f0f0; /* Fond gris clair pour contraste */
+    background-color: #f0f0f0;
 }
 
 header h1, header h2, header p, .socials__title, .socials__description, .control-buttons button {
@@ -658,7 +662,7 @@ header h1, header h2, header p, .socials__title, .socials__description, .control
 }
 
 .character-container {
-    background-color: #ffffff; /* Fond blanc pour les éléments colorés */
+    background-color: #ffffff;
 }
 
 .options-panel {
@@ -678,32 +682,4 @@ header h1, header h2, header p, .socials__title, .socials__description, .control
 .control-buttons button:focus {
     outline: none;
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
-
-/* Bouton Spécial V2 */
-.version-button {
-    background-color: #e31828; /* Rouge vif */
-    color: #000000; /* Noir pour le texte */
-    border: 2px solid #000000; /* Bordure noire */
-    border-radius: 50%; /* Forme circulaire */
-    width: 50px;
-    height: 50px;
-    font-size: 1.2em;
-    font-weight: bold;
-    cursor: pointer;
-    position: absolute; /* Positionnement absolu */
-    top: 20px; /* Ajustez selon vos préférences */
-    right: 20px; /* Ajustez selon vos préférences */
-    z-index: 1001; /* Assure qu'il est au-dessus des autres éléments */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: transform var(--transition-speed), background-color var(--transition-speed);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.version-button:hover,
-.version-button:focus {
-    transform: scale(1.1);
-    background-color: #a1161d; /* Rouge foncé au survol */
 }
