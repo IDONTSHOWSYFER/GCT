@@ -500,7 +500,7 @@ header p {
     width: 24px;
     height: 24px;
     background-color: var(--secondary-color);
-    border: 2px solid #ffffff;
+    border: 2px solid #000000;
     border-radius: 50%;
     cursor: grab;
     box-sizing: border-box;
