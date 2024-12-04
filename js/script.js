@@ -769,7 +769,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let newScale = initialResizeScale * (newWidth / initialResizeWidth);
 
         // Limiter la scale pour éviter des redimensionnements excessifs
-        newScale = Math.max(0.2, Math.min(newScale, 10)); // Permet une échelle entre 50% et 1000%
+        newScale = Math.max(0.2, Math.min(newScale, 10)); // Permet une échelle entre 20% et 1000%
 
         // Appliquer la nouvelle échelle
         selectedElement.dataset.scale = newScale.toString();

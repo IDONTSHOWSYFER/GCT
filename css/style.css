@@ -301,7 +301,7 @@ header p {
 }
 
 .color-button[title="Reset Color"]::after {
-    content: "🔄";
+    content: '🔄';
     position: absolute;
     top: 50%;
     left: 50%;
@@ -618,6 +618,22 @@ button:focus {
 .draggable .rotate-handle,
 .draggable .lock-button {
     z-index: 10;
+}
+
+/* Ajout des règles pour masquer les poignées par défaut et les afficher uniquement lorsque l'élément est sélectionné */
+.draggable .resize-handle,
+.draggable .rotate-handle,
+.draggable .lock-button {
+    display: none; /* Masquer les poignées par défaut */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.draggable.selected .resize-handle,
+.draggable.selected .rotate-handle,
+.draggable.selected .lock-button {
+    display: block; /* Afficher les poignées lorsque l'élément est sélectionné */
+    opacity: 1;
 }
 
 .sidebar::-webkit-scrollbar {
