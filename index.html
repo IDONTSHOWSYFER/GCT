@@ -7,252 +7,313 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
-    <link rel="stylesheet" href="css/style.css" id="theme-v1">
-    <link rel="icon" href="img/draw.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Schoolbell&family=Comic+Neue:wght@700&family=Baloo+2&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="assets/img/draw.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Schoolbell&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <header>
         <h1>GRUMPYCATOR</h1>
-        <h2>Enter the Grumpy World !</h2>
-        <p>Create your Grum !</p>
+        <h2>Welcome in Grumpy World !</h2>
+        <p>Create Your Avatar</p>
         <button id="versionButton" class="version-button" aria-label="Switch to Version 2">V2</button>
     </header>
     <main class="main-container">
         <section class="canvas-section" aria-label="Canvas Section">
-            <div id="characterContainer" class="character-container" aria-label="Character Creation Container">
-                <!-- Initial body part for V1 -->
+            <div id="characterContainer" class="character-container" aria-label="Avatar Creation Container">
+                <!-- Draggable elements will be added here -->
             </div>
-            <div class="selection-buttons" aria-label="Select Part">
-                <button class="part-button" data-part="hair" title="Hair" aria-label="Select Hair" tabindex="0">
-                    <img src="assets/avatar/hair/hair-icon.png" alt="Hair">
-                </button>
-                <button class="part-button" data-part="eyes" title="Eyes" aria-label="Select Eyes" tabindex="0">
-                    <img src="assets/avatar/eyes/eyes-icon.png" alt="Eyes">
-                </button>
-                <button class="part-button" data-part="mouth" title="Mouth" aria-label="Select Mouth" tabindex="0">
-                    <img src="assets/avatar/mouth/mouth-icon.png" alt="Mouth">
-                </button>
-                <button class="part-button" data-part="body" title="Body" aria-label="Select Body" tabindex="0">
-                    <img src="assets/avatar/body/body-icon.png" alt="Body">
-                </button>
-                <button class="part-button" data-part="accessories" title="Accessories" aria-label="Select Accessories" tabindex="0">
-                    <img src="assets/avatar/accessories/accessories-icon.png" alt="Accessories">
-                </button>
-                <button class="part-button" data-part="hat" title="Hat" aria-label="Select Hat" tabindex="0">
-                    <img src="assets/avatar/hat/hat-icon.png" alt="Hat">
-                </button>
-                <button class="part-button" data-part="clothes" title="Clothes" aria-label="Select Clothes" tabindex="0">
-                    <img src="assets/avatar/clothes/clothes-icon.png" alt="Clothes">
-                </button>
-            </div>
+            
+            <section class="control-buttons" aria-label="Control Buttons">
+                <button id="saveButton" class="save-button" aria-label="Save Your Avatar">🎨 Save</button>
+                <button id="deleteButton" class="delete-button" aria-label="Delete Selection">🗑️ Delete</button>
+                <button id="flipHorizontalButton" class="action-button" aria-label="Flip Horizontally">↔️ Flip</button>
+                <button id="flipVerticalButton" class="action-button" aria-label="Flip Vertically">↕️ Flip</button>
+                <button id="bringForwardButton" class="action-button" aria-label="Bring Forward">🔼 Bring Forward</button>
+                <button id="sendBackwardButton" class="action-button" aria-label="Send Backward">🔽 Send Backward</button>
+            </section>
         </section>
-        <aside class="options-panel" aria-label="Options Panel">
-            <div class="color-selection" id="colorSelection">
-                <h3>Choose a Color</h3>
-                <div class="color-buttons">
-                    <button class="color-button" data-color="#FF0000" style="background-color: #FF0000;" title="Red" aria-label="Select Red Color"></button>
-                    <button class="color-button" data-color="#00FF00" style="background-color: #00FF00;" title="Green" aria-label="Select Green Color"></button>
-                    <button class="color-button" data-color="#0000FF" style="background-color: #0000FF;" title="Blue" aria-label="Select Blue Color"></button>
-                    <button class="color-button" data-color="#00FFFF" style="background-color: #00FFFF;" title="Cyan" aria-label="Select Cyan Color"></button>
-                    <button class="color-button" data-color="#FF00FF" style="background-color: #FF00FF;" title="Magenta" aria-label="Select Magenta Color"></button>
-                    <button class="color-button" data-color="#FFFF00" style="background-color: #FFFF00;" title="Yellow" aria-label="Select Yellow Color"></button>
-                    <button class="color-button" data-color="reset" style="background-color: #FFFFFF; border: 2px solid #000000;" title="Reset Color" aria-label="Reset Color">🔄</button>
-                </div>
-            </div>
-            <div class="options-display" id="optionsDisplay" aria-live="polite">
-                <!-- Hair Options Group -->
-                <div class="options-group" id="options-hair">
-                    <h3>Select a Hair Style</h3>
-                    <div class="options-grid">
-                        <button class="option-button" data-part="hair" data-option="hair1" aria-label="Hair Style 1">
-                            <img src="assets/avatar/hair/hair1.png" alt="Hair Style 1">
+
+        <button id="sidebarToggle" class="sidebar-toggle-button" aria-label="Open Elements Sidebar" aria-expanded="false"
+            aria-controls="sidebar">📂 Elements</button>
+
+        <aside class="sidebar" id="sidebar" aria-label="Avatar Parts Selection Sidebar">
+            <button id="closeSidebar" class="close-sidebar-button" aria-label="Close Sidebar">✖️</button>
+            <nav>
+                <ul class="selection-buttons" aria-label="Select Avatar Parts">
+                    <li>
+                        <button class="part-button" data-part="hair" aria-haspopup="true" aria-expanded="false"
+                            aria-controls="options-hair" aria-label="Select Hair">
+                            <img src="assets/avatar/icons/hair-icon.png" alt="Hair Icon">
+                            Hair ▼
                         </button>
-                        <button class="option-button" data-part="hair" data-option="hair2" aria-label="Hair Style 2">
-                            <img src="assets/avatar/hair/hair2.png" alt="Hair Style 2">
+                        <div class="options-display" id="options-hair" aria-label="Hair Options" role="dialog"
+                            aria-modal="false">
+                            <button class="close-button" aria-label="Close Hair Options">✖️</button>
+                            <h3>Select a Hair Style</h3>
+                            <div class="options-grid">
+                                <!-- Hair options will be dynamically added -->
+                            </div>
+                            <div class="color-selection" id="hairColorSelection" style="display: none;">
+                                <h4>Select Hair Color</h4>
+                                <div class="color-buttons">
+                                    <button class="color-button" data-color="rgb(0,0,0)" style="background-color: #000000;"
+                                        title="Black" aria-label="Select Black Hair Color"></button>
+                                    <button class="color-button" data-color="rgb(255,0,0)" style="background-color: #FF0000;"
+                                        title="Red" aria-label="Select Red Hair Color"></button>
+                                    <button class="color-button" data-color="rgb(0,255,0)" style="background-color: #00FF00;"
+                                        title="Green" aria-label="Select Green Hair Color"></button>
+                                    <button class="color-button" data-color="rgb(0,0,255)" style="background-color: #0000FF;"
+                                        title="Blue" aria-label="Select Blue Hair Color"></button>
+                                    <button class="color-button" data-color="rgb(255,255,0)" style="background-color: #FFFF00;"
+                                        title="Yellow" aria-label="Select Yellow Hair Color"></button>
+                                    <button class="color-button" data-color="rgb(255,165,0)" style="background-color: #FFA500;"
+                                        title="Orange" aria-label="Select Orange Hair Color"></button>
+                                    <button class="color-button" data-color="rgb(128,0,128)" style="background-color: #800080;"
+                                        title="Purple" aria-label="Select Purple Hair Color"></button>
+                                    <button class="color-button" data-color="rgb(255,255,255)" style="background-color: #FFFFFF;"
+                                        title="White" aria-label="Select White Hair Color"></button>
+                                    <button class="color-button" data-color="reset"
+                                        style="background-color: #FFFFFF; border: 2px solid #000000;"
+                                        title="Reset Color" aria-label="Reset Hair Color">🔄</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="part-button" data-part="eyes" aria-haspopup="true" aria-expanded="false"
+                            aria-controls="options-eyes" aria-label="Select Eyes">
+                            <img src="assets/avatar/icons/eyes-icon.png" alt="Eyes Icon">
+                            Eyes ▼
                         </button>
-                        <button class="option-button" data-part="hair" data-option="hair3" aria-label="Hair Style 3">
-                            <img src="assets/avatar/hair/hair3.png" alt="Hair Style 3">
+                        <div class="options-display" id="options-eyes" aria-label="Eyes Options" role="dialog"
+                            aria-modal="false">
+                            <button class="close-button" aria-label="Close Eyes Options">✖️</button>
+                            <h3>Select an Eye Style</h3>
+                            <div class="options-grid">
+                                <!-- Eyes options will be dynamically added -->
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="part-button" data-part="mouth" aria-haspopup="true" aria-expanded="false"
+                            aria-controls="options-mouth" aria-label="Select Mouth">
+                            <img src="assets/avatar/icons/mouth-icon.png" alt="Mouth Icon">
+                            Mouth ▼
                         </button>
-                        <button class="option-button" data-part="hair" data-option="hair4" aria-label="Hair Style 4">
-                            <img src="assets/avatar/hair/hair4.png" alt="Hair Style 4">
+                        <div class="options-display" id="options-mouth" aria-label="Mouth Options" role="dialog"
+                            aria-modal="false">
+                            <button class="close-button" aria-label="Close Mouth Options">✖️</button>
+                            <h3>Select a Mouth Style</h3>
+                            <div class="options-grid">
+                                <!-- Mouth options will be dynamically added -->
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="part-button" data-part="body" aria-haspopup="true" aria-expanded="false"
+                            aria-controls="options-body" aria-label="Select Body">
+                            <img src="assets/avatar/icons/body-icon.png" alt="Body Icon">
+                            Body ▼
                         </button>
-                        <button class="option-button" data-part="hair" data-option="hair5" aria-label="Hair Style 5">
-                            <img src="assets/avatar/hair/hair5.png" alt="Hair Style 5">
+                        <div class="options-display" id="options-body" aria-label="Body Options" role="dialog"
+                            aria-modal="false">
+                            <button class="close-button" aria-label="Close Body Options">✖️</button>
+                            <h3>Select a Body Style</h3>
+                            <div class="options-grid">
+                                <!-- Body options will be dynamically added -->
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="part-button" data-part="accessories" aria-haspopup="true" aria-expanded="false"
+                            aria-controls="options-accessories" aria-label="Select Accessories">
+                            <img src="assets/avatar/icons/accessories-icon.png" alt="Accessories Icon">
+                            Accessories ▼
                         </button>
-                        <button class="option-button" data-part="hair" data-option="hair6" aria-label="Hair Style 6">
-                            <img src="assets/avatar/hair/hair6.png" alt="Hair Style 6">
+                        <div class="options-display" id="options-accessories" aria-label="Accessories Options"
+                            role="dialog" aria-modal="false">
+                            <button class="close-button" aria-label="Close Accessories Options">✖️</button>
+                            <h3>Select an Accessory</h3>
+                            <div class="options-grid">
+                                <!-- Accessories options will be dynamically added -->
+                            </div>
+                            <div class="color-selection" id="partsColorSelectionAccessories" style="display: none;">
+                                <h4>Select Accessories Color</h4>
+                                <div class="color-buttons">
+                                    <button class="color-button" data-color="rgb(0,0,0)" style="background-color: #000000;"
+                                        title="Black" aria-label="Select Black Accessories Color"></button>
+                                    <button class="color-button" data-color="rgb(255,0,0)" style="background-color: #FF0000;"
+                                        title="Red" aria-label="Select Red Accessories Color"></button>
+                                    <button class="color-button" data-color="rgb(0,255,0)" style="background-color: #00FF00;"
+                                        title="Green" aria-label="Select Green Accessories Color"></button>
+                                    <button class="color-button" data-color="rgb(0,0,255)" style="background-color: #0000FF;"
+                                        title="Blue" aria-label="Select Blue Accessories Color"></button>
+                                    <button class="color-button" data-color="rgb(255,255,0)" style="background-color: #FFFF00;"
+                                        title="Yellow" aria-label="Select Yellow Accessories Color"></button>
+                                    <button class="color-button" data-color="rgb(255,165,0)" style="background-color: #FFA500;"
+                                        title="Orange" aria-label="Select Orange Accessories Color"></button>
+                                    <button class="color-button" data-color="rgb(128,0,128)" style="background-color: #800080;"
+                                        title="Purple" aria-label="Select Purple Accessories Color"></button>
+                                    <button class="color-button" data-color="rgb(255,255,255)" style="background-color: #FFFFFF;"
+                                        title="White" aria-label="Select White Accessories Color"></button>
+                                    <button class="color-button" data-color="reset"
+                                        style="background-color: #FFFFFF; border: 2px solid #000000;"
+                                        title="Reset Color" aria-label="Reset Accessories Color">🔄</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="part-button" data-part="hat" aria-haspopup="true" aria-expanded="false"
+                            aria-controls="options-hat" aria-label="Select Hat">
+                            <img src="assets/avatar/icons/hat-icon.png" alt="Hat Icon">
+                            Hat ▼
                         </button>
-                    </div>
-                </div>
-                <!-- Eyes Options Group -->
-                <div class="options-group" id="options-eyes">
-                    <h3>Select an Eye Style</h3>
-                    <div class="options-grid">
-                        <button class="option-button" data-part="eyes" data-option="eyes1" aria-label="Eye Style 1">
-                            <img src="assets/avatar/eyes/eyes1.png" alt="Eye Style 1">
+                        <div class="options-display" id="options-hat" aria-label="Hat Options" role="dialog"
+                            aria-modal="false">
+                            <button class="close-button" aria-label="Close Hat Options">✖️</button>
+                            <h3>Select a Hat</h3>
+                            <div class="options-grid">
+                                <!-- Hat options will be dynamically added -->
+                            </div>
+                            <div class="color-selection" id="partsColorSelectionHat" style="display: none;">
+                                <h4>Select Hat Color</h4>
+                                <div class="color-buttons">
+                                    <button class="color-button" data-color="rgb(0,0,0)" style="background-color: #000000;"
+                                        title="Black" aria-label="Select Black Hat Color"></button>
+                                    <button class="color-button" data-color="rgb(255,0,0)" style="background-color: #FF0000;"
+                                        title="Red" aria-label="Select Red Hat Color"></button>
+                                    <button class="color-button" data-color="rgb(0,255,0)" style="background-color: #00FF00;"
+                                        title="Green" aria-label="Select Green Hat Color"></button>
+                                    <button class="color-button" data-color="rgb(0,0,255)" style="background-color: #0000FF;"
+                                        title="Blue" aria-label="Select Blue Hat Color"></button>
+                                    <button class="color-button" data-color="rgb(255,255,0)" style="background-color: #FFFF00;"
+                                        title="Yellow" aria-label="Select Yellow Hat Color"></button>
+                                    <button class="color-button" data-color="rgb(255,165,0)" style="background-color: #FFA500;"
+                                        title="Orange" aria-label="Select Orange Hat Color"></button>
+                                    <button class="color-button" data-color="rgb(128,0,128)" style="background-color: #800080;"
+                                        title="Purple" aria-label="Select Purple Hat Color"></button>
+                                    <button class="color-button" data-color="rgb(255,255,255)" style="background-color: #FFFFFF;"
+                                        title="White" aria-label="Select White Hat Color"></button>
+                                    <button class="color-button" data-color="reset"
+                                        style="background-color: #FFFFFF; border: 2px solid #000000;"
+                                        title="Reset Color" aria-label="Reset Hat Color">🔄</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="part-button" data-part="clothes" aria-haspopup="true" aria-expanded="false"
+                            aria-controls="options-clothes" aria-label="Select Clothes">
+                            <img src="assets/avatar/icons/clothes-icon.png" alt="Clothes Icon">
+                            Clothes ▼
                         </button>
-                        <button class="option-button" data-part="eyes" data-option="eyes2" aria-label="Eye Style 2">
-                            <img src="assets/avatar/eyes/eyes2.png" alt="Eye Style 2">
+                        <div class="options-display" id="options-clothes" aria-label="Clothes Options" role="dialog"
+                            aria-modal="false">
+                            <button class="close-button" aria-label="Close Clothes Options">✖️</button>
+                            <h3>Select Clothes</h3>
+                            <div class="options-grid">
+                                <!-- Clothes options will be dynamically added -->
+                            </div>
+                            <div class="color-selection" id="partsColorSelectionClothes" style="display: none;">
+                                <h4>Select Clothes Color</h4>
+                                <div class="color-buttons">
+                                    <button class="color-button" data-color="rgb(0,0,0)" style="background-color: #000000;"
+                                        title="Black" aria-label="Select Black Clothes Color"></button>
+                                    <button class="color-button" data-color="rgb(255,0,0)" style="background-color: #FF0000;"
+                                        title="Red" aria-label="Select Red Clothes Color"></button>
+                                    <button class="color-button" data-color="rgb(0,255,0)" style="background-color: #00FF00;"
+                                        title="Green" aria-label="Select Green Clothes Color"></button>
+                                    <button class="color-button" data-color="rgb(0,0,255)" style="background-color: #0000FF;"
+                                        title="Blue" aria-label="Select Blue Clothes Color"></button>
+                                    <button class="color-button" data-color="rgb(255,255,0)" style="background-color: #FFFF00;"
+                                        title="Yellow" aria-label="Select Yellow Clothes Color"></button>
+                                    <button class="color-button" data-color="rgb(255,165,0)" style="background-color: #FFA500;"
+                                        title="Orange" aria-label="Select Orange Clothes Color"></button>
+                                    <button class="color-button" data-color="rgb(128,0,128)" style="background-color: #800080;"
+                                        title="Purple" aria-label="Select Purple Clothes Color"></button>
+                                    <button class="color-button" data-color="rgb(255,255,255)" style="background-color: #FFFFFF;"
+                                        title="White" aria-label="Select White Clothes Color"></button>
+                                    <button class="color-button" data-color="reset"
+                                        style="background-color: #FFFFFF; border: 2px solid #000000;"
+                                        title="Reset Color" aria-label="Reset Clothes Color">🔄</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="part-button" data-part="background" aria-haspopup="true" aria-expanded="false"
+                            aria-controls="options-background" aria-label="Select Background">
+                            <img src="assets/avatar/icons/background-icon.png" alt="Background Icon">
+                            Background ▼
                         </button>
-                        <button class="option-button" data-part="eyes" data-option="eyes3" aria-label="Eye Style 3">
-                            <img src="assets/avatar/eyes/eyes3.png" alt="Eye Style 3">
-                        </button>
-                        <button class="option-button" data-part="eyes" data-option="eyes4" aria-label="Eye Style 4">
-                            <img src="assets/avatar/eyes/eyes4.png" alt="Eye Style 4">
-                        </button>
-                        <button class="option-button" data-part="eyes" data-option="eyes5" aria-label="Eye Style 5">
-                            <img src="assets/avatar/eyes/eyes5.png" alt="Eye Style 5">
-                        </button>
-                    </div>
-                </div>
-                <!-- Mouth Options Group -->
-                <div class="options-group" id="options-mouth">
-                    <h3>Select a Mouth Style</h3>
-                    <div class="options-grid">
-                        <button class="option-button" data-part="mouth" data-option="mouth1" aria-label="Mouth Style 1">
-                            <img src="assets/avatar/mouth/mouth1.png" alt="Mouth Style 1">
-                        </button>
-                        <button class="option-button" data-part="mouth" data-option="mouth2" aria-label="Mouth Style 2">
-                            <img src="assets/avatar/mouth/mouth2.png" alt="Mouth Style 2">
-                        </button>
-                        <button class="option-button" data-part="mouth" data-option="mouth3" aria-label="Mouth Style 3">
-                            <img src="assets/avatar/mouth/mouth3.png" alt="Mouth Style 3">
-                        </button>
-                        <button class="option-button" data-part="mouth" data-option="mouth4" aria-label="Mouth Style 4">
-                            <img src="assets/avatar/mouth/mouth4.png" alt="Mouth Style 4">
-                        </button>
-                        <button class="option-button" data-part="mouth" data-option="mouth5" aria-label="Mouth Style 5">
-                            <img src="assets/avatar/mouth/mouth5.png" alt="Mouth Style 5">
-                        </button>
-                        <button class="option-button" data-part="mouth" data-option="mouth6" aria-label="Mouth Style 6">
-                            <img src="assets/avatar/mouth/mouth6.png" alt="Mouth Style 6">
-                        </button>
-                    </div>
-                </div>
-                <!-- Body Options Group -->
-                <div class="options-group" id="options-body">
-                    <h3>Select a Body Style</h3>
-                    <div class="options-grid">
-                        <button class="option-button" data-part="body" data-option="body1" aria-label="Body Style 1">
-                            <img src="assets/avatar/body/body1.png" alt="Body Style 1">
-                        </button>
-                        <button class="option-button" data-part="body" data-option="body2" aria-label="Body Style 2">
-                            <img src="assets/avatar/body/body2.png" alt="Body Style 2">
-                        </button>
-                        <button class="option-button" data-part="body" data-option="body3" aria-label="Body Style 3">
-                            <img src="assets/avatar/body/body3.png" alt="Body Style 3">
-                        </button>
-                        <button class="option-button" data-part="body" data-option="body4" aria-label="Body Style 4">
-                            <img src="assets/avatar/body/body4.png" alt="Body Style 4">
-                        </button>
-                        <button class="option-button" data-part="body" data-option="body5" aria-label="Body Style 5">
-                            <img src="assets/avatar/body/body5.png" alt="Body Style 5">
-                        </button>
-                    </div>
-                </div>
-                <!-- Accessories Options Group -->
-                <div class="options-group" id="options-accessories">
-                    <h3>Select an Accessory</h3>
-                    <div class="options-grid">
-                        <button class="option-button" data-part="accessories" data-option="accessory1" aria-label="Accessory 1">
-                            <img src="assets/avatar/accessories/accessory1.png" alt="Accessory 1">
-                        </button>
-                        <button class="option-button" data-part="accessories" data-option="accessory2" aria-label="Accessory 2">
-                            <img src="assets/avatar/accessories/accessory2.png" alt="Accessory 2">
-                        </button>
-                        <button class="option-button" data-part="accessories" data-option="accessory3" aria-label="Accessory 3">
-                            <img src="assets/avatar/accessories/accessory3.png" alt="Accessory 3">
-                        </button>
-                        <button class="option-button" data-part="accessories" data-option="accessory4" aria-label="Accessory 4">
-                            <img src="assets/avatar/accessories/accessory4.png" alt="Accessory 4">
-                        </button>
-                        <button class="option-button" data-part="accessories" data-option="accessory5" aria-label="Accessory 5">
-                            <img src="assets/avatar/accessories/accessory5.png" alt="Accessory 5">
-                        </button>
-                        <button class="option-button" data-part="accessories" data-option="accessory6" aria-label="Accessory 6">
-                            <img src="assets/avatar/accessories/accessory6.png" alt="Accessory 6">
-                        </button>
-                        <button class="option-button" data-part="accessories" data-option="accessory7" aria-label="Accessory 7">
-                            <img src="assets/avatar/accessories/accessory7.png" alt="Accessory 7">
-                        </button>
-                    </div>
-                </div>
-                <!-- Hat Options Group -->
-                <div class="options-group" id="options-hat">
-                    <h3>Select an Hat</h3>
-                    <div class="options-grid">
-                        <button class="option-button" data-part="hat" data-option="hat1" aria-label="Hat 1">
-                            <img src="assets/avatar/hat/hat1.png" alt="Hat 1">
-                        </button>
-                        <button class="option-button" data-part="hat" data-option="hat2" aria-label="Hat 2">
-                            <img src="assets/avatar/hat/hat2.png" alt="Hat 2">
-                        </button>
-                        <button class="option-button" data-part="hat" data-option="hat3" aria-label="Hat 3">
-                            <img src="assets/avatar/hat/hat3.png" alt="Hat 3">
-                        </button>
-                        <button class="option-button" data-part="hat" data-option="hat4" aria-label="Hat 4">
-                            <img src="assets/avatar/hat/hat4.png" alt="Hat 4">
-                        </button>
-                        <button class="option-button" data-part="hat" data-option="hat5" aria-label="Hat 5">
-                            <img src="assets/avatar/hat/hat5.png" alt="Hat 5">
-                        </button>
-                    </div>
-                </div>
-                <!-- Clothes Options Group -->
-                <div class="options-group" id="options-clothes">
-                    <h3>Select Clothes</h3>
-                    <div class="options-grid">
-                        <button class="option-button" data-part="clothes" data-option="clothes1" aria-label="Clothes 1">
-                            <img src="assets/avatar/clothes/clothes1.png" alt="Clothes 1">
-                        </button>
-                        <button class="option-button" data-part="clothes" data-option="clothes2" aria-label="Clothes 2">
-                            <img src="assets/avatar/clothes/clothes2.png" alt="Clothes 2">
-                        </button>
-                        <button class="option-button" data-part="clothes" data-option="clothes3" aria-label="Clothes 3">
-                            <img src="assets/avatar/clothes/clothes3.png" alt="Clothes 3">
-                        </button>
-                        <button class="option-button" data-part="clothes" data-option="clothes4" aria-label="Clothes 4">
-                            <img src="assets/avatar/clothes/clothes4.png" alt="Clothes 4">
-                        </button>
-                        <button class="option-button" data-part="clothes" data-option="clothes5" aria-label="Clothes 5">
-                            <img src="assets/avatar/clothes/clothes5.png" alt="Clothes 5">
-                        </button>
-                    </div>
-                </div>
-            </div>
+                        <div class="options-display" id="options-background" aria-label="Background Options"
+                            role="dialog" aria-modal="false">
+                            <button class="close-button" aria-label="Close Background Options">✖️</button>
+                            <h3>Select a Background</h3>
+                            <div class="options-grid">
+                                <!-- Background options will be dynamically added -->
+                            </div>
+                            <div class="color-selection" id="backgroundColorSelection" style="display: none;">
+                                <h4>Select Background Color</h4>
+                                <div class="color-buttons">
+                                    <button class="color-button" data-color="rgb(255,255,255)" style="background-color: #FFFFFF;"
+                                        title="White" aria-label="Select White Background Color"></button>
+                                    <button class="color-button" data-color="rgb(0,0,0)" style="background-color: #000000;"
+                                        title="Black" aria-label="Select Black Background Color"></button>
+                                    <button class="color-button" data-color="rgb(128,128,128)" style="background-color: #808080;"
+                                        title="Gray" aria-label="Select Gray Background Color"></button>
+                                    <button class="color-button" data-color="rgb(255,0,0)" style="background-color: #FF0000;"
+                                        title="Red" aria-label="Select Red Background Color"></button>
+                                    <button class="color-button" data-color="rgb(0,255,0)" style="background-color: #00FF00;"
+                                        title="Green" aria-label="Select Green Background Color"></button>
+                                    <button class="color-button" data-color="rgb(0,0,255)" style="background-color: #0000FF;"
+                                        title="Blue" aria-label="Select Blue Background Color"></button>
+                                    <button class="color-button" data-color="rgb(255,255,0)" style="background-color: #FFFF00;"
+                                        title="Yellow" aria-label="Select Yellow Background Color"></button>
+                                    <button class="color-button" data-color="rgb(255,165,0)" style="background-color: #FFA500;"
+                                        title="Orange" aria-label="Select Orange Background Color"></button>
+                                    <button class="color-button" data-color="reset"
+                                        style="background-color: #FFFFFF; border: 2px solid #000000;"
+                                        title="Reset Background" aria-label="Reset Background Color">🔄</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
         </aside>
-        <section class="control-buttons" aria-label="Control Buttons">
-            <button id="saveButton" class="save-button" aria-label="Save Your Creation">🎨 Save</button>
-            <button id="deleteButton" class="action-button" aria-label="Delete Selection">🗑️ Delete</button>
-            <button id="flipHorizontalButton" class="action-button" aria-label="Flip Horizontally">↔️ Flip Horizontally</button>
-            <button id="flipVerticalButton" class="action-button" aria-label="Flip Vertically">↕️ Flip Vertically</button>
-            <button id="bringForwardButton" class="action-button" aria-label="Bring Forward">🔼 Bring Forward</button>
-            <button id="sendBackwardButton" class="action-button" aria-label="Send Backward">🔽 Send Backward</button>
-        </section>
-        <section class="socials" aria-label="Social Links">
-            <div class="social__container">
-                <h2 class="socials__title">SOCIALS</h2>
-                <p class="socials__description">JOIN THE GRUMPY CULT !</p>
-                <div class="socials__links">
-                    <a href="https://twitter.com/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Twitter">
-                        <img src="assets/img/x.svg" alt="Twitter" class="socials__icon" />
-                    </a>
-                    <a href="https://t.me/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Telegram">
-                        <img src="assets/img/telegram.svg" alt="Telegram" class="socials__icon" />
-                    </a>
-                    <a href="https://www.instagram.com/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Instagram">
-                        <img src="assets/img/instagram.svg" alt="Instagram" class="socials__icon" />
-                    </a>
-                    <a href="https://linktr.ee/grumcoin" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Linktree">
-                        <img src="assets/img/linktree.svg" alt="Linktree" class="socials__icon" />
-                    </a>
-                </div>
-                <p>GRUM IS A CULTURE WITH GUARANTEED FUN !</p>
-            </div>
-        </section>
+
     </main>
+    
+    <footer class="socials" aria-label="Social Media Links">
+        <div class="social__container">
+            <h2 class="socials__title">SOCIALS</h2>
+            <p class="socials__description">JOIN THE GRUMPY CULTURE !</p>
+            <div class="socials__links">
+                <a href="https://x.com/grumcoin" target="_blank" rel="noopener noreferrer"
+                    class="socials__link" aria-label="X (Twitter)">
+                    <img src="assets/img/x.svg" alt="X (Twitter)" class="socials__icon" />
+                </a>
+                <a href="https://t.me/grumcoin" target="_blank" rel="noopener noreferrer"
+                    class="socials__link" aria-label="Telegram">
+                    <img src="assets/img/telegram.svg" alt="Telegram" class="socials__icon" />
+                </a>
+                <a href="https://www.instagram.com/grumcoin" target="_blank" rel="noopener noreferrer"
+                    class="socials__link" aria-label="Instagram">
+                    <img src="assets/img/instagram.svg" alt="Instagram" class="socials__icon" />
+                </a>
+                <a href="https://linktr.ee/grumcoin" target="_blank" rel="noopener noreferrer"
+                    class="socials__link" aria-label="Linktree">
+                    <img src="assets/img/linktree.svg" alt="Linktree" class="socials__icon" />
+                </a>
+            </div>
+            <p>GRUMPYCATOR IS GUARANTEED TO BE FUN !</p>
+        </div>
+    </footer>
+
     <script src="js/script.js" defer></script>
 </body>
 
