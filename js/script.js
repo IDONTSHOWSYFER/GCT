@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const versionButton = document.getElementById("versionButton"); // "V2" Button
 
+    // === Selectors for Custom Background Upload ===
+    const uploadButton = document.querySelector(".upload-button");
+    const uploadInput = document.getElementById("backgroundUploadInput");
+
     // === State Variables ===
     let selectedPart = null;
     let selectedElement = null;
@@ -850,6 +854,7 @@ document.addEventListener("DOMContentLoaded", () => {
             characterContainer.style.backgroundSize = "cover";
             characterContainer.style.backgroundPosition = "center";
             characterContainer.style.backgroundRepeat = "no-repeat";
+            characterContainer.style.backgroundColor = "transparent"; // Assurez-vous que la couleur de fond est transparente
             selectedColors.background = null; // Disable background color if an image is selected
             console.log(`Image de fond appliquée: ${imgSrc}`);
         }
@@ -871,6 +876,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // === Function to Apply Custom Background Image ===
+
+    function applyCustomBackground(imageUrl) {
+        characterContainer.style.backgroundImage = `url(${imageUrl})`;
+        characterContainer.style.backgroundSize = "cover";
+        characterContainer.style.backgroundPosition = "center";
+        characterContainer.style.backgroundRepeat = "no-repeat";
+        characterContainer.style.backgroundColor = "transparent"; // Ajouté pour s'assurer que la couleur de fond n'interfère pas
+        selectedColors.background = null; // Désactiver la sélection de couleur si une image est choisie
+        console.log(`Fond personnalisé appliqué: ${imageUrl}`);
+    }
+
     // === Function to Handle Saving the Avatar ===
 
     saveButton.addEventListener("click", () => {
@@ -886,6 +903,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const bgUrl = bgImage.slice(5, -2); // Extraire l'URL
             const bgImg = new Image();
             bgImg.src = bgUrl;
+            bgImg.crossOrigin = "anonymous"; // Pour éviter les problèmes CORS
             bgImg.onload = () => {
                 ctx.drawImage(bgImg, 0, 0, tempCanvas.width / (window.devicePixelRatio || 1), tempCanvas.height / (window.devicePixelRatio || 1));
                 drawElements(ctx, tempCanvas.width / (window.devicePixelRatio || 1), tempCanvas.height / (window.devicePixelRatio || 1));
@@ -932,6 +950,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const img = new Image();
                 img.src = imgElement.src;
+                img.crossOrigin = "anonymous"; // Pour éviter les problèmes CORS
                 img.onload = () => {
                     const left = el.offsetLeft;
                     const top = el.offsetTop;
@@ -1319,4 +1338,56 @@ document.addEventListener("DOMContentLoaded", () => {
     versionButton.addEventListener("click", () => {
         window.location.href = "index-v2.html";
     });
+
+    // === Intégration de la Fonctionnalité de Téléchargement d'Image de Fond Personnalisée ===
+
+    // Event Listener pour le bouton d'upload
+    uploadButton.addEventListener("click", (e) => {
+        e.stopPropagation(); // Empêche le déclenchement du clic sur le document
+        uploadInput.click(); // Déclenche le clic sur l'input file
+    });
+
+    // Event Listener pour le changement de l'input file
+    uploadInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith("image/")) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const imageUrl = event.target.result;
+                applyCustomBackground(imageUrl);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert("Veuillez sélectionner un fichier image valide.");
+        }
+    });
+
+    // Accessibilité : Activation via le clavier pour le bouton d'upload
+    uploadButton.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            uploadButton.click();
+        }
+    });
+
 });
+
+// === Function to Adjust Canvas for Retina Displays ===
+
+function adjustCanvasForRetina(canvas) {
+    const ctx = canvas.getContext('2d');
+    const ratio = window.devicePixelRatio || 1;
+    const width = canvas.width;
+    const height = canvas.height;
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.scale(ratio, ratio);
+}
+
+// === Function to Initialize Body Element ===
+
+function initializeBody() {
+    addElement("body", "body1");
+}

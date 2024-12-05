@@ -309,6 +309,30 @@ header p {
     font-size: 0.8em;
 }
 
+/* Styles pour le bouton d'upload de fond personnalisé */
+.upload-selection {
+    margin-top: 15px;
+}
+
+.upload-button {
+    background-color: #2196f3;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.7em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.upload-button:hover,
+.upload-button:focus {
+    background-color: #1976d2;
+}
+
 .draggable {
     position: absolute;
     cursor: move;
