@@ -76,11 +76,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (max === min) {
             hue = 0;
         } else if (max === r) {
-            hue = (60*((g - b)/(max - min))+360)%360;
+            hue = (60 * ((g - b) / (max - min)) + 360) % 360;
         } else if (max === g) {
-            hue = (60*((b - r)/(max - min))+120)%360;
+            hue = (60 * ((b - r) / (max - min)) + 120) % 360;
         } else {
-            hue = (60*((r - g)/(max - min))+240)%360;
+            hue = (60 * ((r - g) / (max - min)) + 240) % 360;
         }
 
         return hue;
@@ -174,31 +174,33 @@ document.addEventListener("DOMContentLoaded", () => {
             if(group.id!==`options-${part}`){
                 group.classList.remove("active");
                 group.setAttribute("aria-modal","false");
-                const otherPart=group.id.split("-")[1];
-                const partButton=document.querySelector(`.part-button[data-part="${otherPart}"]`);
-                if(partButton){
+                const otherPart = group.id.split("-")[1];
+                const partButton = document.querySelector(`.part-button[data-part="${otherPart}"]`);
+                if (partButton) {
                     partButton.classList.remove("active");
                     partButton.setAttribute("aria-expanded","false");
                 }
-                const colorSelection=group.querySelector(".color-selection");
-                if(colorSelection) colorSelection.style.display="none";
+                const colorSelection = group.querySelector(".color-selection");
+                if (colorSelection) {
+                    colorSelection.style.display = "none";
+                }
             }
         });
-        const activeGroup=document.getElementById(`options-${part}`);
-        if(activeGroup){
-            const isActive=activeGroup.classList.contains("active");
-            activeGroup.classList.toggle("active",!isActive);
-            activeGroup.setAttribute("aria-modal",!isActive);
+        const activeGroup = document.getElementById(`options-${part}`);
+        if (activeGroup) {
+            const isActive = activeGroup.classList.contains("active");
+            activeGroup.classList.toggle("active", !isActive);
+            activeGroup.setAttribute("aria-modal", !isActive);
 
-            const partButton=document.querySelector(`.part-button[data-part="${part}"]`);
-            if(partButton){
-                partButton.classList.toggle("active",!isActive);
-                partButton.setAttribute("aria-expanded",!isActive);
+            const partButton = document.querySelector(`.part-button[data-part="${part}"]`);
+            if (partButton) {
+                partButton.classList.toggle("active", !isActive);
+                partButton.setAttribute("aria-expanded", !isActive);
             }
 
-            const colorSelection=activeGroup.querySelector(".color-selection");
-            if(colorSelection){
-                colorSelection.style.display=!isActive?"block":"none";
+            const colorSelection = activeGroup.querySelector(".color-selection");
+            if (colorSelection) {
+                colorSelection.style.display = !isActive ? "block" : "none";
             }
         }
     }
@@ -211,22 +213,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const draggable = document.createElement("div");
         draggable.classList.add("draggable");
-        draggable.dataset.part=part;
-        draggable.dataset.option=option;
-        draggable.dataset.rotation="0";
-        draggable.dataset.scale="1";
-        draggable.dataset.flipx="false";
-        draggable.dataset.flipy="false";
-        draggable.dataset.color="";
+        draggable.dataset.part = part;
+        draggable.dataset.option = option;
+        draggable.dataset.rotation = "0";
+        draggable.dataset.scale = "1";
+        draggable.dataset.flipx = "false";
+        draggable.dataset.flipy = "false";
+        draggable.dataset.color = "";
 
-        draggable.style.left="0px";
-        draggable.style.top="0px";
-        draggable.style.width="100px";
-        draggable.style.height="100px";
-        draggable.style.zIndex=(getMaxZIndex()+1).toString();
-        draggable.style.position="absolute";
-        draggable.style.cursor="move";
-        draggable.style.userSelect="none"; // Empêcher la sélection de texte
+        draggable.style.left = "0px";
+        draggable.style.top = "0px";
+        draggable.style.width = "100px";
+        draggable.style.height = "100px";
+        draggable.style.zIndex = (getMaxZIndex()+1).toString();
+        draggable.style.position = "absolute";
+        draggable.style.cursor = "move";
+        draggable.style.userSelect = "none";
+        draggable.style.touchAction = "none"; // fluidité sur mobile
 
         const imageContainer=document.createElement("div");
         imageContainer.style.width="100%";
@@ -235,6 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
         imageContainer.style.alignItems="center";
         imageContainer.style.justifyContent="center";
         imageContainer.style.transformOrigin="center center";
+        imageContainer.style.pointerEvents="none";
 
         const img=document.createElement("img");
         img.src=`assets/avatar/${part}/${option}.png`;
@@ -253,6 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
             resizeHandle.setAttribute("aria-label",`Resize Handle ${handle}`);
             draggable.appendChild(resizeHandle);
             resizeHandle.addEventListener("mousedown",(e)=>startResize(e,draggable,handle));
+            resizeHandle.addEventListener("touchstart",(e)=>startResizeTouch(e,draggable,handle), {passive:false});
         });
 
         const rotateHandle=document.createElement("div");
@@ -260,45 +265,57 @@ document.addEventListener("DOMContentLoaded", () => {
         rotateHandle.setAttribute("aria-label","Rotate Handle");
         draggable.appendChild(rotateHandle);
         rotateHandle.addEventListener("mousedown",(e)=>startRotate(e,draggable));
+        rotateHandle.addEventListener("touchstart",(e)=>startRotateTouch(e,draggable),{passive:false});
 
-        const lockButton=createLockButton(draggable);
+        const lockButton = createLockButton(draggable);
         draggable.appendChild(lockButton);
 
         lockButton.addEventListener("click",(e)=>toggleLock(e,draggable,lockButton));
         lockButton.addEventListener("keydown",(e)=>{
             if(e.key==="Enter"||e.key===" "){
-                e.preventDefault();
-                lockButton.click();
+                e.preventDefault();lockButton.click();
             }
         });
 
-        // Dragging classique
         draggable.addEventListener("mousedown",(e)=>{
-            if(draggable.classList.contains("locked")) return;
-            if(e.target.classList.contains("resize-handle") || e.target.classList.contains("rotate-handle")) return;
-            startDrag(e,draggable);
+            if(!draggable.classList.contains("locked")){
+                selectElement(draggable);
+                if(!e.target.classList.contains("resize-handle") && !e.target.classList.contains("rotate-handle")){
+                    startDrag(e,draggable);
+                }
+            }
         });
+        draggable.addEventListener("touchstart",(e)=>{
+            if(!draggable.classList.contains("locked")){
+                selectElement(draggable);
+                if(!e.target.classList.contains("resize-handle") && !e.target.classList.contains("rotate-handle")){
+                    startDragTouch(e,draggable);
+                }
+            }
+        },{passive:false});
 
         characterContainer.appendChild(draggable);
         selectElement(draggable);
+        updateTransform(draggable);
     }
 
-    function createLockButton(element){
-        const lockButton=document.createElement("button");
+    function createLockButton(element) {
+        const lockButton = document.createElement("button");
         lockButton.classList.add("lock-button");
-        lockButton.innerHTML="🔒";
+        lockButton.innerHTML = "🔒";
         lockButton.setAttribute("aria-label","Lock Element");
         return lockButton;
     }
 
-    function toggleLock(e,element,lockButton){
+    function toggleLock(e,element,lockButton) {
         e.stopPropagation();
-        const isLocked=element.classList.toggle("locked");
-        lockButton.innerHTML=isLocked?"🔓":"🔒";
-        lockButton.setAttribute("aria-label",isLocked?"Unlock Element":"Lock Element");
+        const isLocked = element.classList.toggle("locked");
+        lockButton.innerHTML = isLocked?"🔓":"🔒";
+        lockButton.setAttribute("aria-label", isLocked?"Unlock Element":"Lock Element");
     }
 
-    function startDrag(e,element){
+    function startDrag(e,element) {
+        if(element.classList.contains("locked"))return;
         isDragging=true;
         selectElement(element);
 
@@ -306,24 +323,19 @@ document.addEventListener("DOMContentLoaded", () => {
         dragOffsetX=e.clientX-rect.left;
         dragOffsetY=e.clientY-rect.top;
 
-        // Empêcher la sélection de texte
         e.preventDefault();
-
         document.addEventListener("mousemove",handleDragMove);
         document.addEventListener("mouseup",stopDrag);
     }
 
     function handleDragMove(e){
         if(!isDragging||isRotating||isResizing||!selectedElement||selectedElement.classList.contains("locked"))return;
-        e.preventDefault(); // Empêcher sélection de texte
-
+        e.preventDefault();
         const containerRect=characterContainer.getBoundingClientRect();
         let newLeft=e.clientX-containerRect.left-dragOffsetX;
         let newTop=e.clientY-containerRect.top-dragOffsetY;
-
         newLeft=Math.max(0,Math.min(newLeft,containerRect.width-selectedElement.offsetWidth));
         newTop=Math.max(0,Math.min(newTop,containerRect.height-selectedElement.offsetHeight));
-
         selectedElement.style.left=`${newLeft}px`;
         selectedElement.style.top=`${newTop}px`;
     }
@@ -334,20 +346,51 @@ document.addEventListener("DOMContentLoaded", () => {
         document.removeEventListener("mouseup",stopDrag);
     }
 
+    function startDragTouch(e,element){
+        if(element.classList.contains("locked"))return;
+        isDragging=true;
+        selectElement(element);
+        const rect=element.getBoundingClientRect();
+        const touch=e.touches[0];
+        dragOffsetX=touch.clientX-rect.left;
+        dragOffsetY=touch.clientY-rect.top;
+
+        e.preventDefault();
+        document.addEventListener("touchmove",handleDragMoveTouch,{passive:false});
+        document.addEventListener("touchend",stopDragTouch,{passive:false});
+        document.addEventListener("touchcancel",stopDragTouch,{passive:false});
+    }
+
+    function handleDragMoveTouch(e){
+        if(!isDragging||isRotating||isResizing||!selectedElement||selectedElement.classList.contains("locked"))return;
+        e.preventDefault();
+        const touch=e.touches[0];
+        const containerRect=characterContainer.getBoundingClientRect();
+        let newLeft=touch.clientX-containerRect.left-dragOffsetX;
+        let newTop=touch.clientY-containerRect.top-dragOffsetY;
+        newLeft=Math.max(0,Math.min(newLeft,containerRect.width-selectedElement.offsetWidth));
+        newTop=Math.max(0,Math.min(newTop,containerRect.height-selectedElement.offsetHeight));
+        selectedElement.style.left=`${newLeft}px`;
+        selectedElement.style.top=`${newTop}px`;
+    }
+
+    function stopDragTouch(e){
+        isDragging=false;
+        document.removeEventListener("touchmove",handleDragMoveTouch);
+        document.removeEventListener("touchend",stopDragTouch);
+        document.removeEventListener("touchcancel",stopDragTouch);
+    }
+
     function startRotate(e,element){
         if(element.classList.contains("locked"))return;
         isRotating=true;
         selectElement(element);
-
         const rect=element.getBoundingClientRect();
         const centerX=rect.left+rect.width/2;
         const centerY=rect.top+rect.height/2;
-
         initialAngle=(Math.atan2(e.clientY - centerY,e.clientX - centerX)*180)/Math.PI;
         initialRotation=parseFloat(element.dataset.rotation)||0;
-
         e.preventDefault();
-
         document.addEventListener("mousemove",handleRotateMove);
         document.addEventListener("mouseup",stopRotate);
     }
@@ -355,40 +398,70 @@ document.addEventListener("DOMContentLoaded", () => {
     function handleRotateMove(e){
         if(!isRotating||!selectedElement||selectedElement.classList.contains("locked"))return;
         e.preventDefault();
-
         const rect=selectedElement.getBoundingClientRect();
         const centerX=rect.left+rect.width/2;
         const centerY=rect.top+rect.height/2;
-
         const currentAngle=(Math.atan2(e.clientY - centerY,e.clientX - centerX)*180)/Math.PI;
         const deltaAngle=currentAngle-initialAngle;
         selectedElement.dataset.rotation=(initialRotation+deltaAngle).toString();
         updateTransform(selectedElement);
     }
 
-    function stopRotate(){
+    function stopRotate(e){
         isRotating=false;
         document.removeEventListener("mousemove",handleRotateMove);
         document.removeEventListener("mouseup",stopRotate);
+    }
+
+    function startRotateTouch(e,element){
+        if(element.classList.contains("locked"))return;
+        isRotating=true;
+        selectElement(element);
+        const rect=element.getBoundingClientRect();
+        const touch=e.touches[0];
+        const centerX=rect.left+rect.width/2;
+        const centerY=rect.top+rect.height/2;
+        initialAngle=(Math.atan2(touch.clientY - centerY,touch.clientX - centerX)*180)/Math.PI;
+        initialRotation=parseFloat(element.dataset.rotation)||0;
+        e.preventDefault();
+        document.addEventListener("touchmove",handleRotateMoveTouch,{passive:false});
+        document.addEventListener("touchend",stopRotateTouch,{passive:false});
+        document.addEventListener("touchcancel",stopRotateTouch,{passive:false});
+    }
+
+    function handleRotateMoveTouch(e){
+        if(!isRotating||!selectedElement||selectedElement.classList.contains("locked"))return;
+        e.preventDefault();
+        const touch=e.touches[0];
+        const rect=selectedElement.getBoundingClientRect();
+        const centerX=rect.left+rect.width/2;
+        const centerY=rect.top+rect.height/2;
+        const currentAngle=(Math.atan2(touch.clientY - centerY,touch.clientX - centerX)*180)/Math.PI;
+        const deltaAngle=currentAngle-initialAngle;
+        selectedElement.dataset.rotation=(initialRotation+deltaAngle).toString();
+        updateTransform(selectedElement);
+    }
+
+    function stopRotateTouch(e){
+        isRotating=false;
+        document.removeEventListener("touchmove",handleRotateMoveTouch);
+        document.removeEventListener("touchend",stopRotateTouch);
+        document.removeEventListener("touchcancel",stopRotateTouch);
     }
 
     function startResize(e,element,handle){
         if(element.classList.contains("locked"))return;
         isResizing=true;
         selectElement(element);
-
         resizeStartX=e.clientX;
         resizeStartY=e.clientY;
         resizeHandle=handle;
         resizeStartWidth=element.offsetWidth;
         resizeStartHeight=element.offsetHeight;
-
         initialResizeScale=parseFloat(element.dataset.scale)||1;
         initialResizeWidth=element.offsetWidth;
         initialResizeHeight=element.offsetHeight;
-
         e.preventDefault();
-
         document.addEventListener("mousemove",handleResizeMove);
         document.addEventListener("mouseup",stopResize);
     }
@@ -396,39 +469,78 @@ document.addEventListener("DOMContentLoaded", () => {
     function handleResizeMove(e){
         if(!isResizing||!selectedElement||selectedElement.classList.contains("locked"))return;
         e.preventDefault();
-
         let dx=e.clientX - resizeStartX;
         let dy=e.clientY - resizeStartY;
-
         let newWidth=resizeStartWidth;
         let newHeight=resizeStartHeight;
-
         switch(resizeHandle){
-            case "br":
-                newWidth+=dx; newHeight+=dy; break;
-            case "bl":
-                newWidth-=dx; newHeight+=dy; break;
-            case "tr":
-                newWidth+=dx; newHeight-=dy; break;
-            case "tl":
-                newWidth-=dx; newHeight-=dy; break;
+            case "br":newWidth+=dx;newHeight+=dy;break;
+            case "bl":newWidth-=dx;newHeight+=dy;break;
+            case "tr":newWidth+=dx;newHeight-=dy;break;
+            case "tl":newWidth-=dx;newHeight-=dy;break;
         }
-
         newWidth=Math.max(30,newWidth);
         newHeight=Math.max(30,newHeight);
-
         let newScale=initialResizeScale*(newWidth/initialResizeWidth);
         newScale=Math.max(0.2,Math.min(newScale,10));
-
         selectedElement.dataset.scale=newScale.toString();
         updateTransform(selectedElement);
     }
 
-    function stopResize(){
+    function stopResize(e){
         isResizing=false;
         resizeHandle=null;
         document.removeEventListener("mousemove",handleResizeMove);
         document.removeEventListener("mouseup",stopResize);
+    }
+
+    function startResizeTouch(e,element,handle){
+        if(element.classList.contains("locked"))return;
+        isResizing=true;
+        selectElement(element);
+        const touch=e.touches[0];
+        resizeStartX=touch.clientX;
+        resizeStartY=touch.clientY;
+        resizeHandle=handle;
+        resizeStartWidth=element.offsetWidth;
+        resizeStartHeight=element.offsetHeight;
+        initialResizeScale=parseFloat(element.dataset.scale)||1;
+        initialResizeWidth=element.offsetWidth;
+        initialResizeHeight=element.offsetHeight;
+        e.preventDefault();
+        document.addEventListener("touchmove",handleResizeMoveTouch,{passive:false});
+        document.addEventListener("touchend",stopResizeTouch,{passive:false});
+        document.addEventListener("touchcancel",stopResizeTouch,{passive:false});
+    }
+
+    function handleResizeMoveTouch(e){
+        if(!isResizing||!selectedElement||selectedElement.classList.contains("locked"))return;
+        e.preventDefault();
+        const touch=e.touches[0];
+        let dx=touch.clientX - resizeStartX;
+        let dy=touch.clientY - resizeStartY;
+        let newWidth=resizeStartWidth;
+        let newHeight=resizeStartHeight;
+        switch(resizeHandle){
+            case "br":newWidth+=dx;newHeight+=dy;break;
+            case "bl":newWidth-=dx;newHeight+=dy;break;
+            case "tr":newWidth+=dx;newHeight-=dy;break;
+            case "tl":newWidth-=dx;newHeight-=dy;break;
+        }
+        newWidth=Math.max(30,newWidth);
+        newHeight=Math.max(30,newHeight);
+        let newScale=initialResizeScale*(newWidth/initialResizeWidth);
+        newScale=Math.max(0.2,Math.min(newScale,10));
+        selectedElement.dataset.scale=newScale.toString();
+        updateTransform(selectedElement);
+    }
+
+    function stopResizeTouch(e){
+        isResizing=false;
+        resizeHandle=null;
+        document.removeEventListener("touchmove",handleResizeMoveTouch);
+        document.removeEventListener("touchend",stopResizeTouch);
+        document.removeEventListener("touchcancel",stopResizeTouch);
     }
 
     function selectElement(element){
@@ -439,9 +551,8 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedElement=element;
         selectedElement.classList.add("selected");
         document.querySelectorAll(".draggable").forEach(el=>{
-            if(el!==selectedElement) el.classList.remove("selected");
+            if(el!==selectedElement)el.classList.remove("selected");
         });
-
         displayOptions(selectedElement.dataset.part);
         selectedPart=selectedElement.dataset.part;
     }
@@ -459,7 +570,7 @@ document.addEventListener("DOMContentLoaded", () => {
             element.dataset.color=color;
             const hueDegrees=rgbToHueDegrees(color);
             if(hueDegrees!==null){
-                img.style.filter=`sepia(1) saturate(1000%) hue-rotate(${hueDegrees}deg)`;
+                img.style.filter=`sepia(1) saturate(10000%) hue-rotate(${hueDegrees}deg)`;
             } else {
                 img.style.filter="none";
             }
@@ -495,20 +606,22 @@ document.addEventListener("DOMContentLoaded", () => {
         characterContainer.style.backgroundColor="transparent";
     }
 
+    // On ne met plus la rotation/scale/flip sur le bounding box,
+    // on l'applique uniquement à l'imageContainer pour empêcher l'inversion de sens
     function updateTransform(element){
-        const rotation=parseFloat(element.dataset.rotation)||0;
-        const scale=parseFloat(element.dataset.scale)||1;
-        const flipX=(element.dataset.flipx==="true");
-        const flipY=(element.dataset.flipy==="true");
+        const rotation = parseFloat(element.dataset.rotation)||0;
+        const scale = parseFloat(element.dataset.scale)||1;
+        const flipX = (element.dataset.flipx==="true");
+        const flipY = (element.dataset.flipy==="true");
 
-        element.style.transform=`rotate(${rotation}deg) scale(${scale})`;
-
-        const imageContainer=element.querySelector("div");
+        // Le bounding box reste tel quel (pas de transform sur element)
+        // On applique transformations uniquement sur l'imageContainer
+        const imageContainer = element.querySelector("div");
         if(imageContainer){
-            let flipTransform="";
-            if(flipX) flipTransform+=" scaleX(-1)";
-            if(flipY) flipTransform+=" scaleY(-1)";
-            imageContainer.style.transform=flipTransform.trim()||"none";
+            let transformString=`rotate(${rotation}deg) scale(${scale})`;
+            if(flipX) transformString+=` rotateY(180deg)`;
+            if(flipY) transformString+=` rotateX(180deg)`;
+            imageContainer.style.transform=transformString;
         }
     }
 
@@ -537,7 +650,7 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         } else {
             ctx.fillStyle=characterContainer.style.backgroundColor||"#ffffff";
-            ctx.fillRect(0, 0, tempCanvas.width/(window.devicePixelRatio||1), tempCanvas.height/(window.devicePixelRatio||1));
+            ctx.fillRect(0,0,tempCanvas.width/(window.devicePixelRatio||1),tempCanvas.height/(window.devicePixelRatio||1));
             drawElements(ctx,tempCanvas);
         }
     });
@@ -556,15 +669,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         elements.forEach(el=>{
-            const imgEl=el.querySelector("img");
-            if(!imgEl){
+            const imgElement=el.querySelector("img");
+            if(!imgElement){
                 loadedImages++;
                 if(loadedImages===totalImages) downloadCanvas(canvas);
                 return;
             }
 
             const img=new Image();
-            img.src=imgEl.src;
+            img.src=imgElement.src;
             img.crossOrigin="anonymous";
             img.onload=()=>{
                 const left=el.offsetLeft;
@@ -588,7 +701,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if(color && ["clothes","hat","accessories","hair"].includes(part)){
                     const hueDegrees=rgbToHueDegrees(color);
-                    if(hueDegrees!==null) {
+                    if(hueDegrees!==null){
                         ctx.filter=`sepia(1) saturate(1000%) hue-rotate(${hueDegrees}deg)`;
                     } else {
                         ctx.filter='none';
@@ -641,7 +754,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const isOpen=sidebar.classList.toggle("open");
         sidebarToggle.setAttribute("aria-expanded",isOpen);
         sidebarToggle.setAttribute("aria-label", isOpen?"Close Sidebar":"Open Sidebar");
-        if(isOpen) document.body.classList.add("no-scroll");
+        if(isOpen)document.body.classList.add("no-scroll");
         else document.body.classList.remove("no-scroll");
     });
 
@@ -691,7 +804,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     dropdown.classList.add("active");
                     dropdown.setAttribute("aria-modal","true");
                     const colorSelection=dropdown.querySelector(".color-selection");
-                    if(colorSelection) colorSelection.style.display="block";
+                    if(colorSelection)colorSelection.style.display="block";
                 }
                 selectedPart=part;
             }
@@ -749,13 +862,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    function applyColorButtonClick(color) {
-        if(!selectedPart) {
+    function applyColorButtonClick(color){
+        if(!selectedPart){
             console.log("Aucune partie sélectionnée. Couleur non appliquée.");
             return;
         }
 
-        if(selectedPart==="background") {
+        if(selectedPart==="background"){
             if(color==="reset"){
                 applyBackgroundColor("reset");
             } else {
@@ -764,7 +877,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        if(!selectedElement) {
+        if(!selectedElement){
             console.log("Aucun élément sélectionné pour appliquer la couleur.");
             return;
         }
@@ -844,13 +957,6 @@ document.addEventListener("DOMContentLoaded", () => {
             reader.readAsDataURL(file);
         } else {
             alert("Veuillez sélectionner un fichier image valide.");
-        }
-    });
-
-    uploadButton.addEventListener("keydown",(e)=>{
-        if(e.key==="Enter"||e.key===" "){
-            e.preventDefault();
-            uploadButton.click();
         }
     });
 
