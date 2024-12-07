@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>GRUMPYCATOR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Content Security Policy mise à jour pour autoriser les Data URLs dans img-src -->
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; img-src 'self' data:; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
     <link rel="stylesheet" href="css/style.css">
@@ -26,14 +25,13 @@
             <div id="characterContainer" class="character-container" aria-label="Avatar Creation Container">
                 <!-- Draggable elements will be added here -->
             </div>
-
             <section class="control-buttons" aria-label="Control Buttons">
                 <button id="saveButton" class="save-button" aria-label="Save Your Avatar">🎨 Save</button>
                 <button id="deleteButton" class="delete-button" aria-label="Delete Selection">🗑️ Delete</button>
                 <button id="flipHorizontalButton" class="action-button" aria-label="Flip Horizontally">↔️ Flip</button>
                 <button id="flipVerticalButton" class="action-button" aria-label="Flip Vertically">↕️ Flip</button>
-                <button id="bringForwardButton" class="action-button" aria-label="Bring Forward">🔼 Bring Forward</button>
-                <button id="sendBackwardButton" class="action-button" aria-label="Send Backward">🔽 Send Backward</button>
+                <button id="bringForwardButton" class="action-button" aria-label="Bring Forward">🔼 Forward</button>
+                <button id="sendBackwardButton" class="action-button" aria-label="Send Backward">🔽 Backward</button>
             </section>
         </section>
 
@@ -54,43 +52,25 @@
                             aria-modal="false">
                             <button class="close-button" aria-label="Close Hair Options">✖️</button>
                             <h3>Select a Hair Style</h3>
-                            <div class="options-grid">
-                                <!-- Hair options will be dynamically added -->
-                            </div>
+                            <div class="options-grid"></div>
                             <div class="color-selection" id="hairColorSelection" style="display: none;">
                                 <h4>Select Hair Color</h4>
                                 <div class="color-buttons">
-                                    <button class="color-button" data-color="rgb(0,0,0)"
-                                        style="background-color: #000000;" title="Black"
-                                        aria-label="Select Black Hair Color"></button>
-                                    <button class="color-button" data-color="rgb(255,0,0)"
-                                        style="background-color: #FF0000;" title="Red"
-                                        aria-label="Select Red Hair Color"></button>
-                                    <button class="color-button" data-color="rgb(0,255,0)"
-                                        style="background-color: #00FF00;" title="Green"
-                                        aria-label="Select Green Hair Color"></button>
-                                    <button class="color-button" data-color="rgb(0,0,255)"
-                                        style="background-color: #0000FF;" title="Blue"
-                                        aria-label="Select Blue Hair Color"></button>
-                                    <button class="color-button" data-color="rgb(255,255,0)"
-                                        style="background-color: #FFFF00;" title="Yellow"
-                                        aria-label="Select Yellow Hair Color"></button>
-                                    <button class="color-button" data-color="rgb(255,165,0)"
-                                        style="background-color: #FFA500;" title="Orange"
-                                        aria-label="Select Orange Hair Color"></button>
-                                    <button class="color-button" data-color="rgb(128,0,128)"
-                                        style="background-color: #800080;" title="Purple"
-                                        aria-label="Select Purple Hair Color"></button>
-                                    <button class="color-button" data-color="rgb(255,255,255)"
-                                        style="background-color: #FFFFFF;" title="White"
-                                        aria-label="Select White Hair Color"></button>
-                                    <button class="color-button" data-color="reset"
-                                        style="background-color: #FFFFFF; border: 2px solid #000000;"
-                                        title="Reset Color" aria-label="Reset Hair Color"></button>
+                                    <button class="color-button" data-color="#000000" style="background-color: #000000;" title="Black" aria-label="Select Black Hair Color"></button>
+                                    <button class="color-button" data-color="#FF00FF" style="background-color: #FF00FF;" title="Magenta" aria-label="Select Magenta Hair Color"></button>
+                                    <button class="color-button" data-color="#FF0000" style="background-color: #FF0000;" title="Red" aria-label="Select Red Hair Color"></button>
+                                    <button class="color-button" data-color="#00FF00" style="background-color: #00FF00;" title="Green" aria-label="Select Green Hair Color"></button>
+                                    <button class="color-button" data-color="#0000FF" style="background-color: #0000FF;" title="Blue" aria-label="Select Blue Hair Color"></button>
+                                    <button class="color-button" data-color="#FFFF00" style="background-color: #FFFF00;" title="Yellow" aria-label="Select Yellow Hair Color"></button>
+                                    <button class="color-button" data-color="#FFA500" style="background-color: #FFA500;" title="Orange" aria-label="Select Orange Hair Color"></button>
+                                    <button class="color-button" data-color="#800080" style="background-color: #800080;" title="Purple" aria-label="Select Purple Hair Color"></button>
+                                    <button class="color-button" data-color="#FFFFFF" style="background-color: #FFFFFF;" title="White" aria-label="Select White Hair Color"></button>
+                                    <button class="color-button" data-color="reset" style="background-color: #FFFFFF; border: 2px solid #000000;" title="Reset Color" aria-label="Reset Hair Color"></button>
                                 </div>
                             </div>
                         </div>
                     </li>
+
                     <li>
                         <button class="part-button" data-part="eyes" aria-haspopup="true" aria-expanded="false"
                             aria-controls="options-eyes" aria-label="Select Eyes">
@@ -101,11 +81,10 @@
                             aria-modal="false">
                             <button class="close-button" aria-label="Close Eyes Options">✖️</button>
                             <h3>Select an Eye Style</h3>
-                            <div class="options-grid">
-                                <!-- Eyes options will be dynamically added -->
-                            </div>
+                            <div class="options-grid"></div>
                         </div>
                     </li>
+
                     <li>
                         <button class="part-button" data-part="mouth" aria-haspopup="true" aria-expanded="false"
                             aria-controls="options-mouth" aria-label="Select Mouth">
@@ -116,11 +95,10 @@
                             aria-modal="false">
                             <button class="close-button" aria-label="Close Mouth Options">✖️</button>
                             <h3>Select a Mouth Style</h3>
-                            <div class="options-grid">
-                                <!-- Mouth options will be dynamically added -->
-                            </div>
+                            <div class="options-grid"></div>
                         </div>
                     </li>
+
                     <li>
                         <button class="part-button" data-part="body" aria-haspopup="true" aria-expanded="false"
                             aria-controls="options-body" aria-label="Select Body">
@@ -131,11 +109,10 @@
                             aria-modal="false">
                             <button class="close-button" aria-label="Close Body Options">✖️</button>
                             <h3>Select a Body Style</h3>
-                            <div class="options-grid">
-                                <!-- Body options will be dynamically added -->
-                            </div>
+                            <div class="options-grid"></div>
                         </div>
                     </li>
+
                     <li>
                         <button class="part-button" data-part="accessories" aria-haspopup="true" aria-expanded="false"
                             aria-controls="options-accessories" aria-label="Select Accessories">
@@ -146,43 +123,25 @@
                             role="dialog" aria-modal="false">
                             <button class="close-button" aria-label="Close Accessories Options">✖️</button>
                             <h3>Select an Accessory</h3>
-                            <div class="options-grid">
-                                <!-- Accessories options will be dynamically added -->
-                            </div>
+                            <div class="options-grid"></div>
                             <div class="color-selection" id="partsColorSelectionAccessories" style="display: none;">
                                 <h4>Select Accessories Color</h4>
                                 <div class="color-buttons">
-                                    <button class="color-button" data-color="rgb(0,0,0)"
-                                        style="background-color: #000000;" title="Black"
-                                        aria-label="Select Black Accessories Color"></button>
-                                    <button class="color-button" data-color="rgb(255,0,0)"
-                                        style="background-color: #FF0000;" title="Red"
-                                        aria-label="Select Red Accessories Color"></button>
-                                    <button class="color-button" data-color="rgb(0,255,0)"
-                                        style="background-color: #00FF00;" title="Green"
-                                        aria-label="Select Green Accessories Color"></button>
-                                    <button class="color-button" data-color="rgb(0,0,255)"
-                                        style="background-color: #0000FF;" title="Blue"
-                                        aria-label="Select Blue Accessories Color"></button>
-                                    <button class="color-button" data-color="rgb(255,255,0)"
-                                        style="background-color: #FFFF00;" title="Yellow"
-                                        aria-label="Select Yellow Accessories Color"></button>
-                                    <button class="color-button" data-color="rgb(255,165,0)"
-                                        style="background-color: #FFA500;" title="Orange"
-                                        aria-label="Select Orange Accessories Color"></button>
-                                    <button class="color-button" data-color="rgb(128,0,128)"
-                                        style="background-color: #800080;" title="Purple"
-                                        aria-label="Select Purple Accessories Color"></button>
-                                    <button class="color-button" data-color="rgb(255,255,255)"
-                                        style="background-color: #FFFFFF;" title="White"
-                                        aria-label="Select White Accessories Color"></button>
-                                    <button class="color-button" data-color="reset"
-                                        style="background-color: #FFFFFF; border: 2px solid #000000;"
-                                        title="Reset Color" aria-label="Reset Accessories Color"></button>
+                                    <button class="color-button" data-color="#000000" style="background-color: #000000;" aria-label="Black Accessories Color"></button>
+                                    <button class="color-button" data-color="#FF00FF" style="background-color: #FF00FF;" aria-label="Magenta Accessories Color"></button>
+                                    <button class="color-button" data-color="#FF0000" style="background-color: #FF0000;" aria-label="Red Accessories Color"></button>
+                                    <button class="color-button" data-color="#00FF00" style="background-color: #00FF00;" aria-label="Green Accessories Color"></button>
+                                    <button class="color-button" data-color="#0000FF" style="background-color: #0000FF;" aria-label="Blue Accessories Color"></button>
+                                    <button class="color-button" data-color="#FFFF00" style="background-color: #FFFF00;" aria-label="Yellow Accessories Color"></button>
+                                    <button class="color-button" data-color="#FFA500" style="background-color: #FFA500;" aria-label="Orange Accessories Color"></button>
+                                    <button class="color-button" data-color="#800080" style="background-color: #800080;" aria-label="Purple Accessories Color"></button>
+                                    <button class="color-button" data-color="#FFFFFF" style="background-color: #FFFFFF;" aria-label="White Accessories Color"></button>
+                                    <button class="color-button" data-color="reset" style="background-color: #FFFFFF; border:2px solid #000000;" aria-label="Reset Accessories Color"></button>
                                 </div>
                             </div>
                         </div>
                     </li>
+
                     <li>
                         <button class="part-button" data-part="hat" aria-haspopup="true" aria-expanded="false"
                             aria-controls="options-hat" aria-label="Select Hat">
@@ -193,43 +152,25 @@
                             aria-modal="false">
                             <button class="close-button" aria-label="Close Hat Options">✖️</button>
                             <h3>Select a Hat</h3>
-                            <div class="options-grid">
-                                <!-- Hat options will be dynamically added -->
-                            </div>
+                            <div class="options-grid"></div>
                             <div class="color-selection" id="partsColorSelectionHat" style="display: none;">
                                 <h4>Select Hat Color</h4>
                                 <div class="color-buttons">
-                                    <button class="color-button" data-color="rgb(0,0,0)"
-                                        style="background-color: #000000;" title="Black"
-                                        aria-label="Select Black Hat Color"></button>
-                                    <button class="color-button" data-color="rgb(255,0,0)"
-                                        style="background-color: #FF0000;" title="Red"
-                                        aria-label="Select Red Hat Color"></button>
-                                    <button class="color-button" data-color="rgb(0,255,0)"
-                                        style="background-color: #00FF00;" title="Green"
-                                        aria-label="Select Green Hat Color"></button>
-                                    <button class="color-button" data-color="rgb(0,0,255)"
-                                        style="background-color: #0000FF;" title="Blue"
-                                        aria-label="Select Blue Hat Color"></button>
-                                    <button class="color-button" data-color="rgb(255,255,0)"
-                                        style="background-color: #FFFF00;" title="Yellow"
-                                        aria-label="Select Yellow Hat Color"></button>
-                                    <button class="color-button" data-color="rgb(255,165,0)"
-                                        style="background-color: #FFA500;" title="Orange"
-                                        aria-label="Select Orange Hat Color"></button>
-                                    <button class="color-button" data-color="rgb(128,0,128)"
-                                        style="background-color: #800080;" title="Purple"
-                                        aria-label="Select Purple Hat Color"></button>
-                                    <button class="color-button" data-color="rgb(255,255,255)"
-                                        style="background-color: #FFFFFF;" title="White"
-                                        aria-label="Select White Hat Color"></button>
-                                    <button class="color-button" data-color="reset"
-                                        style="background-color: #FFFFFF; border: 2px solid #000000;"
-                                        title="Reset Color" aria-label="Reset Hat Color"></button>
+                                    <button class="color-button" data-color="#000000" style="background-color: #000000;" aria-label="Black Hat Color"></button>
+                                    <button class="color-button" data-color="#FF00FF" style="background-color: #FF00FF;" aria-label="Magenta Hat Color"></button>
+                                    <button class="color-button" data-color="#FF0000" style="background-color: #FF0000;" aria-label="Red Hat Color"></button>
+                                    <button class="color-button" data-color="#00FF00" style="background-color: #00FF00;" aria-label="Green Hat Color"></button>
+                                    <button class="color-button" data-color="#0000FF" style="background-color: #0000FF;" aria-label="Blue Hat Color"></button>
+                                    <button class="color-button" data-color="#FFFF00" style="background-color: #FFFF00;" aria-label="Yellow Hat Color"></button>
+                                    <button class="color-button" data-color="#FFA500" style="background-color: #FFA500;" aria-label="Orange Hat Color"></button>
+                                    <button class="color-button" data-color="#800080" style="background-color: #800080;" aria-label="Purple Hat Color"></button>
+                                    <button class="color-button" data-color="#FFFFFF" style="background-color: #FFFFFF;" aria-label="White Hat Color"></button>
+                                    <button class="color-button" data-color="reset" style="background-color: #FFFFFF; border:2px solid #000000;" aria-label="Reset Hat Color"></button>
                                 </div>
                             </div>
                         </div>
                     </li>
+
                     <li>
                         <button class="part-button" data-part="clothes" aria-haspopup="true" aria-expanded="false"
                             aria-controls="options-clothes" aria-label="Select Clothes">
@@ -240,43 +181,25 @@
                             aria-modal="false">
                             <button class="close-button" aria-label="Close Clothes Options">✖️</button>
                             <h3>Select Clothes</h3>
-                            <div class="options-grid">
-                                <!-- Clothes options will be dynamically added -->
-                            </div>
+                            <div class="options-grid"></div>
                             <div class="color-selection" id="partsColorSelectionClothes" style="display: none;">
                                 <h4>Select Clothes Color</h4>
                                 <div class="color-buttons">
-                                    <button class="color-button" data-color="rgb(0,0,0)"
-                                        style="background-color: #000000;" title="Black"
-                                        aria-label="Select Black Clothes Color"></button>
-                                    <button class="color-button" data-color="rgb(255,0,0)"
-                                        style="background-color: #FF0000;" title="Red"
-                                        aria-label="Select Red Clothes Color"></button>
-                                    <button class="color-button" data-color="rgb(0,255,0)"
-                                        style="background-color: #00FF00;" title="Green"
-                                        aria-label="Select Green Clothes Color"></button>
-                                    <button class="color-button" data-color="rgb(0,0,255)"
-                                        style="background-color: #0000FF;" title="Blue"
-                                        aria-label="Select Blue Clothes Color"></button>
-                                    <button class="color-button" data-color="rgb(255,255,0)"
-                                        style="background-color: #FFFF00;" title="Yellow"
-                                        aria-label="Select Yellow Clothes Color"></button>
-                                    <button class="color-button" data-color="rgb(255,165,0)"
-                                        style="background-color: #FFA500;" title="Orange"
-                                        aria-label="Select Orange Clothes Color"></button>
-                                    <button class="color-button" data-color="rgb(128,0,128)"
-                                        style="background-color: #800080;" title="Purple"
-                                        aria-label="Select Purple Clothes Color"></button>
-                                    <button class="color-button" data-color="rgb(255,255,255)"
-                                        style="background-color: #FFFFFF;" title="White"
-                                        aria-label="Select White Clothes Color"></button>
-                                    <button class="color-button" data-color="reset"
-                                        style="background-color: #FFFFFF; border: 2px solid #000000;"
-                                        title="Reset Color" aria-label="Reset Clothes Color"></button>
+                                    <button class="color-button" data-color="#000000" style="background-color: #000000;" aria-label="Black Clothes Color"></button>
+                                    <button class="color-button" data-color="#FF00FF" style="background-color: #FF00FF;" aria-label="Magenta Clothes Color"></button>
+                                    <button class="color-button" data-color="#FF0000" style="background-color: #FF0000;" aria-label="Red Clothes Color"></button>
+                                    <button class="color-button" data-color="#00FF00" style="background-color: #00FF00;" aria-label="Green Clothes Color"></button>
+                                    <button class="color-button" data-color="#0000FF" style="background-color: #0000FF;" aria-label="Blue Clothes Color"></button>
+                                    <button class="color-button" data-color="#FFFF00" style="background-color: #FFFF00;" aria-label="Yellow Clothes Color"></button>
+                                    <button class="color-button" data-color="#FFA500" style="background-color: #FFA500;" aria-label="Orange Clothes Color"></button>
+                                    <button class="color-button" data-color="#800080" style="background-color: #800080;" aria-label="Purple Clothes Color"></button>
+                                    <button class="color-button" data-color="#FFFFFF" style="background-color: #FFFFFF;" aria-label="White Clothes Color"></button>
+                                    <button class="color-button" data-color="reset" style="background-color: #FFFFFF; border:2px solid #000000;" aria-label="Reset Clothes Color"></button>
                                 </div>
                             </div>
                         </div>
                     </li>
+
                     <li>
                         <button class="part-button" data-part="background" aria-haspopup="true" aria-expanded="false"
                             aria-controls="options-background" aria-label="Select Background">
@@ -287,46 +210,24 @@
                             role="dialog" aria-modal="false">
                             <button class="close-button" aria-label="Close Background Options">✖️</button>
                             <h3>Select a Background</h3>
-                            <div class="options-grid">
-                                <!-- Background options will be dynamically added -->
-                            </div>
+                            <div class="options-grid"></div>
                             <div class="color-selection" id="backgroundColorSelection" style="display: none;">
                                 <h4>Select Background Color</h4>
                                 <div class="color-buttons">
-                                    <button class="color-button" data-color="rgb(255,255,255)"
-                                        style="background-color: #FFFFFF;" title="White"
-                                        aria-label="Select White Background Color"></button>
-                                    <button class="color-button" data-color="rgb(0,0,0)"
-                                        style="background-color: #000000;" title="Black"
-                                        aria-label="Select Black Background Color"></button>
-                                    <button class="color-button" data-color="rgb(128,128,128)"
-                                        style="background-color: #808080;" title="Gray"
-                                        aria-label="Select Gray Background Color"></button>
-                                    <button class="color-button" data-color="rgb(255,0,0)"
-                                        style="background-color: #FF0000;" title="Red"
-                                        aria-label="Select Red Background Color"></button>
-                                    <button class="color-button" data-color="rgb(0,255,0)"
-                                        style="background-color: #00FF00;" title="Green"
-                                        aria-label="Select Green Background Color"></button>
-                                    <button class="color-button" data-color="rgb(0,0,255)"
-                                        style="background-color: #0000FF;" title="Blue"
-                                        aria-label="Select Blue Background Color"></button>
-                                    <button class="color-button" data-color="rgb(255,255,0)"
-                                        style="background-color: #FFFF00;" title="Yellow"
-                                        aria-label="Select Yellow Background Color"></button>
-                                    <button class="color-button" data-color="rgb(255,165,0)"
-                                        style="background-color: #FFA500;" title="Orange"
-                                        aria-label="Select Orange Background Color"></button>
-                                    <button class="color-button" data-color="reset"
-                                        style="background-color: #FFFFFF; border: 2px solid #000000;"
-                                        title="Reset Background" aria-label="Reset Background Color">🔄</button>
-                                    <!-- Bouton pour télécharger une image personnalisée -->
+                                    <button class="color-button" data-color="#FFFFFF" style="background-color: #FFFFFF;" aria-label="White Background"></button>
+                                    <button class="color-button" data-color="#000000" style="background-color: #000000;" aria-label="Black Background"></button>
+                                    <button class="color-button" data-color="#808080" style="background-color: #808080;" aria-label="Gray Background"></button>
+                                    <button class="color-button" data-color="#FF00FF" style="background-color: #FF00FF;" aria-label="Magenta Background"></button>
+                                    <button class="color-button" data-color="#FF0000" style="background-color: #FF0000;" aria-label="Red Background"></button>
+                                    <button class="color-button" data-color="#00FF00" style="background-color: #00FF00;" aria-label="Green Background"></button>
+                                    <button class="color-button" data-color="#0000FF" style="background-color: #0000FF;" aria-label="Blue Background"></button>
+                                    <button class="color-button" data-color="#FFFF00" style="background-color: #FFFF00;" aria-label="Yellow Background"></button>
+                                    <button class="color-button" data-color="#FFA500" style="background-color: #FFA500;" aria-label="Orange Background"></button>
+                                    <button class="color-button" data-color="reset" style="background-color: #FFFFFF; border: 2px solid #000000;" aria-label="Reset Background Color">🔄</button>
                                     <div class="upload-selection" id="backgroundUploadSelection"
                                         style="margin-left: 5px; margin-top: 10px;">
-                                        <input type="file" id="backgroundUploadInput" accept="image/*"
-                                            style="display: none;" />
-                                        <button class="upload-button" aria-label="Upload Custom Background">📁 Upload
-                                            Image</button>
+                                        <input type="file" id="backgroundUploadInput" accept="image/*" style="display: none;" />
+                                        <button class="upload-button" aria-label="Upload Custom Background">📁 Upload Image</button>
                                     </div>
                                 </div>
                             </div>

@@ -234,6 +234,9 @@ header p {
     display: none;
     margin-top: 10px;
     position: relative;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .options-display.active {
@@ -244,6 +247,7 @@ header p {
 .options-display h4 {
     margin: 10px 0;
     font-size: 1.1em;
+    color: #fff;
 }
 
 .options-grid {
@@ -309,7 +313,6 @@ header p {
     font-size: 0.8em;
 }
 
-/* Styles pour le bouton d'upload de fond personnalisé */
 .upload-selection {
     margin-top: 15px;
 }
@@ -337,10 +340,12 @@ header p {
     position: absolute;
     cursor: move;
     transform-origin: center center;
+    width: 100px;
+    height: 100px;
 }
 
 .draggable.selected {
-    box-shadow: 0 0 10px rgba(255, 0, 0, 0.701);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
 }
 
 .resize-handle {
@@ -642,13 +647,7 @@ button:focus {
 .draggable .rotate-handle,
 .draggable .lock-button {
     z-index: 10;
-}
-
-/* Ajout des règles pour masquer les poignées par défaut et les afficher uniquement lorsque l'élément est sélectionné */
-.draggable .resize-handle,
-.draggable .rotate-handle,
-.draggable .lock-button {
-    display: none; /* Masquer les poignées par défaut */
+    display: none;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -656,7 +655,7 @@ button:focus {
 .draggable.selected .resize-handle,
 .draggable.selected .rotate-handle,
 .draggable.selected .lock-button {
-    display: block; /* Afficher les poignées lorsque l'élément est sélectionné */
+    display: block;
     opacity: 1;
 }
 
