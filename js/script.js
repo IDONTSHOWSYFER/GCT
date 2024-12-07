@@ -127,8 +127,8 @@ document.addEventListener("DOMContentLoaded", () => {
             eyes: ["eyes1","eyes2","eyes3","eyes4","eyes5","eyes6","eyes7","eyes8","eyes9","eyes10","eyes11","eyes12","eyes13","eyes14","eyes15"],
             mouth: ["mouth1","mouth2","mouth3","mouth4","mouth5","mouth6","mouth7","mouth8","mouth9","mouth10","mouth11","mouth12","mouth13","mouth14","mouth15"],
             body: ["body1","body2","body3","body4","body5","body6","body7","body8","body9","body10"],
-            accessories: ["accessory1","accessory2","accessory3","accessory4","accessory5","accessory6","accessory7","accessory8","accessory9","accessory10","accessory11","accessory12","accessory13","accessory14","accessory15","accessory16","accessory17","accessory18","accessory19","accessory20"],
-            hat: ["hat1","hat2","hat3","hat4","hat5","hat6","hat7","hat8","hat9","hat10","hat11","hat12","hat13","hat14","hat15","hat16","hat17","hat18","hat19","hat20"],
+            accessories: ["accessory1","accessory2","accessory3","accessory4","accessory5","accessory6","accessory7","accessory8","accessory9","accessory10","accessory11","accessory12","accessory13","accessory14","accessory15","accessory16","accessory17","accessory18","accessory19","accessory20","accessory21","accessory22","accessory23","accessory24","accessory25","accessory26"],
+            hat: ["hat1","hat2","hat3","hat4","hat5","hat6","hat7","hat8","hat9","hat10","hat11","hat12","hat13","hat14","hat15","hat16","hat17","hat18","hat19","hat20","hat21"],
             clothes: ["clothes1","clothes2","clothes3","clothes4","clothes5","clothes6","clothes7","clothes8","clothes9","clothes10","clothes11","clothes12","clothes13","clothes14","clothes15","clothes16","clothes17","clothes18","clothes19","clothes20"],
             background: ["bg1","bg2","bg3","bg4","bg5","bg6","bg7","bg8","bg9","bg10"]
         };
