@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function generateDropdownOptions() {
         const parts = {
-            hair: ["hair1","hair2","hair3","hair4","hair5","hair6","hair7","hair8","hair9","hair10"],
+            hair: ["hair1","hair2","hair3","hair4","hair5","hair6","hair7","hair8","hair9","hair10","hair11","hair12","hair13","hair14","hair15","hair16"],
             eyes: ["eyes1","eyes2","eyes3","eyes4","eyes5","eyes6","eyes7","eyes8","eyes9","eyes10","eyes11","eyes12","eyes13","eyes14","eyes15"],
             mouth: ["mouth1","mouth2","mouth3","mouth4","mouth5","mouth6","mouth7","mouth8","mouth9","mouth10","mouth11","mouth12","mouth13","mouth14","mouth15"],
             body: ["body1","body2","body3","body4","body5","body6","body7","body8","body9","body10"],
