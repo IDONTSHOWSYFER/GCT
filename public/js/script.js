@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Récupération des éléments DOM
+  // --------------------------------------------------------------------
+  // RÉCUPÉRATION DES ÉLÉMENTS DU DOM
+  // --------------------------------------------------------------------
   const characterContainer = document.getElementById("characterContainer");
   const sidebar = document.getElementById("sidebar");
   const sidebarToggle = document.getElementById("sidebarToggle");
@@ -19,6 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const uploadButton = document.querySelector(".upload-button");
   const uploadInput = document.getElementById("backgroundUploadInput");
 
+  // --------------------------------------------------------------------
+  // VARIABLES GLOBALES
+  // --------------------------------------------------------------------
   let selectedPart = null;
   let selectedElement = null;
 
@@ -37,14 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let resizeStartWidth = 0;
   let resizeStartHeight = 0;
 
-  /*---------------------------------------------------------------------------
-    UTILITAIRES
-  ---------------------------------------------------------------------------*/
+  // --------------------------------------------------------------------
+  // FONCTIONS UTILITAIRES
+  // --------------------------------------------------------------------
   function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  // Convertit une couleur (hex, rgb ou nom CSS) en degrés de hue
+  // Convertit une couleur (hex, rgb ou nom CSS) en degrés de teinte
   function rgbToHueDegrees(color) {
     let r, g, b;
     if (color.startsWith('#')) {
@@ -71,23 +76,19 @@ document.addEventListener("DOMContentLoaded", () => {
       [r, g, b] = rgbMatch;
     }
     r /= 255; g /= 255; b /= 255;
-    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const max = Math.max(r, g, b),
+          min = Math.min(r, g, b);
     let hue = 0;
-    if (max === min) {
-      hue = 0;
-    } else if (max === r) {
-      hue = (60 * ((g - b) / (max - min)) + 360) % 360;
-    } else if (max === g) {
-      hue = (60 * ((b - r) / (max - min)) + 120) % 360;
-    } else {
-      hue = (60 * ((r - g) / (max - min)) + 240) % 360;
-    }
+    if (max === min) hue = 0;
+    else if (max === r) hue = (60 * ((g - b) / (max - min)) + 360) % 360;
+    else if (max === g) hue = (60 * ((b - r) / (max - min)) + 120) % 360;
+    else hue = (60 * ((r - g) / (max - min)) + 240) % 360;
     return hue;
   }
 
   function getMaxZIndex() {
     let max = 0;
-    characterContainer.querySelectorAll(".draggable").forEach((el) => {
+    characterContainer.querySelectorAll(".draggable").forEach(el => {
       const z = parseInt(window.getComputedStyle(el).zIndex) || 0;
       if (z > max) max = z;
     });
@@ -99,12 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function sendToBack(element) {
+    // On prend la valeur minimale suivante
     element.style.zIndex = Math.max(0, getMaxZIndex() - 1);
   }
 
   // Ferme tous les menus déroulants
   function closeAllDropdowns() {
-    document.querySelectorAll(".options-display").forEach((group) => {
+    document.querySelectorAll(".options-display").forEach(group => {
       group.classList.remove("active");
       group.setAttribute("aria-modal", "false");
       const part = group.id.split("-")[1];
@@ -114,16 +116,14 @@ document.addEventListener("DOMContentLoaded", () => {
         partButton.setAttribute("aria-expanded", "false");
       }
       const colorSelection = group.querySelector(".color-selection");
-      if (colorSelection) {
-        colorSelection.style.display = "none";
-      }
+      if (colorSelection) colorSelection.style.display = "none";
     });
     selectedPart = null;
   }
 
-  /*---------------------------------------------------------------------------
-    GÉNÉRATION DES OPTIONS DÉROULANTES
-  ---------------------------------------------------------------------------*/
+  // --------------------------------------------------------------------
+  // GÉNÉRATION DES OPTIONS DÉROULANTES
+  // --------------------------------------------------------------------
   function generateDropdownOptions() {
     const parts = {
       hair: ["hair1", "hair2", "hair3", "hair4", "hair5", "hair6", "hair7", "hair8", "hair9", "hair10", "hair11", "hair12", "hair13", "hair14", "hair15", "hair16", "hair17"],
@@ -141,32 +141,28 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!optionsGroup) continue;
       const optionsGrid = optionsGroup.querySelector(".options-grid");
       if (!optionsGrid) continue;
-
       parts[part].forEach(option => {
         const button = document.createElement("button");
         button.classList.add("option-button");
         button.dataset.part = part;
         button.dataset.option = option;
         button.setAttribute("aria-label", `${capitalizeFirstLetter(part)} Option ${option}`);
-
         const img = document.createElement("img");
         img.src = `public/assets/v1/${part}/${option}.png`;
         img.alt = `${capitalizeFirstLetter(part)} ${option}`;
         img.onerror = () => { img.src = `public/assets/v1/${part}/default.png`; };
-
         button.appendChild(img);
-        button.addEventListener("click", (e) => {
+        button.addEventListener("click", e => {
           e.stopPropagation();
           addElement(part, option);
           closeAllDropdowns();
         });
-        button.addEventListener("keydown", (e) => {
+        button.addEventListener("keydown", e => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             button.click();
           }
         });
-
         optionsGrid.appendChild(button);
       });
     }
@@ -174,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function displayOptions(part) {
     if (!part) return;
-    document.querySelectorAll(".options-display").forEach((group) => {
+    document.querySelectorAll(".options-display").forEach(group => {
       if (group.id !== `options-${part}`) {
         group.classList.remove("active");
         group.setAttribute("aria-modal", "false");
@@ -185,9 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
           partButton.setAttribute("aria-expanded", "false");
         }
         const colorSelection = group.querySelector(".color-selection");
-        if (colorSelection) {
-          colorSelection.style.display = "none";
-        }
+        if (colorSelection) colorSelection.style.display = "none";
       }
     });
     const activeGroup = document.getElementById(`options-${part}`);
@@ -195,13 +189,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const isActive = activeGroup.classList.contains("active");
       activeGroup.classList.toggle("active", !isActive);
       activeGroup.setAttribute("aria-modal", !isActive);
-
       const partButton = document.querySelector(`.part-button[data-part="${part}"]`);
       if (partButton) {
         partButton.classList.toggle("active", !isActive);
         partButton.setAttribute("aria-expanded", !isActive);
       }
-
       const colorSelection = activeGroup.querySelector(".color-selection");
       if (colorSelection) {
         colorSelection.style.display = !isActive ? "block" : "none";
@@ -209,9 +201,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /*---------------------------------------------------------------------------
-    AJOUT D'ÉLÉMENTS SUR LA ZONE DE CRÉATION
-  ---------------------------------------------------------------------------*/
+  // --------------------------------------------------------------------
+  // AJOUT DES ÉLÉMENTS DANS LA ZONE DE CRÉATION
+  // --------------------------------------------------------------------
   function addElement(part, option) {
     if (part === "background") {
       applyBackgroundImage(option);
@@ -223,13 +215,10 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable.dataset.part = part;
     draggable.dataset.option = option;
     draggable.dataset.rotation = "0";
-    // On démarre avec une échelle de 1 (sera ensuite ajustée en fonction de la taille naturelle)
     draggable.dataset.scale = "1";
     draggable.dataset.flipx = "false";
     draggable.dataset.flipy = "false";
     draggable.dataset.color = "";
-
-    // Pour l'instant, des dimensions minimales de 50px (elles seront remplacées à l'image load)
     draggable.style.left = "0px";
     draggable.style.top = "0px";
     draggable.style.width = "50px";
@@ -240,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable.style.userSelect = "none";
     draggable.style.touchAction = "none";
 
-    // Conteneur interne pour l'image (les transformations rotation/flips seront appliquées ici)
+    // Conteneur interne pour l'image (pour appliquer les transformations)
     const imageContainer = document.createElement("div");
     imageContainer.style.width = "100%";
     imageContainer.style.height = "100%";
@@ -249,7 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
     imageContainer.style.justifyContent = "center";
     imageContainer.style.transformOrigin = "center center";
     imageContainer.style.pointerEvents = "none";
-    // Dans updateTransform, nous n'appliquerons plus de scale, afin que la taille réelle du conteneur guide la position des poignées.
 
     const img = document.createElement("img");
     img.src = `public/assets/v1/${part}/${option}.png`;
@@ -257,31 +245,22 @@ document.addEventListener("DOMContentLoaded", () => {
     img.style.width = "100%";
     img.style.height = "100%";
     img.onerror = () => { img.src = `public/assets/v1/${part}/default.png`; };
-
-    // Lors du chargement, on ajuste les dimensions du conteneur en fonction de l'image naturelle
+    // Une fois l'image chargée, ajuste la taille du conteneur
     img.addEventListener("load", () => {
       const naturalW = img.naturalWidth;
       const naturalH = img.naturalHeight;
-      // Sauvegarde des dimensions naturelles pour recalculer la taille lors du redimensionnement
       draggable.dataset.naturalWidth = naturalW;
       draggable.dataset.naturalHeight = naturalH;
-
-      // On définit un maximum (ici 50% du conteneur principal)
+      // Limiter à 50% de la largeur du container
       const maxWidth = characterContainer.clientWidth * 0.5;
       const maxHeight = characterContainer.clientHeight * 0.5;
       const ratio = Math.min(1, maxWidth / naturalW, maxHeight / naturalH);
       const displayW = naturalW * ratio;
       const displayH = naturalH * ratio;
-      // Mise à jour des dimensions du conteneur
       draggable.style.width = displayW + "px";
       draggable.style.height = displayH + "px";
-      // Stocke la valeur d'échelle initiale
       draggable.dataset.scale = ratio;
-      
-      // Si c'est le body, on le centre
-      if (part === "body") {
-        centerElement(draggable);
-      }
+      if (part === "body") centerElement(draggable);
     });
 
     imageContainer.appendChild(img);
@@ -294,8 +273,8 @@ document.addEventListener("DOMContentLoaded", () => {
       resizeHandle.classList.add("resize-handle", handle);
       resizeHandle.setAttribute("aria-label", `Resize Handle ${handle}`);
       draggable.appendChild(resizeHandle);
-      resizeHandle.addEventListener("mousedown", (e) => startResize(e, draggable, handle));
-      resizeHandle.addEventListener("touchstart", (e) => startResizeTouch(e, draggable, handle), { passive: false });
+      resizeHandle.addEventListener("mousedown", e => startResize(e, draggable, handle));
+      resizeHandle.addEventListener("touchstart", e => startResizeTouch(e, draggable, handle), { passive: false });
     });
 
     // Poignée de rotation
@@ -303,35 +282,44 @@ document.addEventListener("DOMContentLoaded", () => {
     rotateHandle.classList.add("rotate-handle");
     rotateHandle.setAttribute("aria-label", "Rotate Handle");
     draggable.appendChild(rotateHandle);
-    rotateHandle.addEventListener("mousedown", (e) => startRotate(e, draggable));
-    rotateHandle.addEventListener("touchstart", (e) => startRotateTouch(e, draggable), { passive: false });
+    rotateHandle.addEventListener("mousedown", e => startRotate(e, draggable));
+    rotateHandle.addEventListener("touchstart", e => startRotateTouch(e, draggable), { passive: false });
 
     // Bouton de verrouillage/déverrouillage
     const lockButton = createLockButton(draggable);
     draggable.appendChild(lockButton);
-    lockButton.addEventListener("click", (e) => toggleLock(e, draggable, lockButton));
-    lockButton.addEventListener("keydown", (e) => {
+    // Pour clic souris
+    lockButton.addEventListener("click", e => {
+      e.stopPropagation();
+      toggleLock(e, draggable, lockButton);
+    });
+    // Pour tactile
+    lockButton.addEventListener("touchend", e => {
+      e.stopPropagation();
+      toggleLock(e, draggable, lockButton);
+    });
+    lockButton.addEventListener("keydown", e => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         lockButton.click();
       }
     });
 
-    // Activation du drag sur l'élément (éviter les poignées)
-    draggable.addEventListener("mousedown", (e) => {
+    // Activation du drag sur l'élément (en excluant les poignées)
+    draggable.addEventListener("mousedown", e => {
       if (!draggable.classList.contains("locked")) {
         selectElement(draggable);
-        if (!e.target.classList.contains("resize-handle") && !e.target.classList.contains("rotate-handle")) {
+        if (!e.target.classList.contains("resize-handle") &&
+            !e.target.classList.contains("rotate-handle"))
           startDrag(e, draggable);
-        }
       }
     });
-    draggable.addEventListener("touchstart", (e) => {
+    draggable.addEventListener("touchstart", e => {
       if (!draggable.classList.contains("locked")) {
         selectElement(draggable);
-        if (!e.target.classList.contains("resize-handle") && !e.target.classList.contains("rotate-handle")) {
+        if (!e.target.classList.contains("resize-handle") &&
+            !e.target.classList.contains("rotate-handle"))
           startDragTouch(e, draggable);
-        }
       }
     }, { passive: false });
 
@@ -355,9 +343,9 @@ document.addEventListener("DOMContentLoaded", () => {
     lockButton.setAttribute("aria-label", isLocked ? "Unlock Element" : "Lock Element");
   }
 
-  /*---------------------------------------------------------------------------
-    GESTION DU DRAG
-  ---------------------------------------------------------------------------*/
+  // --------------------------------------------------------------------
+  // GESTION DU DRAG (SOURIS ET TOUCH)
+  // --------------------------------------------------------------------
   function startDrag(e, element) {
     if (element.classList.contains("locked")) return;
     isDragging = true;
@@ -378,8 +366,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let newTop = e.clientY - containerRect.top - dragOffsetY;
     newLeft = Math.max(0, Math.min(newLeft, containerRect.width - selectedElement.offsetWidth));
     newTop = Math.max(0, Math.min(newTop, containerRect.height - selectedElement.offsetHeight));
-    selectedElement.style.left = `${newLeft}px`;
-    selectedElement.style.top = `${newTop}px`;
+    selectedElement.style.left = newLeft + "px";
+    selectedElement.style.top = newTop + "px";
   }
 
   function stopDrag(e) {
@@ -411,8 +399,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let newTop = touch.clientY - containerRect.top - dragOffsetY;
     newLeft = Math.max(0, Math.min(newLeft, containerRect.width - selectedElement.offsetWidth));
     newTop = Math.max(0, Math.min(newTop, containerRect.height - selectedElement.offsetHeight));
-    selectedElement.style.left = `${newLeft}px`;
-    selectedElement.style.top = `${newTop}px`;
+    selectedElement.style.left = newLeft + "px";
+    selectedElement.style.top = newTop + "px";
   }
 
   function stopDragTouch(e) {
@@ -422,9 +410,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.removeEventListener("touchcancel", stopDragTouch);
   }
 
-  /*---------------------------------------------------------------------------
-    GESTION DE LA ROTATION
-  ---------------------------------------------------------------------------*/
+  // --------------------------------------------------------------------
+  // GESTION DE LA ROTATION (SOURIS & TOUCH)
+  // --------------------------------------------------------------------
   function startRotate(e, element) {
     if (element.classList.contains("locked")) return;
     isRotating = true;
@@ -493,9 +481,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.removeEventListener("touchcancel", stopRotateTouch);
   }
 
-  /*---------------------------------------------------------------------------
-    GESTION DU REDIMENSIONNEMENT
-  ---------------------------------------------------------------------------*/
+  // --------------------------------------------------------------------
+  // GESTION DU REDIMENSIONNEMENT (SOURIS & TOUCH)
+  // --------------------------------------------------------------------
   function startResize(e, element, handle) {
     if (element.classList.contains("locked")) return;
     isResizing = true;
@@ -510,6 +498,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("mouseup", stopResize);
   }
 
+  
   function handleResizeMove(e) {
     if (!isResizing || !selectedElement || selectedElement.classList.contains("locked")) return;
     e.preventDefault();
@@ -525,11 +514,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     newWidth = Math.max(30, newWidth);
     newHeight = Math.max(30, newHeight);
-    // Recalcul de l'échelle par rapport aux dimensions naturelles
     const naturalW = parseFloat(selectedElement.dataset.naturalWidth) || newWidth;
     const newScale = newWidth / naturalW;
     selectedElement.dataset.scale = newScale;
-    // Mise à jour des dimensions réelles du conteneur
     selectedElement.style.width = newWidth + "px";
     selectedElement.style.height = newHeight + "px";
     updateTransform(selectedElement);
@@ -590,50 +577,45 @@ document.addEventListener("DOMContentLoaded", () => {
     document.removeEventListener("touchcancel", stopResizeTouch);
   }
 
-  /*---------------------------------------------------------------------------
-    SÉLECTION DE L'ÉLÉMENT
-  ---------------------------------------------------------------------------*/
+  // --------------------------------------------------------------------
+  // SÉLECTION D'UN ÉLÉMENT
+  // --------------------------------------------------------------------
   function selectElement(element) {
     if (selectedElement && selectedElement !== element) {
       selectedElement.classList.remove("selected");
     }
     selectedElement = element;
     selectedElement.classList.add("selected");
-    document.querySelectorAll(".draggable").forEach(el => {
-      if (el !== selectedElement) el.classList.remove("selected");
-    });
+    // Mettre à jour l'affichage des options pour la partie sélectionnée
     displayOptions(selectedElement.dataset.part);
     selectedPart = selectedElement.dataset.part;
   }
 
-  /*---------------------------------------------------------------------------
-    APPLICATION DES TRANSFORMATIONS
-  ---------------------------------------------------------------------------*/
-  // Ici, on applique uniquement rotation et flips au conteneur interne
+  // --------------------------------------------------------------------
+  // APPLICATION DES TRANSFORMATIONS (rotation et flips)
+  // --------------------------------------------------------------------
   function updateTransform(element) {
     const rotation = parseFloat(element.dataset.rotation) || 0;
     const flipX = (element.dataset.flipx === "true");
     const flipY = (element.dataset.flipy === "true");
-
     const imageContainer = element.querySelector("div");
     if (imageContainer) {
       let transformString = `rotate(${rotation}deg)`;
-      if (flipX) transformString += ` rotateY(180deg)`;
-      if (flipY) transformString += ` rotateX(180deg)`;
+      if (flipX) transformString += " rotateY(180deg)";
+      if (flipY) transformString += " rotateX(180deg)";
       imageContainer.style.transform = transformString;
     }
   }
 
-  /*---------------------------------------------------------------------------
-    APPLICATION DES COULEURS ET DES ARRIÈRES-PLANS
-  ---------------------------------------------------------------------------*/
+  // --------------------------------------------------------------------
+  // APPLICATION DES COULEURS ET ARRIÈRES-PLANS
+  // --------------------------------------------------------------------
   function applyColorToElement(element, color) {
     const part = element.dataset.part;
-    // On ne modifie pas certaines parties (body, eyes, mouth)
+    // Ne modifie pas pour certaines parties
     if (["body", "eyes", "mouth"].includes(part)) return;
     const img = element.querySelector("img");
     if (!img) return;
-
     if (color === "reset") {
       element.dataset.color = "";
       img.style.filter = "none";
@@ -677,51 +659,37 @@ document.addEventListener("DOMContentLoaded", () => {
     characterContainer.style.backgroundColor = "transparent";
   }
 
-  /*---------------------------------------------------------------------------
-    SAUVEGARDE SUR CANVAS
-  ---------------------------------------------------------------------------*/
+  // --------------------------------------------------------------------
+  // SAUVEGARDE SUR CANVAS (rendu fidèle via computedStyle)
+  // --------------------------------------------------------------------
   saveButton.addEventListener("click", () => {
-    const tempCanvas = document.createElement("canvas");
     const containerRect = characterContainer.getBoundingClientRect();
-    tempCanvas.width = containerRect.width;
-    tempCanvas.height = containerRect.height;
-    adjustCanvasForRetina(tempCanvas);
+    const ratio = window.devicePixelRatio || 1;
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = containerRect.width * ratio;
+    tempCanvas.height = containerRect.height * ratio;
     const ctx = tempCanvas.getContext("2d");
-
+    ctx.scale(ratio, ratio);
+    
+    // Gestion du background
     const bgImage = characterContainer.style.backgroundImage;
     if (bgImage && bgImage !== "none") {
       const bgUrl = bgImage.slice(5, -2);
       const bgImg = new Image();
-      bgImg.src = bgUrl;
       bgImg.crossOrigin = "anonymous";
+      bgImg.src = bgUrl;
       bgImg.onload = () => {
-        ctx.drawImage(
-          bgImg,
-          0,
-          0,
-          tempCanvas.width / (window.devicePixelRatio || 1),
-          tempCanvas.height / (window.devicePixelRatio || 1)
-        );
+        ctx.drawImage(bgImg, 0, 0, containerRect.width, containerRect.height);
         drawElements(ctx, tempCanvas);
       };
       bgImg.onerror = () => {
         ctx.fillStyle = characterContainer.style.backgroundColor || "#ffffff";
-        ctx.fillRect(
-          0,
-          0,
-          tempCanvas.width / (window.devicePixelRatio || 1),
-          tempCanvas.height / (window.devicePixelRatio || 1)
-        );
+        ctx.fillRect(0, 0, containerRect.width, containerRect.height);
         drawElements(ctx, tempCanvas);
       };
     } else {
       ctx.fillStyle = characterContainer.style.backgroundColor || "#ffffff";
-      ctx.fillRect(
-        0,
-        0,
-        tempCanvas.width / (window.devicePixelRatio || 1),
-        tempCanvas.height / (window.devicePixelRatio || 1)
-      );
+      ctx.fillRect(0, 0, containerRect.width, containerRect.height);
       drawElements(ctx, tempCanvas);
     }
   });
@@ -731,14 +699,12 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.sort((a, b) => {
       return (parseInt(window.getComputedStyle(a).zIndex) || 0) - (parseInt(window.getComputedStyle(b).zIndex) || 0);
     });
-
     let loadedImages = 0;
     const totalImages = elements.length;
     if (totalImages === 0) {
       downloadCanvas(canvas);
       return;
     }
-
     elements.forEach(el => {
       const imgElement = el.querySelector("img");
       if (!imgElement) {
@@ -746,41 +712,28 @@ document.addEventListener("DOMContentLoaded", () => {
         if (loadedImages === totalImages) downloadCanvas(canvas);
         return;
       }
-
       const img = new Image();
-      img.src = imgElement.src;
       img.crossOrigin = "anonymous";
+      img.src = imgElement.src;
       img.onload = () => {
         const left = el.offsetLeft;
         const top = el.offsetTop;
         const width = el.offsetWidth;
         const height = el.offsetHeight;
-
         const rotation = parseFloat(el.dataset.rotation) || 0;
         const flipX = (el.dataset.flipx === "true");
         const flipY = (el.dataset.flipy === "true");
         const part = el.dataset.part;
-
         ctx.save();
         ctx.translate(left + width / 2, top + height / 2);
         ctx.rotate((rotation * Math.PI) / 180);
         if (flipX) ctx.scale(-1, 1);
         if (flipY) ctx.scale(1, -1);
-
-        if (el.dataset.color && ["clothes", "hat", "accessories", "hair"].includes(part)) {
-          const hueDegrees = rgbToHueDegrees(el.dataset.color);
-          if (hueDegrees !== null) {
-            ctx.filter = `sepia(1) saturate(1000%) hue-rotate(${hueDegrees}deg)`;
-          } else {
-            ctx.filter = "none";
-          }
-        } else {
-          ctx.filter = "none";
-        }
-
+        // Pour reproduire exactement le rendu visuel, récupérer le filter calculé
+        const computedFilter = window.getComputedStyle(imgElement).filter;
+        ctx.filter = computedFilter && computedFilter !== "none" ? computedFilter : "none";
         ctx.drawImage(img, -width / 2, -height / 2, width, height);
         ctx.restore();
-
         loadedImages++;
         if (loadedImages === totalImages) downloadCanvas(canvas);
       };
@@ -801,9 +754,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.removeChild(link);
   }
 
-  /*---------------------------------------------------------------------------
-    AJUSTEMENT POUR RETINA & INITIALISATION DU BODY
-  ---------------------------------------------------------------------------*/
+  // --------------------------------------------------------------------
+  // AJUSTEMENT POUR RETINA & CENTRAGE
+  // --------------------------------------------------------------------
   function adjustCanvasForRetina(canvas) {
     const ctx = canvas.getContext('2d');
     const ratio = window.devicePixelRatio || 1;
@@ -811,41 +764,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const height = canvas.height;
     canvas.width = width * ratio;
     canvas.height = height * ratio;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
     ctx.scale(ratio, ratio);
   }
 
-  // Centre l'élément passé en argument dans le conteneur principal
   function centerElement(element) {
     const containerRect = characterContainer.getBoundingClientRect();
     const elemWidth = element.offsetWidth;
     const elemHeight = element.offsetHeight;
     const left = (containerRect.width - elemWidth) / 2;
     const top = (containerRect.height - elemHeight) / 2;
-    element.style.left = `${left}px`;
-    element.style.top = `${top}px`;
+    element.style.left = left + "px";
+    element.style.top = top + "px";
   }
 
-  // Initialise l'élément "body" et le centre après le chargement de l'image
   function initializeBody() {
     addElement("body", "body1");
-    // Le centrage s'effectuera lors du load de l'image de l'asset (cf. addEventListener "load")
+    // Le centrage s'effectue lors du chargement de l'image de l'asset (voir addEventListener "load")
   }
 
-  /*---------------------------------------------------------------------------
-    GESTION DU SIDEBAR & DES BOUTONS DE SÉLECTION
-  ---------------------------------------------------------------------------*/
-  sidebarToggle.addEventListener("click", (e) => {
+  // --------------------------------------------------------------------
+  // GESTION DU SIDEBAR & BOUTONS DE SÉLECTION
+  // --------------------------------------------------------------------
+  sidebarToggle.addEventListener("click", e => {
     e.stopPropagation();
     const isOpen = sidebar.classList.toggle("open");
     sidebarToggle.setAttribute("aria-expanded", isOpen);
     sidebarToggle.setAttribute("aria-label", isOpen ? "Close Sidebar" : "Open Sidebar");
-    if (isOpen) document.body.classList.add("no-scroll");
-    else document.body.classList.remove("no-scroll");
+    document.body.classList.toggle("no-scroll", isOpen);
   });
 
-  closeSidebar.addEventListener("click", (e) => {
+  closeSidebar.addEventListener("click", e => {
     e.stopPropagation();
     if (sidebar.classList.contains("open")) {
       sidebar.classList.remove("open");
@@ -855,7 +805,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.addEventListener("click", (e) => {
+  document.addEventListener("click", e => {
     if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
       if (sidebar.classList.contains("open")) {
         sidebar.classList.remove("open");
@@ -867,7 +817,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   selectionButtons.forEach(button => {
-    button.addEventListener("click", (e) => {
+    button.addEventListener("click", e => {
       e.stopPropagation();
       const part = button.dataset.part;
       const isActive = button.classList.contains("active");
@@ -896,8 +846,7 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedPart = part;
       }
     });
-
-    button.addEventListener("keydown", (e) => {
+    button.addEventListener("keydown", e => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         button.click();
@@ -906,7 +855,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.querySelectorAll(".close-button").forEach(closeBtn => {
-    closeBtn.addEventListener("click", (e) => {
+    closeBtn.addEventListener("click", e => {
       e.stopPropagation();
       const dropdown = closeBtn.parentElement;
       dropdown.classList.remove("active");
@@ -921,8 +870,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (colorSelection) colorSelection.style.display = "none";
       selectedPart = null;
     });
-
-    closeBtn.addEventListener("keydown", (e) => {
+    closeBtn.addEventListener("keydown", e => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         closeBtn.click();
@@ -930,18 +878,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  colorButtons.forEach((button) => {
-    button.addEventListener("click", (e) => {
+  colorButtons.forEach(button => {
+    button.addEventListener("click", e => {
       e.stopPropagation();
       applyColorButtonClick(button.dataset.color);
     });
-
-    button.addEventListener("touchend", (e) => {
+    button.addEventListener("touchend", e => {
       e.preventDefault();
       applyColorButtonClick(button.dataset.color);
     });
-
-    button.addEventListener("keydown", (e) => {
+    button.addEventListener("keydown", e => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         button.click();
@@ -955,25 +901,19 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     if (selectedPart === "background") {
-      if (color === "reset") {
-        applyBackgroundColor("reset");
-      } else {
-        applyBackgroundColor(color);
-      }
+      if (color === "reset") applyBackgroundColor("reset");
+      else applyBackgroundColor(color);
       return;
     }
     if (!selectedElement) {
       console.log("Aucun élément sélectionné pour appliquer la couleur.");
       return;
     }
-    if (color === "reset") {
-      applyColorToElement(selectedElement, "reset");
-    } else {
-      applyColorToElement(selectedElement, color);
-    }
+    if (color === "reset") applyColorToElement(selectedElement, "reset");
+    else applyColorToElement(selectedElement, color);
   }
 
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
       closeAllDropdowns();
       if (sidebar.classList.contains("open")) {
@@ -1010,27 +950,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   bringForwardButton.addEventListener("click", () => {
-    if (selectedElement && !selectedElement.classList.contains("locked")) {
+    if (selectedElement && !selectedElement.classList.contains("locked"))
       bringToFront(selectedElement);
-    }
   });
 
   sendBackwardButton.addEventListener("click", () => {
-    if (selectedElement && !selectedElement.classList.contains("locked")) {
+    if (selectedElement && !selectedElement.classList.contains("locked"))
       sendToBack(selectedElement);
-    }
   });
 
   versionButton.addEventListener("click", () => {
     window.location.href = "/public/v2/index2.html";
   });
 
-  uploadButton.addEventListener("click", (e) => {
+  uploadButton.addEventListener("click", e => {
     e.stopPropagation();
     uploadInput.click();
   });
 
-  uploadInput.addEventListener("change", (e) => {
+  uploadInput.addEventListener("change", e => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
@@ -1044,7 +982,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Génération des options et initialisation du body
+  // Génération des options et initialisation
   generateDropdownOptions();
   initializeBody();
+
 });

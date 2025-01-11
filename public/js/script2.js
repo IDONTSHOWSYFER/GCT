@@ -5,14 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const characterContainer = document.getElementById("characterContainer");
     const versionButton = document.getElementById("versionButton");
     const selectionButtons = document.querySelectorAll(".part-button");
-
     const saveButton = document.getElementById("saveButton");
     const deleteButton = document.getElementById("deleteButton");
     const flipHorizontalButton = document.getElementById("flipHorizontalButton");
     const flipVerticalButton = document.getElementById("flipVerticalButton");
     const bringForwardButton = document.getElementById("bringForwardButton");
     const sendBackwardButton = document.getElementById("sendBackwardButton");
-
     const colorButtons = document.querySelectorAll(".color-button");
     const optionsDisplay = document.getElementById("optionsDisplay");
     const notification = document.getElementById("notification");
@@ -24,37 +22,37 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedElement = null;  // Élément actuellement sélectionné
     let selectedPart = null;     // Partie sélectionnée (hair, clothes, etc.)
 
-    // Variables de drag
+    // Variables pour le drag
     let isDragging = false;
     let dragOffsetX = 0;
     let dragOffsetY = 0;
 
-    // Variables de rotation
+    // Variables pour la rotation
     let isRotating = false;
     let initialAngle = 0;
     let initialRotation = 0;
     let previousAngle = 0;
 
-    // Variables de redimensionnement
+    // Variables pour le redimensionnement
     let isResizing = false;
     let resizeStartX = 0;
     let resizeStartY = 0;
     let resizeHandle = null;
 
-    // Largeur/hauteur de départ pour calcul d'aspect ratio
+    // Dimensions de départ pour calculer l’aspect ratio
     let originalWidth = 0;
     let originalHeight = 0;
     let originalAspectRatio = 1;
 
-    // Dimensions minimales pour l'élément
-    const MIN_SIZE = 50;  // Ajustez selon vos préférences
+    // Dimensions minimales pour un élément
+    const MIN_SIZE = 50;  
 
-    // Dimensions par défaut pour le body selon la taille de l'écran
-    const MOBILE_BODY_SIZE = 100;   // Taille pour mobile
-    const DESKTOP_BODY_SIZE = 200;  // Taille pour desktop
+    // Dimensions par défaut pour le body selon la taille d'écran
+    const MOBILE_BODY_SIZE = 100;   
+    const DESKTOP_BODY_SIZE = 200;  
 
     // --------------------------------------------------------------------
-    // FONCTIONS UTILITAIRES & NOTIFICATIONS
+    // FONCTIONS UTILES & NOTIFICATIONS
     // --------------------------------------------------------------------
     function showNotification(message, type) {
         notification.textContent = message;
@@ -70,12 +68,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
-    // Convertit une couleur (hex ou rgb) en hue (0–360°) pour le filtre hue-rotate
+    // Convertir une couleur (hex ou rgb) en degrés de teinte (pour appliquer un filter)
     function rgbToHueDegrees(color) {
         let r, g, b;
         if (color.startsWith('#')) {
             let hex = color.slice(1);
-            // Gestion des raccourcis #FFF => #FFFFFF
             if (hex.length === 3) {
                 hex = hex.split('').map(c => c + c).join('');
             }
@@ -88,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (rgbValues.length < 3) return null;
             [r, g, b] = rgbValues;
         } else {
-            // Couleur nommée (red, blue, etc.) => trouver son rgb réel
             const dummy = document.createElement("div");
             dummy.style.color = color;
             document.body.appendChild(dummy);
@@ -99,11 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
             [r, g, b] = rgbMatch;
         }
 
-        // Conversion en [0..1]
         r /= 255; g /= 255; b /= 255;
         const max = Math.max(r, g, b), min = Math.min(r, g, b);
         let hue = 0;
-
         if (max === min) {
             hue = 0;
         } else if (max === r) {
@@ -121,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // --------------------------------------------------------------------
     function getMaxZIndex() {
         let max = 0;
-        characterContainer.querySelectorAll(".draggable").forEach((el) => {
+        characterContainer.querySelectorAll(".draggable").forEach(el => {
             const z = parseInt(window.getComputedStyle(el).zIndex) || 0;
             if (z > max) max = z;
         });
@@ -142,11 +136,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --------------------------------------------------------------------
-    // FERMETURE DES DROP-DOWNS
+    // FERMETURE DES MENUS D'OPTIONS
     // --------------------------------------------------------------------
     function closeAllDropdowns() {
         optionsDisplay.classList.remove("active");
-        document.querySelectorAll(".options-group").forEach((group) => {
+        document.querySelectorAll(".options-group").forEach(group => {
             group.classList.remove("active");
             const part = group.id.split("-")[1];
             const partButton = document.querySelector(`.part-button[data-part="${part}"]`);
@@ -159,10 +153,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --------------------------------------------------------------------
-    // GÉNÉRATION DYNAMIQUE DES BOUTONS D'OPTIONS (HAIR, EYES, ETC.)
+    // GÉNÉRATION DYNAMIQUE DES OPTIONS (hair, eyes, etc.)
     // --------------------------------------------------------------------
     function generateDropdownOptions() {
-        // Vous pouvez ajouter d'autres options dans chaque tableau
         const parts = {
             hair: ["hair1", "hair2", "hair3"],
             eyes: ["eyes1", "eyes2", "eyes3"],
@@ -170,18 +163,16 @@ document.addEventListener("DOMContentLoaded", () => {
             body: ["body1", "body2", "body3"],
             accessories: ["accessory1", "accessory2", "accessory3"],
             clothes: ["clothe1", "clothe2", "clothe3"],
-            background: ["red", "white", "black"] 
+            background: ["red", "white", "black"]
         };
 
         for (const part in parts) {
             const optionsGroup = document.createElement("div");
             optionsGroup.id = `options-${part}`;
             optionsGroup.classList.add("options-group");
-
             const title = document.createElement("h3");
             title.textContent = `${capitalizeFirstLetter(part)} Options`;
             optionsGroup.appendChild(title);
-
             const optionsGrid = document.createElement("div");
             optionsGrid.classList.add("options-grid");
 
@@ -192,12 +183,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 button.dataset.option = option;
                 button.setAttribute("aria-label", `${capitalizeFirstLetter(part)} Option ${option}`);
 
-                // Création de l'img
                 const img = document.createElement("img");
                 img.src = `/public/assets/v2/${part}/${option}.png`;
                 img.alt = `${capitalizeFirstLetter(part)} ${option}`;
-
-                // IMPORTANT : fallback en cas d'erreur
+                // Fallback en cas d'erreur
                 img.onerror = () => {
                     if (part === "background") {
                         switch (option) {
@@ -214,30 +203,25 @@ document.addEventListener("DOMContentLoaded", () => {
                                 img.src = "/public/assets/v2/background/shape_default.png";
                         }
                     } else {
-                        // Pour les autres parties
                         img.src = `/public/assets/v2/${part}/default.png`;
                     }
                 };
 
                 button.appendChild(img);
-
-                // Au clic, on ajoute l'élément (draggable) ou on applique un background
                 button.addEventListener("click", (e) => {
                     e.stopPropagation();
                     addElement(part, option);
                     closeAllDropdowns();
                 });
-
                 optionsGrid.appendChild(button);
             });
-
             optionsGroup.appendChild(optionsGrid);
             optionsDisplay.appendChild(optionsGroup);
         }
     }
 
     // --------------------------------------------------------------------
-    // AFFICHAGE DES OPTIONS (PART-BUTTONS)
+    // AFFICHAGE DES OPTIONS (boutons pour chaque partie)
     // --------------------------------------------------------------------
     function displayOptions(part) {
         if (!part) return;
@@ -246,8 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         optionsDisplay.classList.add("active");
-
-        document.querySelectorAll(".options-group").forEach((group) => {
+        document.querySelectorAll(".options-group").forEach(group => {
             if (group.id !== `options-${part}`) {
                 group.classList.remove("active");
                 const otherPart = group.id.split("-")[1];
@@ -258,26 +241,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
-
         const activeGroup = document.getElementById(`options-${part}`);
         if (activeGroup) {
             const isActive = activeGroup.classList.contains("active");
             activeGroup.classList.toggle("active", !isActive);
             activeGroup.setAttribute("aria-modal", !isActive);
-
             const partButton = document.querySelector(`.part-button[data-part="${part}"]`);
             if (partButton) {
                 partButton.classList.toggle("active", !isActive);
                 partButton.setAttribute("aria-expanded", !isActive);
             }
         }
-        selectedPart = !document.getElementById(`options-${part}`).classList.contains("active") 
-                       ? null 
-                       : part;
+        selectedPart = activeGroup.classList.contains("active") ? part : null;
     }
 
     // --------------------------------------------------------------------
-    // CRÉER UN ÉLÉMENT DRAGGABLE (SAUF BACKGROUND)
+    // CRÉATION D'UN ÉLÉMENT DRAGGABLE
     // --------------------------------------------------------------------
     function addElement(part, option) {
         if (part === "background") {
@@ -296,11 +275,10 @@ document.addEventListener("DOMContentLoaded", () => {
         draggable.dataset.x = "0";
         draggable.dataset.y = "0";
         draggable.style.zIndex = getMaxZIndex() + 1;
-
         // ID unique
         draggable.dataset.elementId = generateUniqueId();
 
-        // Conteneur de l'image
+        // Conteneur pour l'image
         const imgContainer = document.createElement("div");
         imgContainer.style.width = "100%";
         imgContainer.style.height = "100%";
@@ -315,27 +293,21 @@ document.addEventListener("DOMContentLoaded", () => {
         img.onerror = () => {
             img.src = `/public/assets/v2/${part}/default.png`;
         };
-
         img.style.objectFit = "contain";
         img.style.width = "100%";
         img.style.height = "100%";
-
         imgContainer.appendChild(img);
         draggable.appendChild(imgContainer);
 
-        // Taille par défaut
-        let defaultSize = 100; 
+        // Taille par défaut (adaptée au body)
+        let defaultSize = 100;
         if (part === "body") {
-            if (window.innerWidth < 768) {
-                defaultSize = MOBILE_BODY_SIZE;
-            } else {
-                defaultSize = DESKTOP_BODY_SIZE;
-            }
+            defaultSize = window.innerWidth < 768 ? MOBILE_BODY_SIZE : DESKTOP_BODY_SIZE;
         }
         draggable.style.width = defaultSize + "px";
         draggable.style.height = defaultSize + "px";
 
-        // Poignées de redimensionnement
+        // Création des poignées de redimensionnement
         ["br", "bl", "tr", "tl"].forEach(handle => {
             const rh = document.createElement("div");
             rh.classList.add("resize-handle", handle);
@@ -351,13 +323,23 @@ document.addEventListener("DOMContentLoaded", () => {
         rotateHandle.addEventListener("mousedown", (e) => startRotate(e, draggable));
         rotateHandle.addEventListener("touchstart", (e) => startRotateTouch(e, draggable), { passive: false });
 
-        // Bouton de verrouillage
+        // Bouton de verrouillage avec prise en charge du clic et du tactile
         const lockButton = document.createElement("button");
         lockButton.classList.add("lock-button");
         lockButton.setAttribute("aria-label", "Lock/Unlock Element");
         draggable.appendChild(lockButton);
+        // Pour souris
+        lockButton.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            toggleLock(draggable, lockButton);
+        });
+        // Pour mobile
+        lockButton.addEventListener("touchend", (ev) => {
+            ev.stopPropagation();
+            toggleLock(draggable, lockButton);
+        });
 
-        // Drag (mouse)
+        // Gestion du drag pour souris
         draggable.addEventListener("mousedown", (e) => {
             const isHandle = e.target.classList.contains("resize-handle") || e.target.classList.contains("rotate-handle");
             if (!draggable.classList.contains("locked") && !isHandle) {
@@ -365,8 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             selectElement(draggable);
         });
-
-        // Drag (touch)
+        // Gestion du drag pour mobile
         draggable.addEventListener("touchstart", (e) => {
             const isHandle = e.target.classList.contains("resize-handle") || e.target.classList.contains("rotate-handle");
             if (!draggable.classList.contains("locked") && !isHandle) {
@@ -375,27 +356,20 @@ document.addEventListener("DOMContentLoaded", () => {
             selectElement(draggable);
         }, { passive: false });
 
-        // Action du lock
-        lockButton.addEventListener("click", (ev) => {
-            ev.stopPropagation();
-            toggleLock(draggable, lockButton);
-        });
-
         characterContainer.appendChild(draggable);
 
-        // Centrer si c'est un body
+        // Centrer le body si nécessaire
         if (part === "body") {
             setTimeout(() => {
                 centerElementInContainer(draggable);
             }, 0);
         }
-
         selectElement(draggable);
         updateLayersList();
     }
 
     // --------------------------------------------------------------------
-    // LOCK / UNLOCK
+    // VERROUILLAGE / DÉVERROUILLAGE D'UN ÉLÉMENT
     // --------------------------------------------------------------------
     function toggleLock(element, lockButton) {
         element.classList.toggle("locked");
@@ -414,9 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         selectedElement = element;
         selectedElement.classList.add("selected");
-
         selectedPart = element.dataset.part;
-
         selectionButtons.forEach(btn => {
             if (btn.dataset.part === selectedPart) {
                 btn.classList.add("active");
@@ -426,12 +398,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 btn.setAttribute("aria-expanded", "false");
             }
         });
-
         updateLayersList();
     }
 
     // --------------------------------------------------------------------
-    // DRAG (MOUSE)
+    // DRAG (SOURIS)
     // --------------------------------------------------------------------
     function startDrag(e, element) {
         bringToFront(element);
@@ -440,7 +411,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentY = parseFloat(element.dataset.y) || 0;
         dragOffsetX = e.clientX - currentX;
         dragOffsetY = e.clientY - currentY;
-
         document.addEventListener("mousemove", onDragMove);
         document.addEventListener("mouseup", onDragEnd);
     }
@@ -448,17 +418,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function onDragMove(e) {
         if (!isDragging || !selectedElement) return;
         if (selectedElement.classList.contains("locked")) return;
-
         const containerRect = characterContainer.getBoundingClientRect();
         const elRect = selectedElement.getBoundingClientRect();
-
         let newX = e.clientX - dragOffsetX;
         let newY = e.clientY - dragOffsetY;
-
-        // Empêcher de sortir du container
         newX = Math.max(0, Math.min(newX, containerRect.width - elRect.width));
         newY = Math.max(0, Math.min(newY, containerRect.height - elRect.height));
-
         selectedElement.dataset.x = newX.toString();
         selectedElement.dataset.y = newY.toString();
         updateTransform(selectedElement);
@@ -472,7 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --------------------------------------------------------------------
-    // DRAG (TOUCH)
+    // DRAG (MOBILE / TOUCH)
     // --------------------------------------------------------------------
     function startDragTouch(e, element) {
         bringToFront(element);
@@ -482,7 +447,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentY = parseFloat(element.dataset.y) || 0;
         dragOffsetX = touch.clientX - currentX;
         dragOffsetY = touch.clientY - currentY;
-
         document.addEventListener("touchmove", onDragMoveTouch, { passive: false });
         document.addEventListener("touchend", onDragEndTouch, { passive: false });
         document.addEventListener("touchcancel", onDragEndTouch, { passive: false });
@@ -492,17 +456,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!isDragging || !selectedElement) return;
         e.preventDefault();
         if (selectedElement.classList.contains("locked")) return;
-
         const touch = e.touches[0];
         const containerRect = characterContainer.getBoundingClientRect();
         const elRect = selectedElement.getBoundingClientRect();
-
         let newX = touch.clientX - dragOffsetX;
         let newY = touch.clientY - dragOffsetY;
-
         newX = Math.max(0, Math.min(newX, containerRect.width - elRect.width));
         newY = Math.max(0, Math.min(newY, containerRect.height - elRect.height));
-
         selectedElement.dataset.x = newX.toString();
         selectedElement.dataset.y = newY.toString();
         updateTransform(selectedElement);
@@ -517,20 +477,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --------------------------------------------------------------------
-    // ROTATION (MOUSE)
+    // ROTATION (SOURIS)
     // --------------------------------------------------------------------
     function startRotate(e, element) {
         bringToFront(element);
         isRotating = true;
-
         const rect = element.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-
         initialAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
         initialRotation = parseFloat(element.dataset.rotation) || 0;
         previousAngle = initialAngle;
-
         document.addEventListener("mousemove", onRotateMove);
         document.addEventListener("mouseup", onRotateEnd);
     }
@@ -538,17 +495,13 @@ document.addEventListener("DOMContentLoaded", () => {
     function onRotateMove(e) {
         if (!isRotating || !selectedElement) return;
         if (selectedElement.classList.contains("locked")) return;
-
         const rect = selectedElement.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-
         const currentAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
         let deltaAngle = currentAngle - previousAngle;
-
         if (deltaAngle > 180) deltaAngle -= 360;
         else if (deltaAngle < -180) deltaAngle += 360;
-
         initialRotation += deltaAngle;
         selectedElement.dataset.rotation = initialRotation.toString();
         updateTransform(selectedElement);
@@ -568,16 +521,13 @@ document.addEventListener("DOMContentLoaded", () => {
     function startRotateTouch(e, element) {
         bringToFront(element);
         isRotating = true;
-
         const touch = e.touches[0];
         const rect = element.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-
         initialAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * (180 / Math.PI);
         initialRotation = parseFloat(element.dataset.rotation) || 0;
         previousAngle = initialAngle;
-
         document.addEventListener("touchmove", onRotateMoveTouch, { passive: false });
         document.addEventListener("touchend", onRotateEndTouch, { passive: false });
         document.addEventListener("touchcancel", onRotateEndTouch, { passive: false });
@@ -587,18 +537,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!isRotating || !selectedElement) return;
         e.preventDefault();
         if (selectedElement.classList.contains("locked")) return;
-
         const touch = e.touches[0];
         const rect = selectedElement.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-
         const currentAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * (180 / Math.PI);
         let deltaAngle = currentAngle - previousAngle;
-
         if (deltaAngle > 180) deltaAngle -= 360;
         else if (deltaAngle < -180) deltaAngle += 360;
-
         initialRotation += deltaAngle;
         selectedElement.dataset.rotation = initialRotation.toString();
         updateTransform(selectedElement);
@@ -614,7 +560,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --------------------------------------------------------------------
-    // REDIMENSIONNEMENT (MOUSE)
+    // REDIMENSIONNEMENT (SOURIS)
     // --------------------------------------------------------------------
     function startResize(e, element, handle) {
         bringToFront(element);
@@ -622,11 +568,9 @@ document.addEventListener("DOMContentLoaded", () => {
         resizeStartX = e.clientX;
         resizeStartY = e.clientY;
         resizeHandle = handle;
-
         originalWidth = element.offsetWidth;
         originalHeight = element.offsetHeight;
         originalAspectRatio = originalWidth / originalHeight;
-
         document.addEventListener("mousemove", onResizeMove);
         document.addEventListener("mouseup", onResizeEnd);
     }
@@ -634,13 +578,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function onResizeMove(e) {
         if (!isResizing || !selectedElement) return;
         if (selectedElement.classList.contains("locked")) return;
-
         let dx = e.clientX - resizeStartX;
         let dy = e.clientY - resizeStartY;
-
         let newWidth = originalWidth;
         let newHeight = originalHeight;
-
         switch (resizeHandle) {
             case "br":
                 newWidth = originalWidth + dx;
@@ -659,7 +600,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 newWidth = newHeight * originalAspectRatio;
                 break;
         }
-
         if (newWidth < MIN_SIZE) {
             newWidth = MIN_SIZE;
             newHeight = newWidth / originalAspectRatio;
@@ -668,14 +608,11 @@ document.addEventListener("DOMContentLoaded", () => {
             newHeight = MIN_SIZE;
             newWidth = newHeight * originalAspectRatio;
         }
-
         const containerRect = characterContainer.getBoundingClientRect();
         const currentX = parseFloat(selectedElement.dataset.x) || 0;
         const currentY = parseFloat(selectedElement.dataset.y) || 0;
-
         const maxWidth = containerRect.width - currentX;
         const maxHeight = containerRect.height - currentY;
-
         if (newWidth > maxWidth) {
             newWidth = maxWidth;
             newHeight = newWidth / originalAspectRatio;
@@ -684,10 +621,8 @@ document.addEventListener("DOMContentLoaded", () => {
             newHeight = maxHeight;
             newWidth = newHeight * originalAspectRatio;
         }
-
         selectedElement.style.width = newWidth + "px";
         selectedElement.style.height = newHeight + "px";
-
         updateTransform(selectedElement);
         updateLayersList();
     }
@@ -708,11 +643,9 @@ document.addEventListener("DOMContentLoaded", () => {
         resizeStartX = touch.clientX;
         resizeStartY = touch.clientY;
         resizeHandle = handle;
-
         originalWidth = element.offsetWidth;
         originalHeight = element.offsetHeight;
         originalAspectRatio = originalWidth / originalHeight;
-
         e.preventDefault();
         document.addEventListener("touchmove", onResizeMoveTouch, { passive: false });
         document.addEventListener("touchend", onResizeEndTouch, { passive: false });
@@ -723,14 +656,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!isResizing || !selectedElement) return;
         e.preventDefault();
         if (selectedElement.classList.contains("locked")) return;
-
         const touch = e.touches[0];
         let dx = touch.clientX - resizeStartX;
         let dy = touch.clientY - resizeStartY;
-
         let newWidth = originalWidth;
         let newHeight = originalHeight;
-
         switch (resizeHandle) {
             case "br":
                 newWidth = originalWidth + dx;
@@ -749,7 +679,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 newWidth = newHeight * originalAspectRatio;
                 break;
         }
-
         if (newWidth < MIN_SIZE) {
             newWidth = MIN_SIZE;
             newHeight = newWidth / originalAspectRatio;
@@ -758,14 +687,11 @@ document.addEventListener("DOMContentLoaded", () => {
             newHeight = MIN_SIZE;
             newWidth = newHeight * originalAspectRatio;
         }
-
         const containerRect = characterContainer.getBoundingClientRect();
         const currentX = parseFloat(selectedElement.dataset.x) || 0;
         const currentY = parseFloat(selectedElement.dataset.y) || 0;
-
         const maxWidth = containerRect.width - currentX;
         const maxHeight = containerRect.height - currentY;
-
         if (newWidth > maxWidth) {
             newWidth = maxWidth;
             newHeight = newWidth / originalAspectRatio;
@@ -774,10 +700,8 @@ document.addEventListener("DOMContentLoaded", () => {
             newHeight = maxHeight;
             newWidth = newHeight * originalAspectRatio;
         }
-
         selectedElement.style.width = newWidth + "px";
         selectedElement.style.height = newHeight + "px";
-
         updateTransform(selectedElement);
         updateLayersList();
     }
@@ -796,33 +720,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const rotation = parseFloat(element.dataset.rotation) || 0;
         const flipX = (element.dataset.flipx === "true");
         const flipY = (element.dataset.flipy === "true");
-
         const x = parseFloat(element.dataset.x) || 0;
         const y = parseFloat(element.dataset.y) || 0;
-
         let transformString = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
         if (flipX) transformString += " scaleX(-1)";
         if (flipY) transformString += " scaleY(-1)";
-
         element.style.transform = transformString;
         element.style.transformOrigin = "center center";
     }
 
     // --------------------------------------------------------------------
-    // COLORATION D'UN ÉLÉMENT (APPLIQUÉE À TOUS SAUF "EYES")
+    // APPLICATION DE LA COLORATION (sauf pour "eyes")
     // --------------------------------------------------------------------
     function applyColorToElement(element, color) {
         const part = element.dataset.part;
-
-        // On NE colore PAS les yeux :
-        if (part === "eyes") {
-            return; // on ignore la coloration si c'est "eyes"
-        }
-
-        // Sinon, on applique le filtre
+        if (part === "eyes") return;
         const img = element.querySelector("img");
         if (!img) return;
-
         if (color === "reset") {
             element.dataset.color = "";
             img.style.filter = "none";
@@ -838,7 +752,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --------------------------------------------------------------------
-    // APPLIQUER UN BACKGROUND 
+    // APPLIQUER UN BACKGROUND
     // --------------------------------------------------------------------
     function applyBackground(option) {
         if (["bg1", "bg2", "bg3"].includes(option)) {
@@ -866,7 +780,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --------------------------------------------------------------------
-    // CENTRER (POUR LE BODY)
+    // CENTRER UN ÉLÉMENT DANS LE CONTAINER (utile pour le body)
     // --------------------------------------------------------------------
     function centerElementInContainer(element) {
         const containerRect = characterContainer.getBoundingClientRect();
@@ -890,22 +804,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // --------------------------------------------------------------------
     function updateLayersList() {
         const elements = Array.from(characterContainer.querySelectorAll(".draggable"));
-
         elements.sort((a, b) => {
             return (parseInt(window.getComputedStyle(a).zIndex) || 0) -
                    (parseInt(window.getComputedStyle(b).zIndex) || 0);
         });
-
         layersList.innerHTML = "";
         elements.forEach(el => {
             const li = document.createElement("li");
             li.dataset.elementId = el.dataset.elementId;
-
             const icon = document.createElement("img");
             icon.classList.add("layer-icon");
             icon.src = `/public/assets/v2/${el.dataset.part}/${el.dataset.option}.png`;
             icon.alt = `${capitalizeFirstLetter(el.dataset.part)} ${el.dataset.option}`;
-
             icon.onerror = () => {
                 if (el.dataset.part === "background") {
                     switch (el.dataset.option) {
@@ -926,10 +836,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             };
             li.appendChild(icon);
-
             const actionsDiv = document.createElement("div");
             actionsDiv.classList.add("layer-actions");
-
             const upBtn = document.createElement("button");
             upBtn.classList.add("move-up");
             upBtn.setAttribute("aria-label", "Move Up");
@@ -938,7 +846,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 ev.stopPropagation();
                 moveLayerUp(el);
             });
-
             const downBtn = document.createElement("button");
             downBtn.classList.add("move-down");
             downBtn.setAttribute("aria-label", "Move Down");
@@ -947,17 +854,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 ev.stopPropagation();
                 moveLayerDown(el);
             });
-
             actionsDiv.appendChild(upBtn);
             actionsDiv.appendChild(downBtn);
             li.appendChild(actionsDiv);
-
             li.addEventListener("click", () => {
                 selectElement(el);
             });
-
             layersList.appendChild(li);
-
             if (selectedElement && selectedElement.dataset.elementId === el.dataset.elementId) {
                 li.classList.add("selected");
             }
@@ -969,7 +872,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const allElements = Array.from(characterContainer.querySelectorAll(".draggable"));
         let target = null;
         let minAbove = Infinity;
-
         allElements.forEach(el => {
             const z = parseInt(window.getComputedStyle(el).zIndex) || 0;
             if (z > currentZ && z < minAbove) {
@@ -989,7 +891,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const allElements = Array.from(characterContainer.querySelectorAll(".draggable"));
         let target = null;
         let maxBelow = -Infinity;
-
         allElements.forEach(el => {
             const z = parseInt(window.getComputedStyle(el).zIndex) || 0;
             if (z < currentZ && z > maxBelow) {
@@ -1005,7 +906,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --------------------------------------------------------------------
-    // SAUVEGARDE EN PNG
+    // SAUVEGARDE EN PNG (en récupérant le rendu visuel complet)
     // --------------------------------------------------------------------
     saveButton.addEventListener("click", () => {
         const containerRect = characterContainer.getBoundingClientRect();
@@ -1013,17 +914,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const tempCanvas = document.createElement("canvas");
         tempCanvas.width = containerRect.width * ratio;
         tempCanvas.height = containerRect.height * ratio;
-
         const ctx = tempCanvas.getContext("2d");
         ctx.scale(ratio, ratio);
 
+        // Gérer le background
         const bgImage = characterContainer.style.backgroundImage;
         if (bgImage && bgImage !== "none") {
             const bgUrl = bgImage.slice(5, -2);
             const bgImg = new Image();
             bgImg.crossOrigin = "anonymous";
             bgImg.src = bgUrl;
-
             bgImg.onload = () => {
                 ctx.drawImage(bgImg, 0, 0, containerRect.width, containerRect.height);
                 drawElementsToCanvas(ctx, tempCanvas);
@@ -1042,17 +942,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function drawElementsToCanvas(ctx, canvas) {
         const elements = Array.from(characterContainer.querySelectorAll(".draggable"));
+        // Tri des éléments par z-index
         elements.sort((a, b) => {
             return (parseInt(window.getComputedStyle(a).zIndex) || 0) -
                    (parseInt(window.getComputedStyle(b).zIndex) || 0);
         });
-
         let loadedCount = 0;
         if (elements.length === 0) {
             downloadCanvas(canvas);
             return;
         }
-
         elements.forEach(el => {
             const imgElement = el.querySelector("img");
             if (!imgElement) {
@@ -1063,7 +962,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const img = new Image();
             img.crossOrigin = "anonymous";
             img.src = imgElement.src;
-
             img.onload = () => {
                 drawSingleElement(ctx, el, img);
                 loadedCount++;
@@ -1080,36 +978,23 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Pour dessiner un élément en récupérant le filtre depuis le computed style
     function drawSingleElement(ctx, element, img) {
         const x = parseFloat(element.dataset.x) || 0;
         const y = parseFloat(element.dataset.y) || 0;
         const w = element.offsetWidth;
         const h = element.offsetHeight;
-
         const rotation = parseFloat(element.dataset.rotation) || 0;
         const flipX = (element.dataset.flipx === "true");
         const flipY = (element.dataset.flipy === "true");
-        const color = element.dataset.color || "";
-        const part = element.dataset.part;
-
+        // Récupérer le filtre calculé de l'image
+        const computedFilter = window.getComputedStyle(img).filter;
         ctx.save();
         ctx.translate(x + w / 2, y + h / 2);
         ctx.rotate(rotation * Math.PI / 180);
         if (flipX) ctx.scale(-1, 1);
         if (flipY) ctx.scale(1, -1);
-
-        // On n'applique le filtre que si part != "eyes" (déjà géré aussi dans applyColorToElement)
-        if (color && part !== "eyes") {
-            const hue = rgbToHueDegrees(color);
-            if (hue !== null) {
-                ctx.filter = `sepia(1) saturate(10000%) hue-rotate(${hue}deg)`;
-            } else {
-                ctx.filter = "none";
-            }
-        } else {
-            ctx.filter = "none";
-        }
-
+        ctx.filter = computedFilter && computedFilter !== "none" ? computedFilter : "none";
         ctx.drawImage(img, -w / 2, -h / 2, w, h);
         ctx.restore();
     }
@@ -1125,7 +1010,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --------------------------------------------------------------------
-    // BOUTONS FLIP / Z-INDEX / SUPPR / ETC.
+    // BOUTONS FLIP, Z-INDEX, SUPPRESSION, ETC.
     // --------------------------------------------------------------------
     flipHorizontalButton.addEventListener("click", () => {
         if (!selectedElement) {
@@ -1203,7 +1088,6 @@ document.addEventListener("DOMContentLoaded", () => {
     colorButtons.forEach(btn => {
         btn.addEventListener("click", () => {
             const color = btn.dataset.color;
-
             if (!selectedElement) {
                 if (selectedPart === "background") {
                     if (color === "reset") {
@@ -1218,7 +1102,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 return;
             }
-
             if (selectedPart === "background") {
                 if (color === "reset") {
                     applyBackground("reset");
@@ -1229,8 +1112,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 return;
             }
-
-            // Application de la couleur
             if (color === "reset") {
                 applyColorToElement(selectedElement, "reset");
                 showNotification("Couleur réinitialisée.", "success");
@@ -1277,7 +1158,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Lance la génération et l'initialisation
+    // Lancer la génération des options et l'initialisation
     generateDropdownOptions();
     initializeBody();
     updateLayersList();
