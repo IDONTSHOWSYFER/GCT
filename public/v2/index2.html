@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>GRUMPYCATOR - V2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Sécurité CSP -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
+  <link rel="icon" href="/public/img/favicon2.png" type="image/x-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Feuille de style -->
+  <link rel="stylesheet" href="/public/css/style2.css">
+</head>
+
+<body>
+  <!-- Notification -->
+  <div id="notification" class="notification" role="alert" aria-live="assertive"></div>
+
+  <!-- Header -->
+  <header>
+    <h1>GRUMPYCATOR</h1>
+    <h2>Powering Speed, Defining Tech</h2>
+    <p>Create Your Gtrx !</p>
+    <button id="versionButton" class="version-button" aria-label="Switch to Version 1">V1</button>
+  </header>
+
+    <!-- Conteneur pour la bordure fluide -->
+  <!-- Conteneur du "conduit de liquide" -->
+  <div class="liquid-border">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- Rectangle de 100 x 100 pour le tour de l'écran -->
+      <path vector-effect="non-scaling-stroke" d="M0,0 H100 V100 H0 Z" />
+    </svg>
+  </div>
+
+  <!-- Conteneur principal -->
+  <main class="main-container">
+
+    <!-- Section Canvas -->
+    <section class="canvas-section" aria-label="Canvas Section">
+      <div id="characterContainer" class="character-container" aria-label="Character Creation Container">
+        <!-- Les éléments seront ajoutés via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Conteneur des options de sélection -->
+    <div class="selection-options-container">
+      <!-- Panneau de sélection de couleurs -->
+      <aside class="color-selection" id="colorSelection" aria-label="Color Selection Panel">
+        <h3>Choose a Color</h3>
+        <div class="color-buttons">
+          <button class="color-button" data-color="#FF5733" title="Red" aria-label="Red" tabindex="0" style="background-color: #FF5733;"></button>
+          <button class="color-button" data-color="#33FF57" title="Green" aria-label="Green" tabindex="0" style="background-color: #33FF57;"></button>
+          <button class="color-button" data-color="#3357FF" title="Blue" aria-label="Blue" tabindex="0" style="background-color: #3357FF;"></button>
+          <button class="color-button" data-color="#FF33A1" title="Pink" aria-label="Pink" tabindex="0" style="background-color: #FF33A1;"></button>
+          <button class="color-button" data-color="#FF8C33" title="Orange" aria-label="Orange" tabindex="0" style="background-color: #FF8C33;"></button>
+          <button class="color-button" data-color="#8C33FF" title="Purple" aria-label="Purple" tabindex="0" style="background-color: #8C33FF;"></button>
+          <button class="color-button" data-color="#33FFF6" title="Cyan" aria-label="Cyan" tabindex="0" style="background-color: #33FFF6;"></button>
+          <button class="color-button" data-color="#FF3333" title="Dark Red" aria-label="Dark Red" tabindex="0" style="background-color: #FF3333;"></button>
+          <button class="color-button" data-color="#33FF99" title="Mint Green" aria-label="Mint Green" tabindex="0" style="background-color: #33FF99;"></button>
+          <button class="color-button" data-color="#3333FF" title="Royal Blue" aria-label="Royal Blue" tabindex="0" style="background-color: #3333FF;"></button>
+          <button class="color-button" data-color="#FF69B4" title="Hot Pink" aria-label="Hot Pink" tabindex="0" style="background-color: #FF69B4;"></button>
+          <button class="color-button" data-color="#FFD700" title="Gold" aria-label="Gold" tabindex="0" style="background-color: #FFD700;"></button>
+          <button class="color-button" data-color="#00FF7F" title="Spring Green" aria-label="Spring Green" tabindex="0" style="background-color: #00FF7F;"></button>
+          <button class="color-button" data-color="#FF1493" title="Deep Pink" aria-label="Deep Pink" tabindex="0" style="background-color: #FF1493;"></button>
+          <button class="color-button" data-color="#7FFF00" title="Chartreuse" aria-label="Chartreuse" tabindex="0" style="background-color: #7FFF00;"></button>
+          <button class="color-button" data-color="#1E90FF" title="Dodger Blue" aria-label="Dodger Blue" tabindex="0" style="background-color: #1E90FF;"></button>
+          <!-- Reset -->
+          <button class="color-button" data-color="reset" title="Reset Color" aria-label="Reset Color" tabindex="0" style="background-color: #FFFFFF; border: 2px solid #000000;">🔄</button>
+        </div>
+      </aside>
+
+      <!-- Zone d'affichage des options (hair, eyes, etc.) -->
+      <div id="optionsDisplay" class="options-display" aria-live="polite">
+        <!-- Groupes d'options pour chaque partie (générés via JS) -->
+      </div>
+
+      <!-- Boutons de sélection de partie -->
+      <div class="selection-buttons" aria-label="Select Part">
+        <button class="part-button" data-part="hair" title="Hair" aria-label="Select Hair" tabindex="0" aria-expanded="false">
+          <img src="/public/assets/v2/icons/hair-icon.png" alt="Hair Icon">
+        </button>
+        <button class="part-button" data-part="eyes" title="Eyes" aria-label="Select Eyes" tabindex="0" aria-expanded="false">
+          <img src="/public/assets/v2/icons/eyes-icon.png" alt="Eyes Icon">
+        </button>
+        <button class="part-button" data-part="mouth" title="Mouth" aria-label="Select Mouth" tabindex="0" aria-expanded="false">
+          <img src="/public/assets/v2/icons/mouth-icon.png" alt="Mouth Icon">
+        </button>
+        <button class="part-button" data-part="body" title="Body" aria-label="Select Body" tabindex="0" aria-expanded="false">
+          <img src="/public/assets/v2/icons/body-icon.png" alt="Body Icon">
+        </button>
+        <button class="part-button" data-part="accessories" title="Accessories" aria-label="Select Accessories" tabindex="0" aria-expanded="false">
+          <img src="/public/assets/v2/icons/accessories-icon.png" alt="Accessories Icon">
+        </button>
+        <button class="part-button" data-part="clothes" title="Clothes" aria-label="Select Clothes" tabindex="0" aria-expanded="false">
+          <img src="/public/assets/v2/icons/clothes-icon.png" alt="Clothes Icon">
+        </button>
+        <button class="part-button" data-part="background" title="Background" aria-label="Select Background" tabindex="0" aria-expanded="false">
+          <img src="/public/assets/v2/background/white.png" alt="Background Icon">
+        </button>
+      </div>
+
+      <!-- Panneau des calques -->
+      <aside class="layers-panel" aria-label="Layers Panel">
+        <h3>Calques</h3>
+        <ul id="layersList" class="layers-list">
+          <!-- Calques dynamiques via JS -->
+        </ul>
+      </aside>
+    </div>
+
+    <!-- Boutons d'actions -->
+    <section class="control-buttons" aria-label="Control Buttons">
+      <button id="saveButton" class="save-button" aria-label="Save Your Creation">💾 Save</button>
+      <button id="deleteButton" class="action-button" aria-label="Delete Selection">🗑️ Delete</button>
+      <button id="flipHorizontalButton" class="action-button" aria-label="Flip Horizontally">↔️ Flip H</button>
+      <button id="flipVerticalButton" class="action-button" aria-label="Flip Vertically">↕️ Flip V</button>
+      <button id="bringForwardButton" class="action-button" aria-label="Bring Forward">🔼 Forward</button>
+      <button id="sendBackwardButton" class="action-button" aria-label="Send Backward">🔽 Backward</button>
+    </section>
+
+    <!-- Socials -->
+    <section class="socials" aria-label="Social Links">
+      <div class="social__container">
+        <h2 class="socials__title">SOCIALS</h2>
+        <p class="socials__description">JOIN THE GTRX RUN !</p>
+        <div class="socials__links">
+          <a href="https://x.com/grumcointrx" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Twitter">
+            <img src="/public/img/x2.svg" alt="Twitter" class="socials__icon" />
+          </a>
+          <a href="https://t.me/grumcointrx" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Telegram">
+            <img src="/public/img/telegram2.svg" alt="Telegram" class="socials__icon" />
+          </a>
+          <a href="https://www.instagram.com/grumcointrx" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Instagram">
+            <img src="/public/img/instagram2.svg" alt="Instagram" class="socials__icon" />
+          </a>
+          <a href="https://linktr.ee/grumcointrx" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Linktree">
+            <img src="/public/img/linktree2.svg" alt="Linktree" class="socials__icon" />
+          </a>
+          <a href="https://github.com/IDONTSHOWSYFER/GCT" target="_blank" rel="noopener noreferrer" class="socials__link" aria-label="Github">
+            <img src="/public/img/github2.svg" alt="Github" class="socials__icon" />
+          </a>
+        </div>
+        <p>GTRX IS A MEMECOIN WITH GUARANTEED RETURN !</p>
+      </div>
+    </section>
+
+    <!-- Artwork -->
+    <img src="/public/img/artwork.png" alt="Artwork" class="artwork">
+
+  </main>
+
+  <!-- Script principal -->
+  <script src="/public/js/script2.js" defer></script>
+</body>
+</html>
