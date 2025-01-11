@@ -1,37 +1,39 @@
+/* public/css/style.css */
+
 body {
     font-family: 'Comic Neue', cursive;
     margin: 0;
     padding: 0;
     background-color: #f0f0f0;
     box-sizing: border-box;
-}
-
-header {
+  }
+  
+  header {
     background-color: transparent;
-    color: #000000;
+    color: #000;
     padding: 20px;
     text-align: center;
     position: relative;
-}
-
-header h1 {
+  }
+  
+  header h1 {
     margin: 0;
     font-family: 'Schoolbell', cursive;
     font-size: 3em;
     text-shadow: 2px 0 3px rgba(0,0,0,0.5);
-}
-
-header h2 {
+  }
+  
+  header h2 {
     margin: 10px 0;
     font-size: 1.5em;
-}
-
-header p {
-    margin: 5px 0 15px 0;
+  }
+  
+  header p {
+    margin: 5px 0 15px;
     font-size: 1.2em;
-}
-
-.version-button {
+  }
+  
+  .version-button {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -43,14 +45,14 @@ header p {
     cursor: pointer;
     font-size: 1em;
     z-index: 1004;
-}
-
-.version-button:hover,
-.version-button:focus {
+  }
+  
+  .version-button:hover,
+  .version-button:focus {
     background-color: #e61919;
-}
-
-.main-container {
+  }
+  
+  .main-container {
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -58,9 +60,9 @@ header p {
     position: relative;
     flex: 1;
     box-sizing: border-box;
-}
-
-.canvas-section {
+  }
+  
+  .canvas-section {
     position: relative;
     width: 80%;
     max-width: 800px;
@@ -71,21 +73,21 @@ header p {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.character-container {
+  }
+  
+  .character-container {
     position: relative;
     width: 100%;
     height: 800px;
-    background-color: #ffffff;
+    background-color: #fff;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     border-bottom: 2px solid #ccc;
     overflow: hidden;
-}
-
-.control-buttons {
+  }
+  
+  .control-buttons {
     width: 100%;
     padding: 10px;
     background-color: #fafafa;
@@ -94,43 +96,43 @@ header p {
     gap: 10px;
     border-top: 1px solid #ccc;
     position: relative;
-}
-
-.control-buttons button {
+  }
+  
+  .control-buttons button {
     padding: 10px 15px;
     font-size: 1em;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-.save-button {
+  }
+  
+  .save-button {
     background-color: #4caf50;
     color: #fff;
-}
-
-.delete-button {
+  }
+  
+  .delete-button {
     background-color: #ff3737;
     color: #fff;
-}
-
-.save-button:hover,
-.save-button:focus {
+  }
+  
+  .save-button:hover,
+  .save-button:focus {
     background-color: #43a047;
-}
-
-.action-button {
+  }
+  
+  .action-button {
     background-color: #2196f3;
     color: #fff;
-}
-
-.action-button:hover,
-.action-button:focus {
+  }
+  
+  .action-button:hover,
+  .action-button:focus {
     background-color: #1976d2;
-}
-
-.sidebar-toggle-button {
+  }
+  
+  .sidebar-toggle-button {
     position: fixed;
     top: 20px;
     left: 20px;
@@ -145,15 +147,15 @@ header p {
     display: flex;
     align-items: center;
     gap: 8px;
-}
-
-.sidebar-toggle-button:hover,
-.sidebar-toggle-button:focus {
-    background-color: #ffffff;
+  }
+  
+  .sidebar-toggle-button:hover,
+  .sidebar-toggle-button:focus {
+    background-color: #fff;
     color: #494949;
-}
-
-.sidebar {
+  }
+  
+  .sidebar {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -168,13 +170,13 @@ header p {
     z-index: 1001;
     overflow-y: auto;
     box-sizing: border-box;
-}
-
-.sidebar.open {
+  }
+  
+  .sidebar.open {
     left: 0;
-}
-
-.close-sidebar-button {
+  }
+  
+  .close-sidebar-button {
     background-color: #e51414;
     color: #fff;
     border: none;
@@ -185,25 +187,25 @@ header p {
     position: absolute;
     top: 20px;
     right: 20px;
-}
-
-.close-sidebar-button:hover,
-.close-sidebar-button:focus {
+  }
+  
+  .close-sidebar-button:hover,
+  .close-sidebar-button:focus {
     background-color: #e64a19;
-}
-
-.selection-buttons {
+  }
+  
+  .selection-buttons {
     list-style: none;
-    padding: 60px 0 0 0;
+    padding: 60px 0 0;
     margin: 0;
-}
-
-.selection-buttons li {
+  }
+  
+  .selection-buttons li {
     margin-bottom: 15px;
     position: relative;
-}
-
-.part-button {
+  }
+  
+  .part-button {
     width: 100%;
     background-color: #666;
     color: #fff;
@@ -213,112 +215,109 @@ header p {
     font-size: 1em;
     border-radius: 5px;
     cursor: pointer;
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.part-button img {
+  }
+  
+  .part-button img {
     width: 24px;
     height: 24px;
     margin-right: 10px;
-    vertical-align: middle;
-}
-
-.part-button:hover,
-.part-button:focus {
+  }
+  
+  .part-button:hover,
+  .part-button:focus {
     background-color: #777;
-}
-
-.options-display {
+  }
+  
+  .options-display {
     display: none;
     margin-top: 10px;
-    position: relative;
     background-color: #333;
     padding: 10px;
     border-radius: 5px;
-}
-
-.options-display.active {
+  }
+  
+  .options-display.active {
     display: block;
-}
-
-.options-display h3,
-.options-display h4 {
+  }
+  
+  .options-display h3,
+  .options-display h4 {
     margin: 10px 0;
     font-size: 1.1em;
     color: #fff;
-}
-
-.options-grid {
+  }
+  
+  .options-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
     gap: 10px;
-}
-
-.option-button,
-.color-button,
-.close-button {
+  }
+  
+  .option-button,
+  .color-button,
+  .close-button {
     width: 100%;
     padding: 8px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.option-button img {
+  }
+  
+  .option-button img {
     width: 100%;
     height: auto;
     border-radius: 5px;
-}
-
-.close-button {
+  }
+  
+  .close-button {
     background-color: #ff2222;
     color: #fff;
     padding: 8px 12px;
     margin-bottom: 10px;
-}
-
-.close-button:hover,
-.close-button:focus {
+  }
+  
+  .close-button:hover,
+  .close-button:focus {
     background-color: #e61919;
-}
-
-.color-buttons {
+  }
+  
+  .color-buttons {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-}
-
-.color-button {
+  }
+  
+  .color-button {
     width: 30px;
     height: 30px;
     border: none;
     border-radius: 50%;
     cursor: pointer;
     position: relative;
-}
-
-.color-button:focus {
+  }
+  
+  .color-button:focus {
     outline: 2px solid #fff;
     outline-offset: 2px;
-}
-
-.color-button[title="Reset Color"]::after {
+  }
+  
+  .color-button[title="Reset Color"]::after {
     content: '🔄';
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 0.8em;
-}
-
-.upload-selection {
+  }
+  
+  .upload-selection {
     margin-top: 15px;
-}
-
-.upload-button {
+  }
+  
+  .upload-button {
     background-color: #2196f3;
     color: #fff;
     border: none;
@@ -330,57 +329,57 @@ header p {
     align-items: center;
     gap: 5px;
     transition: background-color 0.3s ease;
-}
-
-.upload-button:hover,
-.upload-button:focus {
+  }
+  
+  .upload-button:hover,
+  .upload-button:focus {
     background-color: #1976d2;
-}
-
-.draggable {
+  }
+  
+  .draggable {
     position: absolute;
     cursor: move;
     transform-origin: center center;
     width: 100px;
     height: 100px;
-}
-
-.draggable.selected {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-}
-
-.resize-handle {
+  }
+  
+  .draggable.selected {
+    box-shadow: 0 0 10px rgba(0,0,0,0.7);
+  }
+  
+  .resize-handle {
     width: 10px;
     height: 10px;
     background-color: #fff;
     border: 1px solid #000;
     position: absolute;
     cursor: nwse-resize;
-}
-
-.resize-handle.br {
+  }
+  
+  .resize-handle.br {
     bottom: -5px;
     right: -5px;
-}
-
-.resize-handle.bl {
+  }
+  
+  .resize-handle.bl {
     bottom: -5px;
     left: -5px;
     cursor: nesw-resize;
-}
-
-.resize-handle.tr {
+  }
+  
+  .resize-handle.tr {
     top: -5px;
     right: -5px;
     cursor: nesw-resize;
-}
-
-.resize-handle.tl {
+  }
+  
+  .resize-handle.tl {
     top: -5px;
     left: -5px;
-}
-
-.rotate-handle {
+  }
+  
+  .rotate-handle {
     width: 15px;
     height: 15px;
     background-color: #fff;
@@ -392,13 +391,13 @@ header p {
     transform: translateX(-50%);
     cursor: grab;
     transition: background-color 0.3s ease;
-}
-
-.rotate-handle:active {
+  }
+  
+  .rotate-handle:active {
     cursor: grabbing;
-}
-
-.lock-button {
+  }
+  
+  .lock-button {
     position: absolute;
     bottom: -20px;
     right: -20px;
@@ -412,19 +411,17 @@ header p {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
-}
-
-.lock-button:hover,
-.lock-button:focus {
+  }
+  
+  .lock-button:hover,
+  .lock-button:focus {
     background-color: #ddd;
-}
-
-footer.socials {
-    bottom: 0;
-    left: 0;
+  }
+  
+  footer.socials {
     width: 100%;
     background-color: transparent;
-    color: #000000;
+    color: #000;
     text-align: center;
     padding: 20px 0;
     display: flex;
@@ -433,203 +430,173 @@ footer.socials {
     z-index: 1000;
     box-sizing: border-box;
     text-decoration: none;
-}
-
-.social__container {
-    max-width: 1200px;     
-    width: 100%;           
-    display: flex;      
-    flex-direction: column; 
+  }
+  
+  .social__container {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     padding: 0 20px;
     box-sizing: border-box;
-}
-
-.socials__link {
+  }
+  
+  .socials__link {
     text-decoration: none;
-}
-
-@media (max-width: 768px) {
+  }
+  
+  @media (max-width: 768px) {
     .main-container {
-        flex-direction: column;
+      flex-direction: column;
     }
-
     .canvas-section {
-        padding: 10px;
-        max-height: 80vh;
-        width: 90%;
+      padding: 10px;
+      max-height: 80vh;
+      width: 90%;
     }
-
     .sidebar-toggle-button {
-        top: 10px;
-        left: 10px;
+      top: 10px;
+      left: 10px;
     }
-
     .sidebar {
-        left: -100%;
-        height: 100vh;
+      left: -100%;
+      height: 100vh;
     }
-
     .sidebar.open {
-        left: 0;
+      left: 0;
     }
-
     .character-container {
-        width: 100%;
-        height: 80vh;
+      width: 100%;
+      height: 80vh;
     }
-
     .options-grid {
-        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
     }
-
     .control-buttons {
-        flex-direction: column;
-        gap: 5px;
+      flex-direction: column;
+      gap: 5px;
     }
-
     .control-buttons button {
-        padding: 8px 12px;
+      padding: 8px 12px;
     }
-
     .rotate-handle {
-        top: -20px;
-        width: 12px;
-        height: 12px;
+      top: -20px;
+      width: 12px;
+      height: 12px;
     }
-
     .lock-button {
-        bottom: -18px;
-        right: -18px;
-        width: 20px;
-        height: 20px;
+      bottom: -18px;
+      right: -18px;
+      width: 20px;
+      height: 20px;
     }
-
     .color-button {
-        width: 25px;
-        height: 25px;
+      width: 25px;
+      height: 25px;
     }
-
     .option-button {
-        width: 50px;
-        height: 50px;
+      width: 50px;
+      height: 50px;
     }
-
     footer.socials {
-        position: relative;
-        padding: 10px 0;
+      position: relative;
+      padding: 10px 0;
     }
-
     .social__container {
-        padding: 0 10px;
+      padding: 0 10px;
     }
-
     footer.socials p {
-        font-size: 0.9em;
+      font-size: 0.9em;
     }
-
     footer.socials .socials__links {
-        gap: 10px;
+      gap: 10px;
     }
-
     footer.socials .socials__icon {
-        width: 24px;
-        height: 24px;
+      width: 24px;
+      height: 24px;
     }
-}
-
-@media (min-width: 769px) {
+  }
+  
+  @media (min-width: 769px) {
     .canvas-section {
-        max-width: 600px;
-        width: 70%;
+      max-width: 600px;
+      width: 70%;
     }
-
     .sidebar {
-        width: 300px;
-        height: 100vh;
+      width: 300px;
+      height: 100vh;
     }
-
     .options-grid {
-        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
     }
-
     .control-buttons {
-        padding: 10px 0;
-        flex-direction: row;
-        justify-content: center;
+      padding: 10px 0;
+      flex-direction: row;
+      justify-content: center;
     }
-
     .control-buttons button {
-        padding: 10px 15px;
+      padding: 10px 15px;
     }
-
     .rotate-handle {
-        top: -25px;
-        width: 15px;
-        height: 15px;
+      top: -25px;
+      width: 15px;
+      height: 15px;
     }
-
     .lock-button {
-        bottom: -20px;
-        right: -20px;
-        width: 25px;
-        height: 25px;
+      bottom: -20px;
+      right: -20px;
+      width: 25px;
+      height: 25px;
     }
-
     .color-button {
-        width: 30px;
-        height: 30px;
+      width: 30px;
+      height: 30px;
     }
-
     .option-button {
-        width: 60px;
-        height: 60px;
+      width: 60px;
+      height: 60px;
     }
-
     footer.socials {
-        position: relative;
-        padding: 20px 0;
+      position: relative;
+      padding: 20px 0;
     }
-
     .social__container {
-        padding: 0 20px;
+      padding: 0 20px;
     }
-
     footer.socials p {
-        font-size: 1em;
+      font-size: 1em;
     }
-
     footer.socials .socials__links {
-        gap: 15px;
+      gap: 15px;
     }
-
     footer.socials .socials__icon {
-        width: 30px;
-        height: 30px;
+      width: 30px;
+      height: 30px;
     }
-}
-
-.sidebar {
+  }
+  
+  .sidebar {
     transition: left 0.3s ease;
-}
-
-.option-button,
-.color-button,
-.part-button,
-.control-buttons button,
-.sidebar-toggle-button,
-.close-sidebar-button,
-.lock-button,
-.rotate-handle {
+  }
+  
+  .option-button,
+  .color-button,
+  .part-button,
+  .control-buttons button,
+  .sidebar-toggle-button,
+  .close-sidebar-button,
+  .lock-button,
+  .rotate-handle {
     transition: all 0.3s ease;
-}
-
-button:focus {
+  }
+  
+  button:focus {
     outline: 2px solid #fff;
     outline-offset: 2px;
-}
-
-.part-button.active::after {
+  }
+  
+  .part-button.active::after {
     content: "";
     position: absolute;
     top: 100%;
@@ -638,48 +605,48 @@ button:focus {
     border-width: 5px 5px 0 5px;
     border-style: solid;
     border-color: #fff transparent transparent transparent;
-}
-
-.draggable img {
+  }
+  
+  .draggable img {
     display: block;
-}
-
-.draggable .resize-handle,
-.draggable .rotate-handle,
-.draggable .lock-button {
+  }
+  
+  .draggable .resize-handle,
+  .draggable .rotate-handle,
+  .draggable .lock-button {
     z-index: 10;
     display: none;
     opacity: 0;
     transition: opacity 0.3s ease;
-}
-
-.draggable.selected .resize-handle,
-.draggable.selected .rotate-handle,
-.draggable.selected .lock-button {
+  }
+  
+  .draggable.selected .resize-handle,
+  .draggable.selected .rotate-handle,
+  .draggable.selected .lock-button {
     display: block;
     opacity: 1;
-}
-
-.sidebar::-webkit-scrollbar {
+  }
+  
+  .sidebar::-webkit-scrollbar {
     width: 8px;
-}
-
-.sidebar::-webkit-scrollbar-track {
+  }
+  
+  .sidebar::-webkit-scrollbar-track {
     background: #555;
     border-radius: 4px;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
+  }
+  
+  .sidebar::-webkit-scrollbar-thumb {
     background-color: #888;
     border-radius: 4px;
     border: 2px solid #555;
-}
-
-.sidebar {
+  }
+  
+  .sidebar {
     scrollbar-width: thin;
     scrollbar-color: #888 #555;
-}
-
-body.no-scroll {
+  }
+  
+  body.no-scroll {
     overflow: hidden;
-}
+  }

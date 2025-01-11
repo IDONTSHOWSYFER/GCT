@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // --------------------------------------------------------------------
-  // RÉCUPÉRATION DES ÉLÉMENTS DU DOM
+  // Récupération des éléments du DOM
   // --------------------------------------------------------------------
   const characterContainer = document.getElementById("characterContainer");
   const sidebar = document.getElementById("sidebar");
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const uploadInput = document.getElementById("backgroundUploadInput");
 
   // --------------------------------------------------------------------
-  // VARIABLES GLOBALES
+  // Variables globales
   // --------------------------------------------------------------------
   let selectedPart = null;
   let selectedElement = null;
@@ -43,25 +43,25 @@ document.addEventListener("DOMContentLoaded", () => {
   let resizeStartHeight = 0;
 
   // --------------------------------------------------------------------
-  // FONCTIONS UTILITAIRES
+  // Fonctions utilitaires
   // --------------------------------------------------------------------
   function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  // Convertit une couleur (hex, rgb ou nom CSS) en degrés de teinte
+  // Convertir une couleur en degrés de teinte pour appliquer un filtre CSS
   function rgbToHueDegrees(color) {
     let r, g, b;
-    if (color.startsWith('#')) {
+    if (color.startsWith("#")) {
       let hex = color.slice(1);
       if (hex.length === 3) {
-        hex = hex.split('').map(c => c + c).join('');
+        hex = hex.split("").map(c => c + c).join("");
       }
       const bigint = parseInt(hex, 16);
       r = (bigint >> 16) & 255;
       g = (bigint >> 8) & 255;
       b = bigint & 255;
-    } else if (color.startsWith('rgb')) {
+    } else if (color.startsWith("rgb")) {
       const rgbValues = color.match(/\d+/g).map(Number);
       if (rgbValues.length < 3) return null;
       [r, g, b] = rgbValues;
@@ -75,7 +75,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (rgbMatch.length < 3) return null;
       [r, g, b] = rgbMatch;
     }
-    r /= 255; g /= 255; b /= 255;
+    r /= 255;
+    g /= 255;
+    b /= 255;
     const max = Math.max(r, g, b),
           min = Math.min(r, g, b);
     let hue = 0;
@@ -86,25 +88,27 @@ document.addEventListener("DOMContentLoaded", () => {
     return hue;
   }
 
+  // Gestion du z-index via dataset
   function getMaxZIndex() {
     let max = 0;
     characterContainer.querySelectorAll(".draggable").forEach(el => {
-      const z = parseInt(window.getComputedStyle(el).zIndex) || 0;
+      const z = parseInt(el.dataset.zindex) || 0;
       if (z > max) max = z;
     });
     return max;
   }
-
   function bringToFront(element) {
-    element.style.zIndex = getMaxZIndex() + 1;
+    const newZ = getMaxZIndex() + 1;
+    element.style.zIndex = newZ;
+    element.dataset.zindex = newZ;
   }
-
   function sendToBack(element) {
-    // On prend la valeur minimale suivante
-    element.style.zIndex = Math.max(0, getMaxZIndex() - 1);
+    const newZ = Math.max(0, getMaxZIndex() - 1);
+    element.style.zIndex = newZ;
+    element.dataset.zindex = newZ;
   }
 
-  // Ferme tous les menus déroulants
+  // Fermer tous les menus déroulants
   function closeAllDropdowns() {
     document.querySelectorAll(".options-display").forEach(group => {
       group.classList.remove("active");
@@ -122,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // GÉNÉRATION DES OPTIONS DÉROULANTES
+  // Génération des options déroulantes (similaire à l'existant)
   // --------------------------------------------------------------------
   function generateDropdownOptions() {
     const parts = {
@@ -202,14 +206,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // AJOUT DES ÉLÉMENTS DANS LA ZONE DE CRÉATION
+  // Ajout d’un élément dans la zone de création
   // --------------------------------------------------------------------
   function addElement(part, option) {
     if (part === "background") {
       applyBackgroundImage(option);
       return;
     }
-
     const draggable = document.createElement("div");
     draggable.classList.add("draggable");
     draggable.dataset.part = part;
@@ -223,13 +226,14 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable.style.top = "0px";
     draggable.style.width = "50px";
     draggable.style.height = "50px";
-    draggable.style.zIndex = (getMaxZIndex() + 1).toString();
+    const currentZ = getMaxZIndex() + 1;
+    draggable.style.zIndex = currentZ.toString();
+    draggable.dataset.zindex = currentZ.toString();
     draggable.style.position = "absolute";
     draggable.style.cursor = "move";
     draggable.style.userSelect = "none";
     draggable.style.touchAction = "none";
 
-    // Conteneur interne pour l'image (pour appliquer les transformations)
     const imageContainer = document.createElement("div");
     imageContainer.style.width = "100%";
     imageContainer.style.height = "100%";
@@ -245,13 +249,11 @@ document.addEventListener("DOMContentLoaded", () => {
     img.style.width = "100%";
     img.style.height = "100%";
     img.onerror = () => { img.src = `public/assets/v1/${part}/default.png`; };
-    // Une fois l'image chargée, ajuste la taille du conteneur
     img.addEventListener("load", () => {
       const naturalW = img.naturalWidth;
       const naturalH = img.naturalHeight;
       draggable.dataset.naturalWidth = naturalW;
       draggable.dataset.naturalHeight = naturalH;
-      // Limiter à 50% de la largeur du container
       const maxWidth = characterContainer.clientWidth * 0.5;
       const maxHeight = characterContainer.clientHeight * 0.5;
       const ratio = Math.min(1, maxWidth / naturalW, maxHeight / naturalH);
@@ -266,9 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
     imageContainer.appendChild(img);
     draggable.appendChild(imageContainer);
 
-    // Ajout des poignées de redimensionnement
-    const handles = ["br", "bl", "tr", "tl"];
-    handles.forEach(handle => {
+    ["br", "bl", "tr", "tl"].forEach(handle => {
       const resizeHandle = document.createElement("div");
       resizeHandle.classList.add("resize-handle", handle);
       resizeHandle.setAttribute("aria-label", `Resize Handle ${handle}`);
@@ -277,7 +277,6 @@ document.addEventListener("DOMContentLoaded", () => {
       resizeHandle.addEventListener("touchstart", e => startResizeTouch(e, draggable, handle), { passive: false });
     });
 
-    // Poignée de rotation
     const rotateHandle = document.createElement("div");
     rotateHandle.classList.add("rotate-handle");
     rotateHandle.setAttribute("aria-label", "Rotate Handle");
@@ -285,15 +284,12 @@ document.addEventListener("DOMContentLoaded", () => {
     rotateHandle.addEventListener("mousedown", e => startRotate(e, draggable));
     rotateHandle.addEventListener("touchstart", e => startRotateTouch(e, draggable), { passive: false });
 
-    // Bouton de verrouillage/déverrouillage
     const lockButton = createLockButton(draggable);
     draggable.appendChild(lockButton);
-    // Pour clic souris
     lockButton.addEventListener("click", e => {
       e.stopPropagation();
       toggleLock(e, draggable, lockButton);
     });
-    // Pour tactile
     lockButton.addEventListener("touchend", e => {
       e.stopPropagation();
       toggleLock(e, draggable, lockButton);
@@ -305,20 +301,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Activation du drag sur l'élément (en excluant les poignées)
     draggable.addEventListener("mousedown", e => {
       if (!draggable.classList.contains("locked")) {
         selectElement(draggable);
-        if (!e.target.classList.contains("resize-handle") &&
-            !e.target.classList.contains("rotate-handle"))
+        if (!e.target.classList.contains("resize-handle") && !e.target.classList.contains("rotate-handle"))
           startDrag(e, draggable);
       }
     });
     draggable.addEventListener("touchstart", e => {
       if (!draggable.classList.contains("locked")) {
         selectElement(draggable);
-        if (!e.target.classList.contains("resize-handle") &&
-            !e.target.classList.contains("rotate-handle"))
+        if (!e.target.classList.contains("resize-handle") && !e.target.classList.contains("rotate-handle"))
           startDragTouch(e, draggable);
       }
     }, { passive: false });
@@ -343,9 +336,6 @@ document.addEventListener("DOMContentLoaded", () => {
     lockButton.setAttribute("aria-label", isLocked ? "Unlock Element" : "Lock Element");
   }
 
-  // --------------------------------------------------------------------
-  // GESTION DU DRAG (SOURIS ET TOUCH)
-  // --------------------------------------------------------------------
   function startDrag(e, element) {
     if (element.classList.contains("locked")) return;
     isDragging = true;
@@ -410,9 +400,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.removeEventListener("touchcancel", stopDragTouch);
   }
 
-  // --------------------------------------------------------------------
-  // GESTION DE LA ROTATION (SOURIS & TOUCH)
-  // --------------------------------------------------------------------
   function startRotate(e, element) {
     if (element.classList.contains("locked")) return;
     isRotating = true;
@@ -481,9 +468,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.removeEventListener("touchcancel", stopRotateTouch);
   }
 
-  // --------------------------------------------------------------------
-  // GESTION DU REDIMENSIONNEMENT (SOURIS & TOUCH)
-  // --------------------------------------------------------------------
   function startResize(e, element, handle) {
     if (element.classList.contains("locked")) return;
     isResizing = true;
@@ -498,7 +482,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("mouseup", stopResize);
   }
 
-  
   function handleResizeMove(e) {
     if (!isResizing || !selectedElement || selectedElement.classList.contains("locked")) return;
     e.preventDefault();
@@ -577,23 +560,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.removeEventListener("touchcancel", stopResizeTouch);
   }
 
-  // --------------------------------------------------------------------
-  // SÉLECTION D'UN ÉLÉMENT
-  // --------------------------------------------------------------------
   function selectElement(element) {
     if (selectedElement && selectedElement !== element) {
       selectedElement.classList.remove("selected");
     }
     selectedElement = element;
     selectedElement.classList.add("selected");
-    // Mettre à jour l'affichage des options pour la partie sélectionnée
     displayOptions(selectedElement.dataset.part);
     selectedPart = selectedElement.dataset.part;
   }
 
-  // --------------------------------------------------------------------
-  // APPLICATION DES TRANSFORMATIONS (rotation et flips)
-  // --------------------------------------------------------------------
   function updateTransform(element) {
     const rotation = parseFloat(element.dataset.rotation) || 0;
     const flipX = (element.dataset.flipx === "true");
@@ -607,12 +583,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --------------------------------------------------------------------
-  // APPLICATION DES COULEURS ET ARRIÈRES-PLANS
-  // --------------------------------------------------------------------
   function applyColorToElement(element, color) {
     const part = element.dataset.part;
-    // Ne modifie pas pour certaines parties
     if (["body", "eyes", "mouth"].includes(part)) return;
     const img = element.querySelector("img");
     if (!img) return;
@@ -660,89 +632,33 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // SAUVEGARDE SUR CANVAS (rendu fidèle via computedStyle)
+  // Sauvegarde sur canvas avec html2canvas
   // --------------------------------------------------------------------
   saveButton.addEventListener("click", () => {
-    const containerRect = characterContainer.getBoundingClientRect();
-    const ratio = window.devicePixelRatio || 1;
-    const tempCanvas = document.createElement("canvas");
-    tempCanvas.width = containerRect.width * ratio;
-    tempCanvas.height = containerRect.height * ratio;
-    const ctx = tempCanvas.getContext("2d");
-    ctx.scale(ratio, ratio);
-    
-    // Gestion du background
-    const bgImage = characterContainer.style.backgroundImage;
-    if (bgImage && bgImage !== "none") {
-      const bgUrl = bgImage.slice(5, -2);
-      const bgImg = new Image();
-      bgImg.crossOrigin = "anonymous";
-      bgImg.src = bgUrl;
-      bgImg.onload = () => {
-        ctx.drawImage(bgImg, 0, 0, containerRect.width, containerRect.height);
-        drawElements(ctx, tempCanvas);
-      };
-      bgImg.onerror = () => {
-        ctx.fillStyle = characterContainer.style.backgroundColor || "#ffffff";
-        ctx.fillRect(0, 0, containerRect.width, containerRect.height);
-        drawElements(ctx, tempCanvas);
-      };
-    } else {
-      ctx.fillStyle = characterContainer.style.backgroundColor || "#ffffff";
-      ctx.fillRect(0, 0, containerRect.width, containerRect.height);
-      drawElements(ctx, tempCanvas);
-    }
-  });
-
-  function drawElements(ctx, canvas) {
-    const elements = Array.from(characterContainer.querySelectorAll(".draggable"));
-    elements.sort((a, b) => {
-      return (parseInt(window.getComputedStyle(a).zIndex) || 0) - (parseInt(window.getComputedStyle(b).zIndex) || 0);
-    });
-    let loadedImages = 0;
-    const totalImages = elements.length;
-    if (totalImages === 0) {
-      downloadCanvas(canvas);
+    // Vérifier que html2canvas est bien défini
+    if (typeof html2canvas === "undefined") {
+      console.error("html2canvas n'est pas chargé !");
       return;
     }
-    elements.forEach(el => {
-      const imgElement = el.querySelector("img");
-      if (!imgElement) {
-        loadedImages++;
-        if (loadedImages === totalImages) downloadCanvas(canvas);
-        return;
-      }
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.src = imgElement.src;
-      img.onload = () => {
-        const left = el.offsetLeft;
-        const top = el.offsetTop;
-        const width = el.offsetWidth;
-        const height = el.offsetHeight;
-        const rotation = parseFloat(el.dataset.rotation) || 0;
-        const flipX = (el.dataset.flipx === "true");
-        const flipY = (el.dataset.flipy === "true");
-        const part = el.dataset.part;
-        ctx.save();
-        ctx.translate(left + width / 2, top + height / 2);
-        ctx.rotate((rotation * Math.PI) / 180);
-        if (flipX) ctx.scale(-1, 1);
-        if (flipY) ctx.scale(1, -1);
-        // Pour reproduire exactement le rendu visuel, récupérer le filter calculé
-        const computedFilter = window.getComputedStyle(imgElement).filter;
-        ctx.filter = computedFilter && computedFilter !== "none" ? computedFilter : "none";
-        ctx.drawImage(img, -width / 2, -height / 2, width, height);
-        ctx.restore();
-        loadedImages++;
-        if (loadedImages === totalImages) downloadCanvas(canvas);
-      };
-      img.onerror = () => {
-        loadedImages++;
-        if (loadedImages === totalImages) downloadCanvas(canvas);
-      };
-    });
-  }
+    console.log("Début de la capture avec html2canvas...");
+    html2canvas(characterContainer, {
+      scale: window.devicePixelRatio || 1,
+      useCORS: true
+    })
+      .then(canvas => {
+        console.log("Canvas créé", canvas);
+        const dataURL = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = dataURL;
+        link.download = "avatar.png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch(err => {
+        console.error("Erreur lors de la capture :", err);
+      });
+  });
 
   function downloadCanvas(canvas) {
     const dataURL = canvas.toDataURL("image/png");
@@ -752,21 +668,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
-
-  // --------------------------------------------------------------------
-  // AJUSTEMENT POUR RETINA & CENTRAGE
-  // --------------------------------------------------------------------
-  function adjustCanvasForRetina(canvas) {
-    const ctx = canvas.getContext('2d');
-    const ratio = window.devicePixelRatio || 1;
-    const width = canvas.width;
-    const height = canvas.height;
-    canvas.width = width * ratio;
-    canvas.height = height * ratio;
-    canvas.style.width = width + "px";
-    canvas.style.height = height + "px";
-    ctx.scale(ratio, ratio);
   }
 
   function centerElement(element) {
@@ -781,12 +682,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initializeBody() {
     addElement("body", "body1");
-    // Le centrage s'effectue lors du chargement de l'image de l'asset (voir addEventListener "load")
   }
 
-  // --------------------------------------------------------------------
-  // GESTION DU SIDEBAR & BOUTONS DE SÉLECTION
-  // --------------------------------------------------------------------
   sidebarToggle.addEventListener("click", e => {
     e.stopPropagation();
     const isOpen = sidebar.classList.toggle("open");
@@ -985,5 +882,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // Génération des options et initialisation
   generateDropdownOptions();
   initializeBody();
-
 });
