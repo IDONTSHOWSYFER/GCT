@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Variables globales
   // --------------------------------------------------------------------
   let selectedElement = null; 
-  let selectedPart = null;    
-
+  let selectedPart = null;
+  
   let isDragging = false;
   let dragOffsetX = 0;
   let dragOffsetY = 0;
@@ -34,11 +34,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let isResizing = false;
   let resizeStartX = 0;
   let resizeStartY = 0;
-  let resizeHandle = null;
 
   const MIN_SIZE = 50;  
   const MOBILE_BODY_SIZE = 100;   
   const DESKTOP_BODY_SIZE = 200;  
+
+  // Un compteur global pour déterminer l'ordre de stacking
+  let globalStack = 0;
 
   // --------------------------------------------------------------------
   // Fonctions utilitaires
@@ -98,28 +100,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // Gestion du z-index
+  // Gestion du stacking via une propriété personnalisée (dataset.stack)
   // --------------------------------------------------------------------
-  function getMaxZIndex() {
-    let max = 0;
-    characterContainer.querySelectorAll(".draggable").forEach(el => {
-      const z = parseInt(window.getComputedStyle(el).zIndex) || 0;
-      if (z > max) max = z;
-    });
-    return max;
-  }
-
   function bringToFront(element) {
-    element.style.zIndex = getMaxZIndex() + 1;
+    globalStack++;
+    element.dataset.stack = globalStack.toString();
     updateLayersList();
   }
 
   function sendToBack(element) {
-    const currentZ = parseInt(window.getComputedStyle(element).zIndex) || 0;
-    if (currentZ > 0) {
-      element.style.zIndex = currentZ - 1;
-      updateLayersList();
-    }
+    // On place cet élément derrière en lui assignant 0
+    element.dataset.stack = "0";
+    updateLayersList();
   }
 
   // --------------------------------------------------------------------
@@ -209,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // Affichage des options
+  // Affichage des options pour une partie donnée
   // --------------------------------------------------------------------
   function displayOptions(part) {
     if (!part) return;
@@ -259,13 +251,19 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable.dataset.flipx = "false";
     draggable.dataset.flipy = "false";
     draggable.dataset.color = "";
-    // Nouveau : stockage du filter appliqué (pour la sauvegarde)
+    // Stockage du filter appliqué (pour la sauvegarde)
     draggable.dataset.filter = "";
+    // Position initiale
     draggable.dataset.x = "0";
     draggable.dataset.y = "0";
+    // Attribuer un identifiant unique pour le calque
     draggable.dataset.elementId = generateUniqueId();
-    draggable.style.zIndex = getMaxZIndex() + 1;
 
+    // Attribuer une valeur de stacking (augmente le compteur global)
+    globalStack++;
+    draggable.dataset.stack = globalStack.toString();
+
+    // Création du container d'image
     const imgContainer = document.createElement("div");
     imgContainer.style.width = "100%";
     imgContainer.style.height = "100%";
@@ -284,11 +282,10 @@ document.addEventListener("DOMContentLoaded", () => {
     img.style.width = "100%";
     img.style.height = "100%";
 
-    // On stocke l'image dans le container
     imgContainer.appendChild(img);
     draggable.appendChild(imgContainer);
 
-    // Taille par défaut
+    // Définir une taille par défaut
     let defaultSize = 100;
     if (part === "body") {
       defaultSize = window.innerWidth < 768 ? MOBILE_BODY_SIZE : DESKTOP_BODY_SIZE;
@@ -296,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
     draggable.style.width = defaultSize + "px";
     draggable.style.height = defaultSize + "px";
 
-    // Poignées de resize
+    // Ajout des poignées de redimensionnement
     ["br", "bl", "tr", "tl"].forEach(handle => {
       const rh = document.createElement("div");
       rh.classList.add("resize-handle", handle);
@@ -305,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
       rh.addEventListener("touchstart", e => startResizeTouch(e, draggable, handle), { passive: false });
     });
 
-    // Poignée de rotation
+    // Ajout de la poignée de rotation
     const rotateHandle = document.createElement("div");
     rotateHandle.classList.add("rotate-handle");
     draggable.appendChild(rotateHandle);
@@ -326,27 +323,26 @@ document.addEventListener("DOMContentLoaded", () => {
       toggleLock(draggable, lockButton);
     });
 
-    // Activation du drag
+    // Activation du drag (souris et tactile)
     draggable.addEventListener("mousedown", e => {
-      const isHandle = e.target.classList.contains("resize-handle") ||
-                       e.target.classList.contains("rotate-handle");
+      const isHandle = e.target.classList.contains("resize-handle") || e.target.classList.contains("rotate-handle");
       if (!draggable.classList.contains("locked") && !isHandle) {
         startDrag(e, draggable);
       }
       selectElement(draggable);
     });
     draggable.addEventListener("touchstart", e => {
-      const isHandle = e.target.classList.contains("resize-handle") ||
-                       e.target.classList.contains("rotate-handle");
+      const isHandle = e.target.classList.contains("resize-handle") || e.target.classList.contains("rotate-handle");
       if (!draggable.classList.contains("locked") && !isHandle) {
         startDragTouch(e, draggable);
       }
       selectElement(draggable);
     }, { passive: false });
 
+    // Ajout de l'élément dans le conteneur (l'ordre DOM n'est plus utilisé pour le stacking)
     characterContainer.appendChild(draggable);
 
-    // Centrer le body s’il s’agit du body
+    // Pour le body, centre automatiquement
     if (part === "body") {
       setTimeout(() => {
         centerElementInContainer(draggable);
@@ -357,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // Verrouiller / Déverrouiller
+  // Verrouillage / déverrouillage
   // --------------------------------------------------------------------
   function toggleLock(element, lockButton) {
     element.classList.toggle("locked");
@@ -390,7 +386,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // Drag souris
+  // Drag (souris)
   // --------------------------------------------------------------------
   function startDrag(e, element) {
     bringToFront(element);
@@ -463,7 +459,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // Rotation souris
+  // Rotation (souris)
   // --------------------------------------------------------------------
   function startRotate(e, element) {
     bringToFront(element);
@@ -697,7 +693,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // Application des transformations
+  // Application des transformations (translation, rotation, flip)
   // --------------------------------------------------------------------
   function updateTransform(element) {
     const rotation = parseFloat(element.dataset.rotation) || 0;
@@ -714,14 +710,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // Application des couleurs UNIQUEMENT sur l'asset (l'<img>)
+  // Application des couleurs sur l'asset (<img>) et stockage du filter
   // --------------------------------------------------------------------
   function applyColorToElement(element, color) {
-    // On récupère l'<img>
     const img = element.querySelector("img");
     if (!img) return;
 
-    // Si reset, réinitialisation du filter stocké aussi
     if (color === "reset") {
       element.dataset.color = "";
       element.dataset.filter = "";
@@ -733,7 +727,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (hue !== null) {
         filterValue = `sepia(1) saturate(10000%) hue-rotate(${hue}deg)`;
       }
-      // Stockage du filter dans le dataset pour usage lors de la sauvegarde
       element.dataset.filter = filterValue;
       img.style.filter = filterValue;
     }
@@ -768,7 +761,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // Centrer un élément
+  // Centrer un élément dans le conteneur
   // --------------------------------------------------------------------
   function centerElementInContainer(element) {
     const containerRect = characterContainer.getBoundingClientRect();
@@ -780,20 +773,18 @@ document.addEventListener("DOMContentLoaded", () => {
     updateTransform(element);
   }
 
-  // Génération d'ID unique
+  // Génération d'un ID unique pour chaque élément
   function generateUniqueId() {
     return "el-" + Math.random().toString(36).substr(2, 9);
   }
 
   // --------------------------------------------------------------------
-  // Mise à jour de la liste des calques
+  // Mise à jour de la liste des calques (triés par dataset.stack)
   // --------------------------------------------------------------------
   function updateLayersList() {
     const elements = Array.from(characterContainer.querySelectorAll(".draggable"));
-    elements.sort((a, b) => {
-      return (parseInt(window.getComputedStyle(a).zIndex) || 0) -
-             (parseInt(window.getComputedStyle(b).zIndex) || 0);
-    });
+    // Tri par ordre croissant du stack (les plus faibles d'abord)
+    elements.sort((a, b) => parseInt(a.dataset.stack) - parseInt(b.dataset.stack));
     layersList.innerHTML = "";
     elements.forEach(el => {
       const li = document.createElement("li");
@@ -832,7 +823,7 @@ document.addEventListener("DOMContentLoaded", () => {
       upBtn.textContent = "▲";
       upBtn.addEventListener("click", ev => {
         ev.stopPropagation();
-        moveLayerUp(el);
+        bringToFront(el);
       });
 
       const downBtn = document.createElement("button");
@@ -841,7 +832,7 @@ document.addEventListener("DOMContentLoaded", () => {
       downBtn.textContent = "▼";
       downBtn.addEventListener("click", ev => {
         ev.stopPropagation();
-        moveLayerDown(el);
+        sendToBack(el);
       });
 
       actionsDiv.appendChild(upBtn);
@@ -859,46 +850,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function moveLayerUp(element) {
-    const currentZ = parseInt(window.getComputedStyle(element).zIndex) || 0;
-    const allElements = Array.from(characterContainer.querySelectorAll(".draggable"));
-    let target = null;
-    let minAbove = Infinity;
-    allElements.forEach(el => {
-      const z = parseInt(window.getComputedStyle(el).zIndex) || 0;
-      if (z > currentZ && z < minAbove) {
-        minAbove = z;
-        target = el;
-      }
-    });
-    if (target) {
-      element.style.zIndex = minAbove;
-      target.style.zIndex = currentZ;
-      updateLayersList();
-    }
-  }
-
-  function moveLayerDown(element) {
-    const currentZ = parseInt(window.getComputedStyle(element).zIndex) || 0;
-    const allElements = Array.from(characterContainer.querySelectorAll(".draggable"));
-    let target = null;
-    let maxBelow = -Infinity;
-    allElements.forEach(el => {
-      const z = parseInt(window.getComputedStyle(el).zIndex) || 0;
-      if (z < currentZ && z > maxBelow) {
-        maxBelow = z;
-        target = el;
-      }
-    });
-    if (target) {
-      element.style.zIndex = maxBelow;
-      target.style.zIndex = currentZ;
-      updateLayersList();
-    }
-  }
-
   // --------------------------------------------------------------------
-  // Sauvegarde en PNG en tenant compte du filter appliqué à <img>
+  // Sauvegarde en PNG (tri par dataset.stack)
   // --------------------------------------------------------------------
   saveButton.addEventListener("click", () => {
     const containerRect = characterContainer.getBoundingClientRect();
@@ -909,7 +862,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const ctx = tempCanvas.getContext("2d");
     ctx.scale(ratio, ratio);
 
-    // Gérer le background
+    // Gestion du background
     const bgImage = characterContainer.style.backgroundImage;
     if (bgImage && bgImage !== "none") {
       const bgUrl = bgImage.slice(5, -2);
@@ -933,12 +886,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function drawElementsToCanvas(ctx, canvas) {
+    // Récupère tous les éléments draggable et trie par dataset.stack
     const elements = Array.from(characterContainer.querySelectorAll(".draggable"));
-    // Tri par z-index croissant pour dessiner d'abord l'arrière-plan
-    elements.sort((a, b) => {
-      return (parseInt(window.getComputedStyle(a).zIndex) || 0) -
-             (parseInt(window.getComputedStyle(b).zIndex) || 0);
-    });
+    elements.sort((a, b) => parseInt(a.dataset.stack) - parseInt(b.dataset.stack));
     if (elements.length === 0) {
       downloadCanvas(canvas);
       return;
@@ -967,8 +917,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Modification apportée :
-  // Utilisation du filter stocké dans le dataset (si défini) afin de conserver la couleur appliquée
   function drawSingleElement(ctx, element, imgElement, originalImg) {
     const x = parseFloat(element.dataset.x) || 0;
     const y = parseFloat(element.dataset.y) || 0;
@@ -978,19 +926,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const flipX = (element.dataset.flipx === "true");
     const flipY = (element.dataset.flipy === "true");
 
-    // On récupère le filter stocké dans le dataset, sinon celui calculé sur l'<img>
     const storedFilter = element.dataset.filter;
     const computedFilter = window.getComputedStyle(imgElement).filter;
-    const finalFilter = (storedFilter && storedFilter !== "") ? storedFilter : (computedFilter && computedFilter !== "none" ? computedFilter : "none");
+    const finalFilter = (storedFilter && storedFilter !== "") ? storedFilter :
+                        (computedFilter && computedFilter !== "none" ? computedFilter : "none");
 
     ctx.save();
     ctx.translate(x + w / 2, y + h / 2);
     ctx.rotate((rotation * Math.PI) / 180);
     if (flipX) ctx.scale(-1, 1);
     if (flipY) ctx.scale(1, -1);
-
     ctx.filter = finalFilter;
-
     ctx.drawImage(originalImg, -w / 2, -h / 2, w, h);
     ctx.restore();
   }
@@ -1006,7 +952,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // Boutons flip, delete, etc.
+  // Boutons d'actions (flip, delete, etc.)
   // --------------------------------------------------------------------
   flipHorizontalButton.addEventListener("click", () => {
     if (!selectedElement) {
@@ -1081,7 +1027,9 @@ document.addEventListener("DOMContentLoaded", () => {
     showNotification("Élément supprimé.", "success");
   });
 
-  // Couleurs : background ou assets
+  // --------------------------------------------------------------------
+  // Boutons de couleur (application sur le background ou sur l'asset)
+  // --------------------------------------------------------------------
   colorButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       const color = btn.dataset.color;
@@ -1120,7 +1068,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // --------------------------------------------------------------------
-  // Gestion du clic pour afficher les options
+  // Gestion du clic pour afficher les options de partie
   // --------------------------------------------------------------------
   selectionButtons.forEach(button => {
     button.addEventListener("click", e => {
