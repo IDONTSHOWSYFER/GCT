@@ -96,13 +96,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function bringToFront(element) {
     const newZ = getMaxZIndex() + 1;
     element.style.zIndex = newZ;
-    element.dataset.zindex = newZ;
+    element.dataset.zindex = newZ.toString();
   }
 
   function sendToBack(element) {
     const newZ = Math.max(0, getMaxZIndex() - 1);
-    element.style.zIndex = newZ;
-    element.dataset.zindex = newZ;
+    element.style.zIndex = newZ.toString();
+    element.dataset.zindex = newZ.toString();
   }
 
   function closeAllDropdowns() {
@@ -192,9 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
         partButton.setAttribute("aria-expanded", !isActive);
       }
       const colorSelection = activeGroup.querySelector(".color-selection");
-      if (colorSelection) {
-        colorSelection.style.display = !isActive ? "block" : "none";
-      }
+      if (colorSelection) colorSelection.style.display = !isActive ? "block" : "none";
     }
   }
 
@@ -622,32 +620,88 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------------------------------------------------------------------
-  // Sauvegarde sur canvas avec html2canvas
+  // Sauvegarde sur canvas en "reconstruisant" le rendu (correction)
   // --------------------------------------------------------------------
   saveButton.addEventListener("click", () => {
-    if (typeof html2canvas === "undefined") {
-      console.error("html2canvas n'est pas chargé !");
-      return;
+    const containerRect = characterContainer.getBoundingClientRect();
+    const ratio = window.devicePixelRatio || 1;
+    const canvas = document.createElement("canvas");
+    canvas.width = containerRect.width * ratio;
+    canvas.height = containerRect.height * ratio;
+    const ctx = canvas.getContext("2d");
+    ctx.scale(ratio, ratio);
+
+    // Gérer le background
+    if (characterContainer.style.backgroundImage && characterContainer.style.backgroundImage !== "none") {
+      let bgUrl = characterContainer.style.backgroundImage;
+      // Extraction de l'URL dans le format url("...")
+      bgUrl = bgUrl.slice(bgUrl.indexOf('("') + 2, bgUrl.lastIndexOf('")'));
+      const bgImg = new Image();
+      bgImg.crossOrigin = "anonymous";
+      bgImg.src = bgUrl;
+      bgImg.onload = () => {
+        ctx.drawImage(bgImg, 0, 0, containerRect.width, containerRect.height);
+        drawElementsToCanvas(ctx, canvas);
+      };
+      bgImg.onerror = () => {
+        ctx.fillStyle = characterContainer.style.backgroundColor || "#ffffff";
+        ctx.fillRect(0, 0, containerRect.width, containerRect.height);
+        drawElementsToCanvas(ctx, canvas);
+      };
+    } else {
+      ctx.fillStyle = characterContainer.style.backgroundColor || "#ffffff";
+      ctx.fillRect(0, 0, containerRect.width, containerRect.height);
+      drawElementsToCanvas(ctx, canvas);
     }
-    console.log("Début de la capture avec html2canvas...");
-    html2canvas(characterContainer, {
-      scale: window.devicePixelRatio || 1,
-      useCORS: true
-    })
-    .then(canvas => {
-      console.log("Canvas créé", canvas);
-      const dataURL = canvas.toDataURL("image/png");
-      const link = document.createElement("a");
-      link.href = dataURL;
-      link.download = "avatar.png";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    })
-    .catch(err => {
-      console.error("Erreur lors de la capture :", err);
-    });
   });
+
+  function drawElementsToCanvas(ctx, canvas) {
+    const elements = Array.from(characterContainer.querySelectorAll(".draggable"));
+    // Tri par z-index croissant pour dessiner l'arrière-plan en premier
+    elements.sort((a, b) => {
+      return (parseInt(a.style.zIndex) || 0) - (parseInt(b.style.zIndex) || 0);
+    });
+    const promises = elements.map(el => {
+      return new Promise(resolve => {
+        const img = el.querySelector("img");
+        if (!img) {
+          resolve();
+          return;
+        }
+        const originalImg = new Image();
+        originalImg.crossOrigin = "anonymous";
+        originalImg.src = img.src;
+        originalImg.onload = () => {
+          drawSingleElement(ctx, el, originalImg);
+          resolve();
+        };
+        originalImg.onerror = () => resolve();
+      });
+    });
+    Promise.all(promises).then(() => {
+      downloadCanvas(canvas);
+    });
+  }
+
+  function drawSingleElement(ctx, element, img) {
+    const x = parseFloat(element.style.left) || 0;
+    const y = parseFloat(element.style.top) || 0;
+    const w = element.offsetWidth;
+    const h = element.offsetHeight;
+    const rotation = parseFloat(element.dataset.rotation) || 0;
+    const flipX = (element.dataset.flipx === "true");
+    const flipY = (element.dataset.flipy === "true");
+
+    ctx.save();
+    ctx.translate(x + w / 2, y + h / 2);
+    ctx.rotate((rotation * Math.PI) / 180);
+    if (flipX) ctx.scale(-1, 1);
+    if (flipY) ctx.scale(1, -1);
+    const computedFilter = window.getComputedStyle(element.querySelector("img")).filter;
+    ctx.filter = computedFilter && computedFilter !== "none" ? computedFilter : "none";
+    ctx.drawImage(img, -w / 2, -h / 2, w, h);
+    ctx.restore();
+  }
 
   function downloadCanvas(canvas) {
     const dataURL = canvas.toDataURL("image/png");
