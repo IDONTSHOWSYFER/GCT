@@ -49,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  // Convertir une couleur en degrés de teinte pour appliquer un filtre CSS
   function rgbToHueDegrees(color) {
     let r, g, b;
     if (color.startsWith("#")) {
@@ -75,11 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (rgbMatch.length < 3) return null;
       [r, g, b] = rgbMatch;
     }
-    r /= 255;
-    g /= 255;
-    b /= 255;
-    const max = Math.max(r, g, b),
-          min = Math.min(r, g, b);
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
     let hue = 0;
     if (max === min) hue = 0;
     else if (max === r) hue = (60 * ((g - b) / (max - min)) + 360) % 360;
@@ -88,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return hue;
   }
 
-  // Gestion du z-index via dataset
   function getMaxZIndex() {
     let max = 0;
     characterContainer.querySelectorAll(".draggable").forEach(el => {
@@ -97,18 +92,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     return max;
   }
+
   function bringToFront(element) {
     const newZ = getMaxZIndex() + 1;
     element.style.zIndex = newZ;
     element.dataset.zindex = newZ;
   }
+
   function sendToBack(element) {
     const newZ = Math.max(0, getMaxZIndex() - 1);
     element.style.zIndex = newZ;
     element.dataset.zindex = newZ;
   }
 
-  // Fermer tous les menus déroulants
   function closeAllDropdowns() {
     document.querySelectorAll(".options-display").forEach(group => {
       group.classList.remove("active");
@@ -125,9 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
     selectedPart = null;
   }
 
-  // --------------------------------------------------------------------
-  // Génération des options déroulantes (similaire à l'existant)
-  // --------------------------------------------------------------------
   function generateDropdownOptions() {
     const parts = {
       hair: ["hair1", "hair2", "hair3", "hair4", "hair5", "hair6", "hair7", "hair8", "hair9", "hair10", "hair11", "hair12", "hair13", "hair14", "hair15", "hair16", "hair17"],
@@ -205,9 +198,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --------------------------------------------------------------------
-  // Ajout d’un élément dans la zone de création
-  // --------------------------------------------------------------------
   function addElement(part, option) {
     if (part === "background") {
       applyBackgroundImage(option);
@@ -635,7 +625,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Sauvegarde sur canvas avec html2canvas
   // --------------------------------------------------------------------
   saveButton.addEventListener("click", () => {
-    // Vérifier que html2canvas est bien défini
     if (typeof html2canvas === "undefined") {
       console.error("html2canvas n'est pas chargé !");
       return;
@@ -645,19 +634,19 @@ document.addEventListener("DOMContentLoaded", () => {
       scale: window.devicePixelRatio || 1,
       useCORS: true
     })
-      .then(canvas => {
-        console.log("Canvas créé", canvas);
-        const dataURL = canvas.toDataURL("image/png");
-        const link = document.createElement("a");
-        link.href = dataURL;
-        link.download = "avatar.png";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      })
-      .catch(err => {
-        console.error("Erreur lors de la capture :", err);
-      });
+    .then(canvas => {
+      console.log("Canvas créé", canvas);
+      const dataURL = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = dataURL;
+      link.download = "avatar.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch(err => {
+      console.error("Erreur lors de la capture :", err);
+    });
   });
 
   function downloadCanvas(canvas) {
