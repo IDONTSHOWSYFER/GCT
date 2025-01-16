@@ -900,7 +900,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   versionButton.addEventListener("click", () => {
-    window.location.href = "/public/v2/index2.html";
+    window.location.href = "/public/v2/v2.html";
   });
 
   uploadButton.addEventListener("click", e => {
